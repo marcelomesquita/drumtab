@@ -1,0 +1,46 @@
+$primary: #123456;
+
+@import 'node_modules/bulma/bulma.sass'
+
+.controls
+	margin-bottom: 20px;
+
+.staff
+	margin-bottom: 20px;
+
+.mark
+	display: block;
+	width: 28px !important;
+	height: 28px !important;
+
+.pieces
+	float: left;
+
+.beats
+	overflow-x: scroll;
+	white-space: nowrap;
+
+.beat
+	display: inline-block;
+
+.beat.bar
+	border-left: 1px solid rgba(0, 0, 0, .3);
+
+.beat.time
+	border-left: 1px solid rgba(0, 0, 0, .1);
+
+.beat.active .note
+	background: rgba(0, 0, 0, .3);
+
+.beat .note
+	display: block;
+	width: 28px !important;
+	height: 28px !important;
+	border: none;
+	border-bottom: 1px solid rgba(0, 0, 0, .1);
+
+.beat .note:active,
+.beat .note:focus,
+.beat .note:hover
+	outline: none;
+	background: rgba(0, 0, 0, .1);

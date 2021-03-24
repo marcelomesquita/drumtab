@@ -1,0 +1,33 @@
+{
+  "name": "drumtab",
+  "version": "1.0.0",
+  "author": "Marcelo Mesquita",
+  "homepage": "https://github.com/marcelomesquita/jogo-multiplayer#readme",
+  "main": "index.js",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-brands-svg-icons": "^5.15.3",
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@zeit/next-sass": "^1.0.1",
+    "autoprefixer": "^10.2.5",
+    "bulma": "^0.9.2",
+    "howler": "^2.2.1",
+    "moment": "^2.29.1",
+    "next": "^10.0.8",
+    "node-sass": "^4.14.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "scripts": {
+    "dev": "next dev"
+  },
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "file-loader": "^6.2.0",
+    "url-loader": "^4.1.1"
+  }
+}
