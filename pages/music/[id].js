@@ -26,8 +26,8 @@ export async function getStaticProps(context) {
 			album: "Dookie",
 			author: "Trè Cool",
 			tablature: {
-				beats: 4, 
-				times: 4, 
+				beats: 4,
+				times: 4,
 				beatsPerMin: 60,
 				staff: [
 					[0, 1, 0, 1, 0, 0, 0, 0],
@@ -41,7 +41,7 @@ export async function getStaticProps(context) {
 					[0, 0, 1, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 1],
 					[0, 0, 0, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0],
@@ -72,24 +72,30 @@ function Music(props) {
 				<title>{props.title} | Drumtab</title>
 			</Head>
 
-			<section className="section is-clearfix">
-				<Breadcrumb />
-				
-				<h1 className="title">{props.title}</h1>
-				<h2 className="subtitle has-text-grey">{props.artist} {getAlbum()} {getAuthor()}</h2>
+			<div className="container is-widescreen">
+				<section className="section is-clearfix">
+					<Breadcrumb />
 
+					<h1 className="title">{props.title}</h1>
+					<h2 className="subtitle has-text-grey">{props.artist} {getAlbum()} {getAuthor()}</h2>
+
+					<div className="tags">
+						<span className="tag is-primary">double</span>
+						<span className="tag is-primary">paradidle</span>
+						<span className="tag is-primary">chops</span>
+					</div>
+				</section>
+			</div>
+
+			<div className="container is-fluid has-background-grey-lighter">
 				<Drummer drum={drum} tablature={tablature} />
+			</div>
 
-				<div class="tags">
-					<span class="tag is-primary">double</span>
-					<span class="tag is-primary">paradidle</span>
-					<span class="tag is-primary">chops</span>
-				</div>
-
-				<hr />
-
-				<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{props.created_by}</a> em {moment(props.created_at).format('DD\/MM\/YYYY')}</p>
-			</section>
+			<div className="container is-widescreen">
+				<section className="section">
+					<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{props.created_by}</a> em {moment(props.created_at).format('DD\/MM\/YYYY')}</p>
+				</section>
+			</div>
 		</Container>
 	)
 }

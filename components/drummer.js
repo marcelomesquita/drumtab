@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdjust, faBan, faCircle, faClock, faDotCircle, faHammer, faHourglass, faMusic, faPause, faPlay, faStepBackward, faStepForward, faStop, faTachometerAlt, faTimes, faUndo } from '@fortawesome/free-solid-svg-icons';
+import { faAdjust, faBan, faCircle, faClock, faDotCircle, faMusic, faPause, faPlay, faStepBackward, faStepForward, faStop, faTachometerAlt, faUndo } from '@fortawesome/free-solid-svg-icons';
 import { faCircle as farCircle } from '@fortawesome/free-regular-svg-icons'
 
 class Drummer extends React.Component {
@@ -8,7 +8,7 @@ class Drummer extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			drum: props.drum,
 			tablature: props.tablature,
@@ -18,18 +18,47 @@ class Drummer extends React.Component {
 			repeat: true
 		}
 	}
-	
+
+	componentDidMount() {
+		if (typeof document !== 'undefined') {
+			document.addEventListener('keydown', this.handleKeyboardEvent.bind(this));
+		}
+	}
+
+	componentWillUnmount() {
+		if (typeof document !== 'undefined') {
+			document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
+		}
+	}
+
+	handleKeyboardEvent(event) {
+		const KEY_CODE = {
+			KeyC: 0,
+			KeyH: 1,
+			KeyR: 2,
+			KeyS: 3,
+			Digit1: 4,
+			Digit2: 5,
+			Digit3: 6,
+			KeyB: 7
+		};
+
+		if (KEY_CODE[event.code] !== undefined) {
+			this.state.drum.hitNote(KEY_CODE[event.code]);
+		}
+	}
+
 	beatIcon(beat) {
 		switch (beat) {
 			case 1:
 				return <FontAwesomeIcon icon={faCircle} />
 			case 2:
 				return <FontAwesomeIcon icon={faAdjust} />
-			case 3: 
+			case 3:
 				return <FontAwesomeIcon icon={faDotCircle} />
-			case 4: 
+			case 4:
 				return <FontAwesomeIcon icon={farCircle} />
-			case 5: 
+			case 5:
 				return <FontAwesomeIcon icon={faBan} />
 		}
 	}
@@ -59,7 +88,7 @@ class Drummer extends React.Component {
 
 	play() {
 		this.hitNotes(this.state.tablature.staff[this.state.pace]);
-		
+
 		this.setState({timer: setInterval(() => {
 			this.nextPace();
 
@@ -130,39 +159,39 @@ class Drummer extends React.Component {
 						<button className="button is-small" title="Previous Bar" onClick={() => this.skipPrev()}>
 							<FontAwesomeIcon icon={faStepBackward} />
 						</button>
-						
+
 						<button className="button is-small" title="Play/Pause" onClick={() => this.playPause()}>
 							<FontAwesomeIcon icon={this.state.timer ? faPause : faPlay} />
 						</button>
-						
+
 						<button className="button is-small" title="Next Bar" onClick={() => this.skipNext()}>
 							<FontAwesomeIcon icon={faStepForward} />
 						</button>
-						
+
 						<button className={`button is-small ${this.state.repeat ? "is-active" : ""}`} title="Repeat Bar" onClick={() => this.toggleRepeat()}>
 							<FontAwesomeIcon icon={faUndo} />
 						</button>
 					</div>
 
 					<div className="column is-narrow">
-						<div class="field is-grouped">
+						<div className="field is-grouped">
 							<span className="control has-icons-left">
-								<input className="input is-small" type="number" placeholder="Times" min="1" max="16" style={{width: "80px"}} value={this.state.tablature.times} />
-								<span class="icon is-small is-left">
+								<input className="input is-small" type="number" placeholder="Times" min="1" max="16" style={{width: "80px"}} value={this.state.tablature.times} readOnly />
+								<span className="icon is-small is-left">
 									<FontAwesomeIcon icon={faClock} />
 								</span>
 							</span>
-							
+
 							<span className="control has-icons-left">
-								<input className="input is-small" type="number" placeholder="Times" min="1" max="16" style={{width: "80px"}} value={this.state.tablature.beats} />
-								<span class="icon is-small is-left">
+								<input className="input is-small" type="number" placeholder="Times" min="1" max="16" style={{width: "80px"}} value={this.state.tablature.beats} readOnly />
+								<span className="icon is-small is-left">
 									<FontAwesomeIcon icon={faMusic} />
 								</span>
 							</span>
 
 							<span className="control has-icons-left">
-								<input className="input is-small" type="number" placeholder="Times" min="1" max="300" style={{width: "80px"}} value={this.state.tablature.beatsPerMin} />
-								<span class="icon is-small is-left">
+								<input className="input is-small" type="number" placeholder="Times" min="1" max="300" style={{width: "80px"}} value={this.state.tablature.beatsPerMin} readOnly />
+								<span className="icon is-small is-left">
 									<FontAwesomeIcon icon={faTachometerAlt} />
 								</span>
 							</span>
@@ -178,6 +207,7 @@ class Drummer extends React.Component {
 								{piece.abbr}
 							</button>
 						)})}
+						<button className="mark"></button>
 					</div>
 
 					<div className="beats">
@@ -188,17 +218,16 @@ class Drummer extends React.Component {
 									<button key={`note-${note}${n}`} className="note" onMouseDown={() => this.hitNote(n, b)}>
 										{this.beatIcon(note)}
 									</button>
-								)})}	
+								)})}
+								<button className="mark" onMouseDown={() => this.setState({pace: b})}>{this.state.tablature.getCurrentTime(b) + 1}</button>
 							</div>
 						)})}
 					</div>
 				</div>
 
-				<div className="setup">
-					
+				<div className="content is-small pb-2">
+					<p>{this.state.pace}/{this.state.tablature.getTotalBeats()}</p>
 				</div>
-
-				<p className="has-text-right"><small>{this.state.pace}/{this.state.tablature.getTotalBeats()}</small></p>
 			</div>
 		)
 	}

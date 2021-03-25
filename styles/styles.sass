@@ -1,6 +1,9 @@
-$primary: #123456;
+$primary: #444444;
 
 @import 'node_modules/bulma/bulma.sass'
+
+.is-borderless
+	border: none;
 
 .controls
 	margin-bottom: 20px;
@@ -17,7 +20,7 @@ $primary: #123456;
 	float: left;
 
 .beats
-	overflow-x: scroll;
+	overflow-x: auto;
 	white-space: nowrap;
 
 .beat
@@ -38,6 +41,7 @@ $primary: #123456;
 	height: 28px !important;
 	border: none;
 	border-bottom: 1px solid rgba(0, 0, 0, .1);
+	overflow: hidden;
 
 .beat .note:active,
 .beat .note:focus,

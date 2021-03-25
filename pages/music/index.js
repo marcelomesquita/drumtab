@@ -31,6 +31,11 @@ export async function getStaticProps(context) {
 					title: "Duality",
 					artist: "Slipknot"
 				},
+				{
+					id: 4,
+					title: "30 Seconds to Mars",
+					artist: "Walk on Water"
+				},
 			]
 		}
 	}
@@ -43,38 +48,40 @@ function Musicas(props) {
 				<title>{props.title} | Drumtab</title>
 			</Head>
 
-			<section className="section">
-				<Breadcrumb />
-				
-				<h1 className="title">Músicas</h1>
-				<h2 className="subtitle">Subtitle</h2>
+			<div className="container is-widescreen">
+				<section className="section">
+					<Breadcrumb />
 
-				<div className="columns is-multiline">
-					{props.musics.map((music) => { return (
-						<div key={music.id} className="column is-4">
-							<Link href="/music/1">
-								<a>
-									<div className="card">
-										<div className="card-image">
-											<figure className="image is-4by3">
-												<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
-											</figure>
-										</div>
-										<div className="card-content">
-											<div className="content">
-												<p className="title is-4">{music.title}</p>
-												<p className="subtitle is-6">{music.artist}</p>
+					<h1 className="title">Músicas</h1>
+					<h2 className="subtitle">Subtitle</h2>
+
+					<div className="columns is-multiline">
+						{props.musics.map((music) => { return (
+							<div key={music.id} className="column is-4">
+								<Link href="/music/1">
+									<a>
+										<div className="card">
+											<div className="card-image">
+												<figure className="image is-4by3">
+													<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
+												</figure>
+											</div>
+											<div className="card-content">
+												<div className="content">
+													<p className="title is-5">{music.title}</p>
+													<p className="subtitle is-6">{music.artist}</p>
+												</div>
 											</div>
 										</div>
-									</div>
-								</a>
-							</Link>
-						</div>
-					) })}
-				</div>
+									</a>
+								</Link>
+							</div>
+						) })}
+					</div>
 
-				<Pagination />
-			</section>
+					<Pagination />
+				</section>
+			</div>
 		</Container>
 	)
 }
