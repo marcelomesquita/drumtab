@@ -8,16 +8,44 @@ export class Tablature {
 		Object.assign(this, init);
 	}
 
+	getTimes = () => {
+		return this.times;
+	}
+
+	setTimes = (times) => {
+		this.times = times;
+	}
+
+	getBeats = () => {
+		return this.beats;
+	}
+
+	setBeats = (beats) => {
+		this.beats = beats;
+	}
+
+	getBeatsPerMin = () => {
+		return this.beatsPerMin;
+	}
+
+	setBeatsPerMin = (beatsPerMin) => {
+		this.beatsPerMin = beatsPerMin;
+	}
+
 	getBeatsPerSec() {
-		return this.beatsPerMin / 60;
+		return 60 / this.getBeatsPerMin();
 	}
 
-	getBeatsPerTime() {
-		return this.getBeatsPerSec() / this.beats;
+	getSpeedPerSec = () => {
+		return this.getBeatsPerSec() / this.getBeats() * this.getTimes();
 	}
 
-	getPrecision() {
-		return this.beats * this.times;
+	getSpeedPerTime = () => {
+		return this.getSpeedPerSec() / this.getTimes();
+	}
+
+	getPrecision = () => {
+		return this.getBeats() * this.getTimes();
 	}
 
 	getTotalBeats() {

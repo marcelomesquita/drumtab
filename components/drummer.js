@@ -73,7 +73,7 @@ class Drummer extends React.Component {
 
 				this.play();
 			}
-		}, this.state.tablature.getBeatsPerSec() * 1000)});
+		}, this.state.tablature.getSpeedPerSec() * 1000)});
 	}
 
 	play = () => {
@@ -83,7 +83,7 @@ class Drummer extends React.Component {
 			this.nextPace();
 
 			this.hitNotes(this.state.tablature.staff[this.state.pace]);
-		}, this.state.tablature.getBeatsPerTime() * 1000)});
+		}, this.state.tablature.getSpeedPerTime() * 1000)});
 	}
 
 	pause = () => {
@@ -137,6 +137,58 @@ class Drummer extends React.Component {
 		});
 	}
 
+	setBeats = (e) => {
+		var value = parseInt(e.target.value ? e.target.value : 0);
+		var min = parseInt(e.target.min);
+		var max = parseInt(e.target.max);
+
+		if (value < min) {
+			this.state.tablature.setBeats(min);
+		} else if (value > max) {
+			this.state.tablature.setBeats(max);
+		} else {
+			this.state.tablature.setBeats(value);
+		}
+
+		this.state.tablature.addBar();
+
+		this.setState({tablature: this.state.tablature});
+	}
+
+	setTimes = (e) => {
+		var value = parseInt(e.target.value ? e.target.value : 0);
+		var min = parseInt(e.target.min);
+		var max = parseInt(e.target.max);
+
+		if (value < min) {
+			this.state.tablature.setTimes(min);
+		} else if (value > max) {
+			this.state.tablature.setTimes(max);
+		} else {
+			this.state.tablature.setTimes(value);
+		}
+
+		this.state.tablature.addBar();
+
+		this.setState({tablature: this.state.tablature});
+	}
+
+	setBeatsPerMin = (e) => {
+		var value = parseInt(e.target.value ? e.target.value : 0);
+		var min = parseInt(e.target.min);
+		var max = parseInt(e.target.max);
+
+		if (value < min) {
+			this.state.tablature.setBeatsPerMin(min);
+		} else if (value > max) {
+			this.state.tablature.setBeatsPerMin(max);
+		} else {
+			this.state.tablature.setBeatsPerMin(value);
+		}
+
+		this.setState({tablature: this.state.tablature});
+	}
+
 	render() {
 		return (
 			<div id="tablature">
@@ -166,21 +218,45 @@ class Drummer extends React.Component {
 					<div className="column is-narrow">
 						<div className="field is-grouped">
 							<span className="control has-icons-left">
-								<input className="input is-small" type="number" placeholder="Times" min="1" max="16" style={{width: "80px"}} value={this.state.tablature.times} readOnly />
+								<input
+									className="input is-small"
+									type="number"
+									placeholder="Times"
+									min="1"
+									max="16"
+									style={{width: "80px"}}
+									value={this.state.tablature.times}
+									onChange={(e) => this.setTimes(e)} />
 								<span className="icon is-small is-left">
 									<FontAwesomeIcon icon={faClock} />
 								</span>
 							</span>
 
 							<span className="control has-icons-left">
-								<input className="input is-small" type="number" placeholder="Times" min="1" max="16" style={{width: "80px"}} value={this.state.tablature.beats} readOnly />
+								<input
+									className="input is-small"
+									type="number"
+									placeholder="Beats"
+									min="1"
+									max="16"
+									style={{width: "80px"}}
+									value={this.state.tablature.beats}
+									onChange={(e) => this.setBeats(e)} />
 								<span className="icon is-small is-left">
 									<FontAwesomeIcon icon={faMusic} />
 								</span>
 							</span>
 
 							<span className="control has-icons-left">
-								<input className="input is-small" type="number" placeholder="Times" min="1" max="300" style={{width: "80px"}} value={this.state.tablature.beatsPerMin} readOnly />
+								<input
+									className="input is-small"
+									type="number"
+									placeholder="BpM"
+									min="1"
+									max="300"
+									style={{width: "80px"}}
+									value={this.state.tablature.getBeatsPerMin()}
+									onChange={(e) => this.setBeatsPerMin(e)} />
 								<span className="icon is-small is-left">
 									<FontAwesomeIcon icon={faTachometerAlt} />
 								</span>
