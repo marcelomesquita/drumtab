@@ -2,16 +2,12 @@ import Link from 'next/link';
 
 function Footer() {
 	return (
-		<footer className="footer has-background-light">
+		<footer className="footer has-background-light pb-0">
 			<div className="container is-widescreen">
 				<section className="section">
 					<div className="columns">
 						<div className="column is-one-third">
 							<h2 className="title is-2">DrumTab</h2>
-							<ul className="content is-small is-text-grey">
-								<li>Marcelo Mesquita</li>
-								<li>1.0.0</li>
-							</ul>
 						</div>
 						<div className="column">
 							<h6 className="title is-7 has-text-primary-dark">MÚSICAS</h6>
@@ -45,6 +41,22 @@ function Footer() {
 						</div>
 					</div>
 				</section>
+
+				<section className="section">
+					<div className="columns">
+						<div className="column">
+							<div className="content is-small has-text-grey">
+								<p>&copy; DrumTab by <a href="https://marcelomesquita.com" target="_blank" className="has-text-primary">Marcelo Mesquita</a></p>
+							</div>
+						</div>
+						<div className="column">
+							<div className="content is-small has-text-grey has-text-right">
+								<p>1.0.0</p>
+							</div>
+						</div>
+					</div>
+				</section>
+
 			</div>
 		</footer>
 	)

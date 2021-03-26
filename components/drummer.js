@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdjust, faBan, faCircle, faClock, faDotCircle, faMusic, faPause, faPlay, faStepBackward, faStepForward, faStop, faTachometerAlt, faUndo } from '@fortawesome/free-solid-svg-icons';
 import { faCircle as farCircle } from '@fortawesome/free-regular-svg-icons'
+import { PIECE_KEY } from 'models/drum';
 
 class Drummer extends React.Component {
 	state = {};
@@ -19,36 +20,25 @@ class Drummer extends React.Component {
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount = () => {
 		if (typeof document !== 'undefined') {
-			document.addEventListener('keydown', this.handleKeyboardEvent.bind(this));
+			document.addEventListener('keydown', this.handleKeyboardEvent);
 		}
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount = () => {
 		if (typeof document !== 'undefined') {
-			document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
+			document.removeEventListener('keydown', this.handleKeyboardEvent);
 		}
 	}
 
-	handleKeyboardEvent(event) {
-		const KEY_CODE = {
-			KeyC: 0,
-			KeyH: 1,
-			KeyR: 2,
-			KeyS: 3,
-			Digit1: 4,
-			Digit2: 5,
-			Digit3: 6,
-			KeyB: 7
-		};
-
-		if (KEY_CODE[event.code] !== undefined) {
-			this.state.drum.hitNote(KEY_CODE[event.code]);
+	handleKeyboardEvent = (event) => {
+		if (PIECE_KEY[event.code] !== undefined) {
+			this.hitNote(PIECE_KEY[event.code], this.state.pace);
 		}
 	}
 
-	beatIcon(beat) {
+	beatIcon = (beat) => {
 		switch (beat) {
 			case 1:
 				return <FontAwesomeIcon icon={faCircle} />
@@ -63,7 +53,7 @@ class Drummer extends React.Component {
 		}
 	}
 
-	playPause() {
+	playPause = () => {
 		if (this.state.timer) {
 			this.pause();
 		} else {
@@ -71,7 +61,7 @@ class Drummer extends React.Component {
 		}
 	}
 
-	counter() {
+	counter = () => {
 		this.setState({count: 0});
 		this.setState({timer: setInterval(() => {
 			if (this.state.count < 2) {
@@ -86,7 +76,7 @@ class Drummer extends React.Component {
 		}, this.state.tablature.getBeatsPerSec() * 1000)});
 	}
 
-	play() {
+	play = () => {
 		this.hitNotes(this.state.tablature.staff[this.state.pace]);
 
 		this.setState({timer: setInterval(() => {
@@ -96,26 +86,26 @@ class Drummer extends React.Component {
 		}, this.state.tablature.getBeatsPerTime() * 1000)});
 	}
 
-	pause() {
+	pause = () => {
 		clearInterval(this.state.timer);
 		this.setState({timer: undefined});
 	}
 
-	stop() {
+	stop = () => {
 		clearInterval(this.state.timer);
 		this.setState({timer: undefined});
 		this.setState({pace: 0});
 	}
 
-	skipPrev() {
+	skipPrev = () => {
 		this.setState({pace: this.state.tablature.getFirstBeatInPreviousBar(this.state.pace)});
 	}
 
-	skipNext() {
+	skipNext = () => {
 		this.setState({pace: this.state.tablature.getFirstBeatInNextBar(this.state.pace)});
 	}
 
-	nextPace() {
+	nextPace = () => {
 		if (this.state.repeat && this.state.pace == this.state.tablature.getLastBeatInBar(this.state.pace) - 1) {
 			this.setState({pace: this.state.tablature.getFirstBeatInBar(this.state.pace) - 1});
 		}
@@ -127,11 +117,11 @@ class Drummer extends React.Component {
 		this.setState({pace: this.state.pace + 1});
 	}
 
-	toggleRepeat() {
+	toggleRepeat = () => {
 		this.setState({repeat: !this.state.repeat});
 	}
 
-	hitNote(note, pace = this.state.pace) {
+	hitNote = (note, pace = this.state.pace) => {
 		if (this.state.tablature.hitNote(note, pace)) {
 			this.state.drum.hitNote(note);
 		}
@@ -139,7 +129,7 @@ class Drummer extends React.Component {
 		this.setState({tablature: this.state.tablature});
 	}
 
-	hitNotes(notes) {
+	hitNotes = (notes) => {
 		notes.forEach((note, index) => {
 			if (note) {
 				this.state.drum.hitNote(index);
@@ -149,26 +139,26 @@ class Drummer extends React.Component {
 
 	render() {
 		return (
-			<div className="tablature">
+			<div id="tablature">
 				<div className="controls columns">
 					<div className="column is-narrow">
-						<button className="button is-small" title="Stop" onClick={() => this.stop()}>
+						<button className="button is-small" title="Stop" onClick={this.stop}>
 							<FontAwesomeIcon icon={faStop} />
 						</button>
 
-						<button className="button is-small" title="Previous Bar" onClick={() => this.skipPrev()}>
+						<button className="button is-small" title="Previous Bar" onClick={this.skipPrev}>
 							<FontAwesomeIcon icon={faStepBackward} />
 						</button>
 
-						<button className="button is-small" title="Play/Pause" onClick={() => this.playPause()}>
+						<button className="button is-small" title="Play/Pause" onClick={this.playPause}>
 							<FontAwesomeIcon icon={this.state.timer ? faPause : faPlay} />
 						</button>
 
-						<button className="button is-small" title="Next Bar" onClick={() => this.skipNext()}>
+						<button className="button is-small" title="Next Bar" onClick={this.skipNext}>
 							<FontAwesomeIcon icon={faStepForward} />
 						</button>
 
-						<button className={`button is-small ${this.state.repeat ? "is-active" : ""}`} title="Repeat Bar" onClick={() => this.toggleRepeat()}>
+						<button className={`button is-small ${this.state.repeat ? "is-active" : ""}`} title="Repeat Bar" onClick={this.toggleRepeat}>
 							<FontAwesomeIcon icon={faUndo} />
 						</button>
 					</div>
@@ -212,7 +202,7 @@ class Drummer extends React.Component {
 
 					<div className="beats">
 						{this.state.tablature.staff.map((beat, b) => { return (
-							<div key={`beat-${b}`} className={`beat ${b == this.state.pace ? "active" : ""}`}>
+							<div key={`beat-${b}`} className={`beat ${b == this.state.pace ? "active" : ""} ${(b % this.state.tablature.beats == 0) ? "time" : ""} ${(b % this.state.tablature.getPrecision() == 0) ? "bar" : ""}`}>
 								<button className="mark" onMouseDown={() => this.setState({pace: b})}>{this.state.tablature.getCurrentTime(b) + 1}</button>
 								{beat.map((note, n) => { return (
 									<button key={`note-${note}${n}`} className="note" onMouseDown={() => this.hitNote(n, b)}>

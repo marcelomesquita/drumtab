@@ -80,7 +80,7 @@ function Music(props) {
 					<h2 className="subtitle has-text-grey">{props.artist} {getAlbum()} {getAuthor()}</h2>
 
 					<div className="tags">
-						<span className="tag is-primary">double</span>
+						<span className="tag is-primary">double tap</span>
 						<span className="tag is-primary">paradidle</span>
 						<span className="tag is-primary">chops</span>
 					</div>

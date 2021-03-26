@@ -1,10 +1,85 @@
 import Head from "next/head";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Container from '../layout/container'
+import Container from 'layout/container'
 import Link from "next/link";
 
-function Home() {
+export async function getStaticPaths() {
+	return {
+		paths: [],
+		fallback: 'blocking'
+	}
+}
+
+export async function getStaticProps(context) {
+	return {
+		props: {
+			musics: [
+				{
+					id: 1,
+					title: "Basket Case",
+					artist: "Green Day",
+					album: "Dookie",
+					author: "Trè Cool"
+				},
+				{
+					id: 1,
+					title: "Be Yourself",
+					artist: "Audioslave",
+					album: "Dookie",
+					author: "Trè Cool"
+				},
+				{
+					id: 1,
+					title: "Duality",
+					artist: "Slipknot",
+					album: "Dookie",
+					author: "Trè Cool"
+				},
+				{
+					id: 1,
+					title: "Nothin Else Matters",
+					artist: "Metalica",
+					album: "The Black Album",
+					author: "Trè Cool"
+				},
+				{
+					id: 1,
+					title: "30 Seconds to Mars",
+					artist: "Walk On Water",
+					album: "Dookie",
+					author: "Trè Cool"
+				},
+				{
+					id: 1,
+					title: "Basket Case",
+					artist: "Green Day",
+					album: "Dookie",
+					author: "Trè Cool"
+				}
+			],
+			artists: [
+				{
+					id: 1,
+					title: "Audioslave",
+					image: "https://bulma.io/images/placeholders/128x128.png"
+				},
+				{
+					id: 2,
+					title: "Green Day",
+					image: "https://bulma.io/images/placeholders/128x128.png"
+				},
+				{
+					id: 3,
+					title: "Slipknot",
+					image: "https://bulma.io/images/placeholders/128x128.png"
+				}
+			]
+		}
+	}
+}
+
+function Home(props) {
 	return (
 		<Container>
 			<Head>
@@ -21,7 +96,9 @@ function Home() {
 								<button className="button is-success is-large">Entre nesse clube</button>
 							</div>
 							<div className="column">
-								<iframe width="560" height="315" src="https://www.youtube.com/embed/doIDjVS7qEM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							<figure className="image is-4by3">
+								<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
+							</figure>
 							</div>
 						</div>
 					</div>
@@ -32,43 +109,54 @@ function Home() {
 				<section className="section">
 					<div className="columns">
 						<div className="column is-two-thirds">
-							<a className="is-pulled-right has-text-primary">ver todas as músicas <FontAwesomeIcon icon={faChevronRight} /></a>
-							<h1 className="title is-4 is-info">MÚSICAS POPULARES</h1>
-							<Link href="/">
-								<a className="has-text-primary">
-									<div className="box is-shadowless">
-										<span>1</span>
-										<p>Basket Case</p>
-										<p>Green Day</p>
-									</div>
-								</a>
-							</Link>
-							<Link href="/">
-								<a className="has-text-primary">
-									<div className="box is-shadowless">
-										<span>2</span>
-										<p>Duality</p>
-										<p>Slipknot</p>
-									</div>
-								</a>
-							</Link>
-							<Link href="/">
-								<a className="has-text-primary">
-									<div className="box is-shadowless">
-										<span>3</span>
-										<p>Be Yourself</p>
-										<p>Audioslave</p>
-									</div>
-								</a>
-							</Link>
+						<Link href="/music"><a className="is-pulled-right has-text-primary">ver todas as músicas <FontAwesomeIcon icon={faChevronRight} /></a></Link>
+							<h2 className="title is-4 is-info">MÚSICAS POPULARES</h2>
+							<div className="columns">
+								<div className="column">
+									{props.musics.filter((music, m) => (m < 5)).map((music, m) => { return (
+										<Link key={`music-${m}`} href={`/music/${music.id}`}>
+											<a className="has-text-primary">
+												<div className="box is-shadowless">
+													<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1}</span>
+													<h3 className="title is-5 mt-2 mb-0">{music.title}</h3>
+													<h4 className="title is-6 has-text-grey">{music.artist}</h4>
+												</div>
+											</a>
+										</Link>
+									)})}
+								</div>
+								<div className="column">
+									{props.musics.filter((music, m) => (m >= 5)).map((music, m) => { return (
+										<Link key={`music-${m}`} href={`/music/${music.id}`}>
+											<a className="has-text-primary">
+												<div className="box is-shadowless">
+													<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1 + 5}</span>
+													<h3 className="title is-5 mt-2 mb-0">{music.title}</h3>
+													<h4 className="title is-6 has-text-grey">{music.artist}</h4>
+												</div>
+											</a>
+										</Link>
+									)})}
+								</div>
+							</div>
 						</div>
 						<div className="column">
-							<a className="is-pulled-right has-text-primary">ver todas os artistas <FontAwesomeIcon icon={faChevronRight} /></a>
+							<Link href="/music"><a className="is-pulled-right has-text-primary">ver todas os artistas <FontAwesomeIcon icon={faChevronRight} /></a></Link>
 							<h1 className="title is-4 is-info">ARTISTAS</h1>
-							<div className="box is-shadowless"><Link href="/"><a className="has-text-primary">Green Day</a></Link></div>
-							<div className="box is-shadowless"><Link href="/"><a className="has-text-primary">Audioslave</a></Link></div>
-							<div className="box is-shadowless"><Link href="/"><a className="has-text-primary">Slipknot</a></Link></div>
-							<div className="box is-shadowless"><Link href="/"><a className="has-text-primary">30 Seconds to Mars</a></Link></div>
+							{props.artists.map((artist, a) => { return (
+								<Link key={`artist-${a}`} href="/music">
+									<a className="has-text-primary">
+										<div className="box is-shadowless">
+											<div className="is-pulled-left mr-3">
+												<figure className="image is-48x48">
+													<img className="is-rounded" src={artist.image} />
+												</figure>
+											</div>
+											<h3 className="title is-5 mt-3">{artist.title}</h3>
+										</div>
+									</a>
+								</Link>
+							)})}
 						</div>
 					</div>
 				</section>
