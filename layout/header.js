@@ -25,8 +25,6 @@ function Header() {
 					<div className="navbar-menu" id="mainbar">
 						<div className="navbar-start">
 							<Link href="/music"><a className="navbar-item">Músicas</a></Link>
-							<Link href="/sample"><a className="navbar-item">Samples</a></Link>
-							<Link href="/drum"><a className="navbar-item">Baterias</a></Link>
 						</div>
 
 						<div className="navbar-end">

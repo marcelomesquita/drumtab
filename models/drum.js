@@ -43,17 +43,11 @@ export class Drum {
 		new Piece(DRUM_PIECES.BASS, 'B', 'bass', 'cycdh')
 	];
 
-	drumstick = new Howl({src: [`/assets/audios/drum/stick/cycdh/normal-0.mp3`]});
+	stick = new Howl({src: [`/assets/audios/drum/stick/cycdh/normal-0.mp3`]});
 
 	hitNote = (note) => {
 		if (this.pieces[note]) {
 			this.pieces[note].hit();
-		}
-	}
-
-	handleKeyboardEvent = (event) => {
-		if (PIECE_KEY[event.code] !== undefined) {
-			this.hitNote(PIECE_KEY[event.code]);
 		}
 	}
 }

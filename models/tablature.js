@@ -37,22 +37,22 @@ export class Tablature {
 	}
 
 	getSpeedPerSec = () => {
-		return this.getBeatsPerSec() / this.getBeats() * this.getTimes();
+		return this.getBeatsPerSec() / this.getBeats() * this.getBeats();
 	}
 
 	getSpeedPerTime = () => {
-		return this.getSpeedPerSec() / this.getTimes();
+		return this.getSpeedPerSec() / this.getBeats();
 	}
 
 	getPrecision = () => {
 		return this.getBeats() * this.getTimes();
 	}
 
-	getTotalBeats() {
+	getTotalBeats = () => {
 		return this.staff.length;
 	}
 
-	getFirstBeatInBar(pace) {
+	getFirstBeatInBar = (pace) => {
 		if (pace == 0) {
 			return 0;
 		}
@@ -60,7 +60,7 @@ export class Tablature {
 		return Math.floor(pace / this.getPrecision()) * this.getPrecision();
 	}
 
-	getLastBeatInBar(pace) {
+	getLastBeatInBar = (pace) => {
 		if (pace == 0) {
 			return this.getPrecision();
 		}
@@ -68,7 +68,7 @@ export class Tablature {
 		return Math.ceil(pace / this.getPrecision()) * this.getPrecision();
 	}
 
-	getFirstBeatInPreviousBar(pace) {
+	getFirstBeatInPreviousBar = (pace) => {
 		if (pace == 0) {
 			return 0;
 		}
@@ -76,23 +76,23 @@ export class Tablature {
 		return this.getFirstBeatInBar(pace - 1);
 	}
 
-	getFirstBeatInNextBar(pace) {
+	getFirstBeatInNextBar = (pace) => {
 		return (this.getLastBeatInBar(pace + 1) >= this.getTotalBeats()) ? this.getTotalBeats() - 1 : this.getLastBeatInBar(pace + 1);
 	}
 
-	getCurrentBar(pace) {
+	getCurrentBar = (pace) => {
 		return Math.floor(pace / this.getPrecision() % this.getPrecision());
 	}
 
-	getCurrentTime(pace) {
+	getCurrentTime = (pace) => {
 		return Math.floor(pace / this.beats % this.times);
 	}
 
-	addBar() {
+	addBar = () => {
 		this.staff.push(...Array.from({ length: this.getPrecision() - (this.getTotalBeats() % this.getPrecision()) }, () => [0, 0, 0, 0, 0, 0, 0, 0]));
 	}
 
-	hitNote(note, pace) {
+	hitNote = (note, pace) => {
 		if (!this.staff[pace][note]) {
 			this.staff[pace][note] = 1;
 

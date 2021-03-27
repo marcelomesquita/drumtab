@@ -16,7 +16,9 @@ export class Piece {
 		this.brand = brand;
 		this.type = type;
 
-		this.audios.push(new Howl({src: [`/assets/audios/drum/${this.name}/${this.brand}/${this.type}-0.mp3`]}));
+		this.audios.push(new Howl({
+			src: [`/assets/audios/drum/${this.name}/${this.brand}/${this.type}-0.mp3`]
+		}));
 	}
 
 	hit() {
