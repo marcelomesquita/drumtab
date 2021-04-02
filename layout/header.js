@@ -1,11 +1,22 @@
-import { faSearch, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
 
 function Header() {
+	const [session, loading] = useSession();
+
 	const toggleStyles = (event) => {
 		document.querySelector('#burger').classList.toggle('is-active')
 		document.querySelector('#mainbar').classList.toggle('is-active')
+	}
+
+	const signInOut = () => {
+		if (!session) {
+			return <a className="navbar-item" onClick={() => signIn('auth0')} title="login"><FontAwesomeIcon icon={faSignInAlt} /></a>;
+		} else {
+			return <a className="navbar-item" onClick={() => signOut()} title={`sair da conta ${session.user.email}`}><FontAwesomeIcon icon={faSignOutAlt} /></a>
+		}
 	}
 
 	return (
@@ -37,7 +48,7 @@ function Header() {
 								</div>
 							</div>
 
-							<Link href="/login"><a className="navbar-item" title="Login"><FontAwesomeIcon icon={faSignInAlt} /></a></Link>
+							{signInOut()}
 						</div>
 					</div>
 				</div>

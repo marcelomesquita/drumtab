@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import Container from 'layout/container'
-import Breadcrumb from 'components/breadcrumb';
-import Drummer from 'components/drummer';
-import { Tablature } from 'models/tablature';
-import { Drum } from 'models/drum';
 import moment from 'moment';
+import Container from '../../layout/container'
+import Breadcrumb from '../../components/breadcrumb';
+import Drummer from '../../components/drummer';
+import { Tablature } from '../../models/tablature';
+import { Drum } from '../../models/drum';
 
 export async function getStaticPaths() {
 	return {

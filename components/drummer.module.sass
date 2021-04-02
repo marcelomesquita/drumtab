@@ -1,0 +1,37 @@
+.mark
+	display: block
+	width: 28px !important
+	height: 28px !important
+
+.pieces
+	float: left
+
+.beats
+	overflow-x: auto
+	white-space: nowrap
+
+.beat
+	display: inline-block
+
+.beat.time
+	border-left: 1px solid rgba(0, 0, 0, .1)
+
+.beat.bar
+	border-left: 1px solid rgba(0, 0, 0, .3)
+
+.beat.active .note
+	background: rgba(0, 0, 0, .1)
+
+.beat .note
+	display: block
+	width: 28px !important
+	height: 28px !important
+	border: none
+	border-bottom: 1px solid rgba(0, 0, 0, .1)
+	overflow: hidden
+
+.beat .note:active,
+.beat .note:focus,
+.beat .note:hover
+	outline: none
+	background: rgba(0, 0, 0, .1)

@@ -1,6 +1,5 @@
-import Breadcrumb from 'components/breadcrumb';
-import Footer from './footer';
-import Header from './header';
+import Footer from "./footer";
+import Header from "./header";
 
 function Container({ children }) {
 	return (

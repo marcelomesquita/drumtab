@@ -1,4 +1,4 @@
-import { Howl } from 'howler';
+import { Howl } from "howler";
 
 export class Piece {
 	id;
@@ -17,15 +17,16 @@ export class Piece {
 		this.type = type;
 
 		this.audios.push(new Howl({
-			src: [`/assets/audios/drum/${this.name}/${this.brand}/${this.type}-0.mp3`]
+			src: [`/assets/audios/drum/${this.name}/${this.brand}/${this.type}-0.mp3`],
+			preload: true
 		}));
 	}
 
-	hit() {
+	hit = () => {
 		this.audios[this.nextVariation()].play();
 	}
 
-	nextVariation() {
+	nextVariation = () => {
 		this.variation = (this.variation == this.audios.length - 1) ? 0 : ++this.variation;
 
 		return this.variation;

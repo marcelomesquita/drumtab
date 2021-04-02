@@ -1,13 +1,21 @@
-import Head from 'next/head';
-import Container from 'layout/container'
-import Drummer from 'components/drummer';
-import { Tablature } from 'models/tablature';
-import { Drum } from 'models/drum';
-import Breadcrumb from 'components/breadcrumb';
+import Head from "next/head";
+import Error from "next/error";
+import { useSession } from "next-auth/client";
+import Container from "../../layout/container"
+import Drummer from "../../components/drummer";
+import Breadcrumb from "../../components/breadcrumb";
+import { Tablature } from "../../models/tablature";
+import { Drum } from "../../models/drum";
 
 function NewMusic(props) {
-	var drum = new Drum();
-	var tablature = new Tablature();
+	const [session, loading] = useSession();
+
+	if (loading) return null;
+
+	if (!session) return <Error statusCode={403} />;
+
+	var drum: Drum = new Drum();
+	var tablature: Tablature = new Tablature();
 
 	tablature.addBar();
 

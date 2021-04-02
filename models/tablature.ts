@@ -1,10 +1,10 @@
 export class Tablature {
-	times = 4;
-	beats = 4;
-	beatsPerMin = 60;
-	staff = [];
+	times: number = 4;
+	beats: number = 4;
+	beatsPerMin: number = 60;
+	staff: Array<Array<number>> = [];
 
-	constructor(init) {
+	constructor(init = null) {
 		Object.assign(this, init);
 	}
 

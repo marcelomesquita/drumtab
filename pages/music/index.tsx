@@ -1,13 +1,13 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import Container from 'layout/container'
-import Breadcrumb from 'components/breadcrumb';
-import Pagination from 'components/pagination';
+import Head from "next/head";
+import Link from "next/link";
+import Container from "../../layout/container"
+import Breadcrumb from "../../components/breadcrumb";
+import Pagination from "../../components/pagination";
 
 export async function getStaticPaths() {
 	return {
 		paths: [],
-		fallback: 'blocking'
+		fallback: "blocking"
 	}
 }
 

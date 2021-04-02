@@ -1,8 +1,8 @@
 import Head from "next/head";
+import Link from "next/link";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Container from 'layout/container'
-import Link from "next/link";
+import Container from "../layout/container"
 
 export async function getStaticPaths() {
 	return {
@@ -93,7 +93,6 @@ function Home(props) {
 							<div className="column">
 								<h2 className="title is-2">DrumTab</h2>
 								<h3 className="subtitle is-3 has-text-light">A forma mais simples de escrever e ler tablatura de baterias</h3>
-								<button className="button is-success is-large">Entre nesse clube</button>
 							</div>
 							<div className="column">
 							<figure className="image is-4by3">
