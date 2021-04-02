@@ -4,7 +4,7 @@ import { faAdjust, faBan, faCircle, faClock, faDotCircle, faLock, faLockOpen, fa
 import { faCircle as farCircle, faWindowMinimize as farWindowMinimize } from "@fortawesome/free-regular-svg-icons"
 import { Drum, PIECE_KEY } from "../../models/drum";
 import { Tablature } from "../../models/tablature";
-import styles from "../styles/drummer.module.sass";
+import styles from "../../styles/drummer.module.sass";
 
 interface DrummerProps {
 	drum: Drum;
