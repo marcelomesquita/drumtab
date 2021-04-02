@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
-import Container from "../../layout/container"
-import Breadcrumb from "../../components/breadcrumb";
-import Pagination from "../../components/pagination";
+import Container from "../../components/layout/container"
+import Breadcrumb from "../../components/shared/breadcrumb";
+import Pagination from "../../components/shared/pagination";
 
 export async function getStaticPaths() {
 	return {

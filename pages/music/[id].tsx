@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
-import Container from '../../layout/container'
-import Breadcrumb from '../../components/breadcrumb';
-import Drummer from '../../components/drummer';
+import Container from '../../components/layout/container'
+import Breadcrumb from '../../components/shared/breadcrumb';
+import Drummer from '../../components/shared/drummer';
 import { Tablature } from '../../models/tablature';
 import { Drum } from '../../models/drum';
 

@@ -1,9 +1,9 @@
 import Head from "next/head";
 import Error from "next/error";
 import { useSession } from "next-auth/client";
-import Container from "../../layout/container"
-import Drummer from "../../components/drummer";
-import Breadcrumb from "../../components/breadcrumb";
+import Container from "../../components/layout/container"
+import Drummer from "../../components/shared/drummer";
+import Breadcrumb from "../../components/shared/breadcrumb";
 import { Tablature } from "../../models/tablature";
 import { Drum } from "../../models/drum";
 

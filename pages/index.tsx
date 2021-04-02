@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Container from "../layout/container"
+import Container from "../components/layout/container"
 
 export async function getStaticPaths() {
 	return {

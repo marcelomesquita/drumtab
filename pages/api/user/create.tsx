@@ -1,4 +1,4 @@
-import connect from '../../../util/database';
+import connect from '../../../components/util/database';
 
 async function CreateUser(request, response) {
 	if (request.method === 'POST') {

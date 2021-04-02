@@ -2,9 +2,9 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdjust, faBan, faCircle, faClock, faDotCircle, faLock, faLockOpen, faMusic, faPause, faPlay, faStepBackward, faStepForward, faStop, faTachometerAlt, faThList, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { faCircle as farCircle, faWindowMinimize as farWindowMinimize } from "@fortawesome/free-regular-svg-icons"
-import { Drum, PIECE_KEY } from "../models/drum";
-import { Tablature } from "../models/tablature";
-import styles from "./drummer.module.sass";
+import { Drum, PIECE_KEY } from "../../models/drum";
+import { Tablature } from "../../models/tablature";
+import styles from "../styles/drummer.module.sass";
 
 interface DrummerProps {
 	drum: Drum;
