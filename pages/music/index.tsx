@@ -12,31 +12,12 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
+	const musicsSearch = await (await fetch('http://localhost:3000/api/music/search')).json();
+
 	return {
 		props: {
 			title: "Músicas",
-			musics: [
-				{
-					id: 1,
-					title: "Basket Case",
-					artist: "Green Day"
-				},
-				{
-					id: 2,
-					title: "Be yourself",
-					artist: "Audioslave"
-				},
-				{
-					id: 3,
-					title: "Duality",
-					artist: "Slipknot"
-				},
-				{
-					id: 4,
-					title: "30 Seconds to Mars",
-					artist: "Walk on Water"
-				},
-			]
+			musics: musicsSearch.musics
 		}
 	}
 }
@@ -57,8 +38,8 @@ function Musicas(props) {
 
 					<div className="columns is-multiline">
 						{props.musics.map((music) => { return (
-							<div key={music.id} className="column is-4">
-								<Link href="/music/1">
+							<div key={music.slug} className="column is-4">
+								<Link href={`/music/${music.slug}`}>
 									<a>
 										<div className="card">
 											<div className="card-image">

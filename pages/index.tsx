@@ -12,52 +12,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
+	const musicsSearch = await (await fetch('http://localhost:3000/api/music/search')).json();
+
 	return {
 		props: {
-			musics: [
-				{
-					id: 1,
-					title: "Basket Case",
-					artist: "Green Day",
-					album: "Dookie",
-					author: "Trè Cool"
-				},
-				{
-					id: 1,
-					title: "Be Yourself",
-					artist: "Audioslave",
-					album: "Dookie",
-					author: "Trè Cool"
-				},
-				{
-					id: 1,
-					title: "Duality",
-					artist: "Slipknot",
-					album: "Dookie",
-					author: "Trè Cool"
-				},
-				{
-					id: 1,
-					title: "Nothin Else Matters",
-					artist: "Metalica",
-					album: "The Black Album",
-					author: "Trè Cool"
-				},
-				{
-					id: 1,
-					title: "30 Seconds to Mars",
-					artist: "Walk On Water",
-					album: "Dookie",
-					author: "Trè Cool"
-				},
-				{
-					id: 1,
-					title: "Basket Case",
-					artist: "Green Day",
-					album: "Dookie",
-					author: "Trè Cool"
-				}
-			],
+			musics: musicsSearch.musics,
 			artists: [
 				{
 					id: 1,
@@ -113,7 +72,7 @@ function Home(props) {
 							<div className="columns">
 								<div className="column">
 									{props.musics.filter((music, m) => (m < 5)).map((music, m) => { return (
-										<Link key={`music-${m}`} href={`/music/${music.id}`}>
+										<Link key={`music-${m}`} href={`/music/${music.slug}`}>
 											<a className="has-text-primary">
 												<div className="box is-shadowless">
 													<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1}</span>
@@ -126,7 +85,7 @@ function Home(props) {
 								</div>
 								<div className="column">
 									{props.musics.filter((music, m) => (m >= 5)).map((music, m) => { return (
-										<Link key={`music-${m}`} href={`/music/${music.id}`}>
+										<Link key={`music-${m}`} href={`/music/${music.slug}`}>
 											<a className="has-text-primary">
 												<div className="box is-shadowless">
 													<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1 + 5}</span>

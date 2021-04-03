@@ -6,9 +6,9 @@ import connect from "../../../components/util/database";
 
 async function select(req: NextApiRequest, res: NextApiResponse) {
 	try {
-		const _id: ObjectId = new ObjectId(String(req.query.id));
+		const slug: string = req.query.slug as string;
 		const db: Db = await connect();
-		const result = await db.collection('musics').findOne({_id});
+		const result = await db.collection("musics").findOne({slug});
 
 		if (!result) {
 			return res.status(404).json({message: "Not Found!"});
@@ -28,9 +28,9 @@ async function remove(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(401).json({message: "Unauthorized!"});
 		}
 
-		const _id: ObjectId = new ObjectId(String(req.query.id));
+		const slug: string = req.query.slug as string;
 		const db: Db = await connect();
-		const result = await db.collection('musics').deleteOne({_id});
+		const result = await db.collection('musics').deleteOne({slug});
 
 		if (result.deletedCount === 0) {
 			return res.status(404).json({message: "Not Found!"});
