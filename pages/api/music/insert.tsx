@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
 import { Db } from "mongodb";
-import { ObjectId } from "bson";
 import { Music } from "../../../models/music";
 import connect from "../../../components/util/database";
 
@@ -24,16 +23,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({message: "Invalid parameter!"});
 		}
 
-		music._id = new ObjectId(music._id);
-
 		const db: Db = await connect();
-		const result = await db.collection('musics').updateOne({_id: music._id}, {$set: music});
+		const result = await db.collection('musics').insertOne(music);
 
-		if (result.modifiedCount === 0) {
-			return res.status(404).json({message: "Ops!"});
+		if (result.insertedCount === 0) {
+			return res.status(500).json({message: "Ops!"});
 		}
 
-		return res.status(200).json({message: "Música atualizada!"});
+		return res.status(200).json({message: "Música cadastrada!", music: result.ops[0]});
 	} catch (e) {
 		return res.status(500).json({message: e.toString()});
 	}

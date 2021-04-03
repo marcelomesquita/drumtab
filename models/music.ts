@@ -1,7 +1,8 @@
+import { ObjectId } from 'bson';
 import { Tablature } from './tablature';
 
 export class Music {
-	id: number;
+	_id: ObjectId;
 	title: string;
 	artist: string;
 	album: string;
@@ -12,5 +13,9 @@ export class Music {
 
 	constructor(init = null) {
 		Object.assign(this, init);
+	}
+
+	isValid = (): boolean => {
+		return true;
 	}
 }
