@@ -14,7 +14,7 @@ function Header() {
 		if (!session) {
 			return <a className="navbar-item" onClick={() => signIn('auth0')} title="login"><span className="icon is-small"><i className="fas fa-sign-in-alt" /></span></a>;
 		} else {
-			return <a className="navbar-item" onClick={() => signOut()} title={`sair da conta ${session.user.email}`}><span className="icon is-small"><i className="fas fa-sign-out-alt" /></span></a>
+			return <a className="navbar-item" onClick={() => signOut()} title={`sair (${session.user.email})`}><span className="icon is-small"><i className="fas fa-sign-out-alt" /></span></a>
 		}
 	}
 
@@ -41,7 +41,7 @@ function Header() {
 							<div className="navbar-item">
 								<div className="control has-icons-right">
 									<input className="input has-background-grey-darker has-text-light is-borderless" type="text" placeholder="search" />
-									<span className="icon is-small is-right"><i className="fas fa-search" /></span>
+									<span className="icon is-small is-right"><i className="fw fas fa-search" /></span>
 								</div>
 							</div>
 

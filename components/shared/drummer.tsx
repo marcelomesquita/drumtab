@@ -65,15 +65,15 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	beatIcon = (beat) => {
 		switch (beat) {
 			case 1:
-				return <span className="icon is-small"><i className="fas fa-circle" /></span>
+				return <span className="icon is-small"><i className="fw fas fa-circle" /></span>
 			case 2:
-				return <span className="icon is-small"><i className="fas fa-adjust" /></span>
+				return <span className="icon is-small"><i className="fw fas fa-adjust" /></span>
 			case 3:
-				return <span className="icon is-small"><i className="das fa-dot-circle" /></span>
+				return <span className="icon is-small"><i className="fw fas fa-dot-circle" /></span>
 			case 4:
-				return <span className="icon is-small"><i className="far fa-circle" /></span>
+				return <span className="icon is-small"><i className="fw far fa-circle" /></span>
 			case 5:
-				return <span className="icon is-small"><i className="fas fa-ban" /></span>
+				return <span className="icon is-small"><i className="fw fas fa-ban" /></span>
 		}
 	}
 
@@ -236,15 +236,15 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 			<div id="tablature">
 				<div className="columns">
 					<div className="column is-narrow">
-						<button className="button is-small" title="Stop" onClick={this.stop}><span className="icon is-small"><i className="fas fa-stop" /></span></button>
-						<button className="button is-small" title="Previous Bar" onClick={this.skipPrev}><span className="icon is-small"><i className="fas fa-step-backward" /></span></button>
-						<button className="button is-small" title="Play/Pause" onClick={this.playPause}><span className="icon is-small"><i className={this.state.timer ? "fas fa-pause" : "fas fa-play"} /></span></button>
-						<button className="button is-small" title="Next Bar" onClick={this.skipNext}><span className="icon is-small"><i className="fas fa-step-forward" /></span></button>
+						<button className="button is-small" title="Stop" onClick={this.stop}><span className="icon is-small"><i className="fw fas fa-stop" /></span></button>
+						<button className="button is-small" title="Previous Bar" onClick={this.skipPrev}><span className="icon is-small"><i className="fw fas fa-step-backward" /></span></button>
+						<button className="button is-small" title="Play/Pause" onClick={this.playPause}><span className="icon is-small"><i className={`fw ${this.state.timer ? "fas fa-pause" : "fas fa-play"}`} /></span></button>
+						<button className="button is-small" title="Next Bar" onClick={this.skipNext}><span className="icon is-small"><i className="fw fas fa-step-forward" /></span></button>
 					</div>
 
 					<div className="column is-narrow">
-						<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className={this.state.repeat ? "fas fa-undo" : "far fa-window-minimize"} /></span></button>
-						<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className={this.state.scrollLock ? "fas fa-lock" : "fas fa-lock-open"} /></span></button>
+						<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className={`fw ${this.state.repeat ? "fas fa-undo" : "far fa-window-minimize"}`} /></span></button>
+						<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className={`fw ${this.state.scrollLock ? "fas fa-lock" : "fas fa-lock-open"}`} /></span></button>
 					</div>
 
 					<div className="column is-narrow">
@@ -259,7 +259,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									style={{width: "80px"}}
 									value={this.state.tablature.times}
 									onChange={(e) => this.setTimes(e)} />
-								<span className="icon is-small is-left"><i className="fas fa-clock" /></span>
+								<span className="icon is-small is-left"><i className="fw fas fa-clock" /></span>
 							</span>
 							<span className="control has-icons-left">
 								<input
@@ -271,7 +271,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									style={{width: "80px"}}
 									value={this.state.tablature.beats}
 									onChange={(e) => this.setBeats(e)} />
-								<span className="icon is-small is-left"><i className="fas fa-music" /></span>
+								<span className="icon is-small is-left"><i className="fw fas fa-music" /></span>
 							</span>
 							<span className="control has-icons-left">
 								<input
@@ -283,7 +283,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									style={{width: "80px"}}
 									value={this.state.tablature.getBeatsPerMin()}
 									onChange={(e) => this.setBeatsPerMin(e)} />
-								<span className="icon is-small is-left"><i className="fas fa-tachometer-alt" /></span>
+								<span className="icon is-small is-left"><i className="fw fas fa-tachometer-alt" /></span>
 							</span>
 						</div>
 					</div>

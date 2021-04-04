@@ -2,10 +2,7 @@ import Head from "next/head";
 import { AppProps } from "next/dist/next-server/lib/router/router";
 import { Provider } from "next-auth/client";
 
-import "@fortawesome/fontawesome-free/js/fontawesome";
-import "@fortawesome/fontawesome-free/js/solid";
-import "@fortawesome/fontawesome-free/js/regular";
-import "@fortawesome/fontawesome-free/js/brands";
+import "@fortawesome/fontawesome-free/js/all";
 
 import "../styles/global.sass"
 

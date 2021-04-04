@@ -64,7 +64,7 @@ function Home(props) {
 							<Link href="/music">
 								<a className="is-pulled-right has-text-primary">
 									ver todas as músicas
-									<span className="icon is-small"><i className="fas fa-chevron-right" /></span>
+									<span className="icon is-small"><i className="fw fas fa-chevron-right" /></span>
 								</a>
 							</Link>
 							<h2 className="title is-4 is-info">MÚSICAS POPULARES</h2>
@@ -101,7 +101,7 @@ function Home(props) {
 							<Link href="/music">
 								<a className="is-pulled-right has-text-primary">
 									ver todas os artistas
-									<span className="icon is-small"><i className="fas fa-chevron-right" /></span>
+									<span className="icon is-small"><i className="fw fas fa-chevron-right" /></span>
 								</a>
 							</Link>
 							<h1 className="title is-4 is-info">ARTISTAS</h1>
