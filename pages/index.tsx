@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Container from "../components/layout/container"
 
 export async function getStaticProps(context) {
-	//const musicsSearch = await (await fetch(`${process.env.NEXT_URL}/api/music/search`)).json();
+	const musicsSearch = await (await fetch(`${process.env.NEXT_URL}/api/music/search`)).json();
 
 	return {
 		props: {
-			musics: [], // musicsSearch.musics,
+			musics: musicsSearch.musics,
 			artists: [
 				{
 					id: 1,
