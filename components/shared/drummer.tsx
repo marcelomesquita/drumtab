@@ -1,7 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdjust, faBan, faCircle, faClock, faDotCircle, faLock, faLockOpen, faMusic, faPause, faPlay, faStepBackward, faStepForward, faStop, faTachometerAlt, faThList, faUndo } from "@fortawesome/free-solid-svg-icons";
-import { faCircle as farCircle, faWindowMinimize as farWindowMinimize } from "@fortawesome/free-regular-svg-icons"
 import { Drum, PIECE_KEY } from "../../models/drum";
 import { Tablature } from "../../models/tablature";
 import styles from "../../styles/drummer.module.sass";
@@ -68,15 +65,15 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	beatIcon = (beat) => {
 		switch (beat) {
 			case 1:
-				return <FontAwesomeIcon icon={faCircle} />
+				return <span className="icon"><i className="fas fa-circle" /></span>
 			case 2:
-				return <FontAwesomeIcon icon={faAdjust} />
+				return <span className="icon"><i className="fas fa-adjust" /></span>
 			case 3:
-				return <FontAwesomeIcon icon={faDotCircle} />
+				return <span className="icon"><i className="das fa-dot-circle" /></span>
 			case 4:
-				return <FontAwesomeIcon icon={farCircle} />
+				return <span className="icon"><i className="far fa-circle" /></span>
 			case 5:
-				return <FontAwesomeIcon icon={faBan} />
+				return <span className="icon"><i className="fas fa-ban" /></span>
 		}
 	}
 
@@ -239,15 +236,15 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 			<div id="tablature">
 				<div className="columns">
 					<div className="column is-narrow">
-						<button className="button is-small" title="Stop" onClick={this.stop}><FontAwesomeIcon icon={faStop} /></button>
-						<button className="button is-small" title="Previous Bar" onClick={this.skipPrev}><FontAwesomeIcon icon={faStepBackward} /></button>
-						<button className="button is-small" title="Play/Pause" onClick={this.playPause}><FontAwesomeIcon icon={this.state.timer ? faPause : faPlay} /></button>
-						<button className="button is-small" title="Next Bar" onClick={this.skipNext}><FontAwesomeIcon icon={faStepForward} /></button>
+						<button className="button is-small" title="Stop" onClick={this.stop}><span className="icon"><i className="fas fa-stop" /></span></button>
+						<button className="button is-small" title="Previous Bar" onClick={this.skipPrev}><span className="icon"><i className="fas fa-step-backward" /></span></button>
+						<button className="button is-small" title="Play/Pause" onClick={this.playPause}><span className="icon"><i className={this.state.timer ? "fas fa-pause" : "fas fa-play"} /></span></button>
+						<button className="button is-small" title="Next Bar" onClick={this.skipNext}><span className="icon"><i className="fas fa-step-forward" /></span></button>
 					</div>
 
 					<div className="column is-narrow">
-						<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><FontAwesomeIcon icon={this.state.repeat? faUndo : farWindowMinimize} /></button>
-						<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><FontAwesomeIcon icon={this.state.scrollLock ? faLock : faLockOpen} /></button>
+						<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon"><i className={this.state.repeat ? "fas fa-undo" : "far fa-window-minimize"} /></span></button>
+						<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon"><i className={this.state.scrollLock ? "fas fa-lock" : "fas fa-lock-open"} /></span></button>
 					</div>
 
 					<div className="column is-narrow">
@@ -263,7 +260,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									value={this.state.tablature.times}
 									onChange={(e) => this.setTimes(e)} />
 								<span className="icon is-small is-left">
-									<FontAwesomeIcon icon={faClock} />
+									<span className="icon"><i className="fas fa-clock" /></span>
 								</span>
 							</span>
 							<span className="control has-icons-left">
@@ -277,7 +274,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									value={this.state.tablature.beats}
 									onChange={(e) => this.setBeats(e)} />
 								<span className="icon is-small is-left">
-									<FontAwesomeIcon icon={faMusic} />
+									<span className="icon"><i className="fas fa-music" /></span>
 								</span>
 							</span>
 							<span className="control has-icons-left">
@@ -291,7 +288,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									value={this.state.tablature.getBeatsPerMin()}
 									onChange={(e) => this.setBeatsPerMin(e)} />
 								<span className="icon is-small is-left">
-									<FontAwesomeIcon icon={faTachometerAlt} />
+									<span className="icon"><i className="fas fa-tachometer-alt" /></span>
 								</span>
 							</span>
 						</div>

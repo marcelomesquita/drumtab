@@ -1,18 +1,15 @@
 import Link from 'next/link';
 import React from 'react';
+import { PROJECT } from '../../models/project';
 
-class Footer extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
-	menu = () => {
-		if (this.props.menu) {
-			return (
+function Footer() {
+	return (
+		<footer className="footer has-background-light pb-0">
+			<div className="container is-widescreen">
 				<section className="section">
 					<div className="columns">
 						<div className="column is-one-third">
-							<h2 className="title is-2">DrumTab</h2>
+							<h2 className="title is-2">{PROJECT.TITLE}</h2>
 						</div>
 						<div className="column">
 							<h6 className="title is-7 has-text-primary-dark">MÚSICAS</h6>
@@ -40,34 +37,24 @@ class Footer extends React.Component {
 						</div>
 					</div>
 				</section>
-			)
-		}
-	}
 
-	render() {
-		return (
-			<footer className="footer has-background-light pb-0">
-				<div className="container is-widescreen">
-					{this.menu()}
-
-					<section className="section">
-						<div className="columns">
-							<div className="column">
-								<div className="content is-small has-text-grey">
-									<p>&copy; DrumTab by <a href="https://marcelomesquita.com" target="_blank" className="has-text-primary">Marcelo Mesquita</a></p>
-								</div>
-							</div>
-							<div className="column">
-								<div className="content is-small has-text-grey has-text-right">
-									<p>1.0.0</p>
-								</div>
+				<section className="section">
+					<div className="columns">
+						<div className="column">
+							<div className="content is-small has-text-grey">
+								<p>&copy; {process.env.TITLE} by <a href="https://marcelomesquita.com" target="_blank" className="has-text-primary">Marcelo Mesquita</a></p>
 							</div>
 						</div>
-					</section>
-				</div>
-			</footer>
-		)
-	}
+						<div className="column">
+							<div className="content is-small has-text-grey has-text-right">
+								<p>{PROJECT.VERSION}</p>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</footer>
+	)
 }
 
 export default Footer;

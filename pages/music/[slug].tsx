@@ -6,6 +6,7 @@ import Breadcrumb from '../../components/shared/breadcrumb';
 import Drummer from '../../components/shared/drummer';
 import { Tablature } from '../../models/tablature';
 import { Drum } from '../../models/drum';
+import { PROJECT } from '../../models/project';
 
 export async function getStaticPaths() {
 	return {
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
 	const slug = context.params.slug;
-	const musicSearch = await (await fetch(`${process.env.NEXT_URL}/api/music/${slug}`)).json();
+	const musicSearch = await (await fetch(`${process.env.BASE_URL}/api/music/${slug}`)).json();
 
 	return {
 		props: {
@@ -122,22 +123,15 @@ export async function getStaticProps(context) {
 }
 
 function Music(props) {
+	const pageTitle = props.music.title;
 	const music = props.music;
 	const drum = new Drum();
 	const tablature = new Tablature(music.tablature);
 
-	function getAlbum() {
-		return music.album ? `/ ${music.album}` : ``;
-	}
-
-	function getAuthor() {
-		return music.author ? `(${music.author})` : ``;
-	}
-
 	return (
 		<Container>
 			<Head>
-				<title>{music.title} | Drumtab</title>
+				<title>{pageTitle} | {PROJECT.TITLE}</title>
 			</Head>
 
 			<div className="container is-widescreen">
@@ -145,7 +139,7 @@ function Music(props) {
 					<Breadcrumb />
 
 					<h1 className="title">{music.title}</h1>
-					<h2 className="subtitle has-text-grey">{music.artist} {getAlbum()} {getAuthor()}</h2>
+					<h2 className="subtitle has-text-grey">{music.artist} {music.album && (`/ ${music.album}`)} {music.author && (`(${music.author})`)}</h2>
 
 					<div className="tags">
 						<span className="tag is-primary">double tap</span>

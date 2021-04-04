@@ -1,6 +1,8 @@
 {
   "name": "drumtab",
   "version": "1.0.0",
+  "license": "ISC",
+  "description": "The easiest way to write drum tabs!",
   "author": "Marcelo Mesquita",
   "homepage": "https://marcelomesquita.com",
   "main": "index.js",
@@ -10,7 +12,6 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
     "@zeit/next-sass": "^1.0.1",
     "autoprefixer": "^10.2.5",
     "bulma": "^0.9.2",
@@ -25,8 +26,6 @@
   "scripts": {
     "dev": "next dev"
   },
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@types/mongodb": "^3.6.10",
     "@types/next-auth": "^3.13.0",

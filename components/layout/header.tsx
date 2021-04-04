@@ -1,7 +1,6 @@
-import { faSearch, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
+import { PROJECT } from '../../models/project';
 
 function Header() {
 	const [session, loading] = useSession();
@@ -13,9 +12,9 @@ function Header() {
 
 	const signInOut = () => {
 		if (!session) {
-			return <a className="navbar-item" onClick={() => signIn('auth0')} title="login"><FontAwesomeIcon icon={faSignInAlt} /></a>;
+			return <a className="navbar-item" onClick={() => signIn('auth0')} title="login"><span className="icon"><i className="fas fa-sign-in-alt" /></span></a>;
 		} else {
-			return <a className="navbar-item" onClick={() => signOut()} title={`sair da conta ${session.user.email}`}><FontAwesomeIcon icon={faSignOutAlt} /></a>
+			return <a className="navbar-item" onClick={() => signOut()} title={`sair da conta ${session.user.email}`}><span className="icon"><i className="fas fa-sign-out-alt" /></span></a>
 		}
 	}
 
@@ -24,7 +23,7 @@ function Header() {
 			<nav className="navbar is-primary" role="navigation" aria-label="main navigation">
 				<div className="container is-widescreen">
 					<div className="navbar-brand">
-						<Link href="/"><a className="navbar-item"><strong>Drumtab</strong></a></Link>
+						<Link href="/"><a className="navbar-item"><strong>{PROJECT.TITLE}</strong></a></Link>
 
 						<a className="navbar-burger" onClick={toggleStyles} id="burger" role="button" aria-label="menu" aria-expanded="false" data-target="mainbar">
 							<span aria-hidden="true"></span>
@@ -42,9 +41,7 @@ function Header() {
 							<div className="navbar-item">
 								<div className="control has-icons-right">
 									<input className="input has-background-grey-darker has-text-light is-borderless" type="text" placeholder="search" />
-									<span className="icon is-right">
-										<FontAwesomeIcon icon={faSearch} />
-									</span>
+									<span className="icon is-right"><i className="fas fa-search" /></span>
 								</div>
 							</div>
 

@@ -6,6 +6,7 @@ import Drummer from "../../components/shared/drummer";
 import Breadcrumb from "../../components/shared/breadcrumb";
 import { Tablature } from "../../models/tablature";
 import { Drum } from "../../models/drum";
+import { PROJECT } from "../../models/project";
 
 function NewMusic(props) {
 	const [session, loading] = useSession();
@@ -14,15 +15,16 @@ function NewMusic(props) {
 
 	if (!session) return <Error statusCode={403} />;
 
-	var drum: Drum = new Drum();
-	var tablature: Tablature = new Tablature();
+	const pageTitle = "Nova Música";
+	const drum: Drum = new Drum();
+	const tablature: Tablature = new Tablature();
 
 	tablature.addBar();
 
 	return (
 		<Container>
 			<Head>
-				<title>Nova Música | Drumtab</title>
+				<title>{pageTitle} | {PROJECT.TITLE}</title>
 			</Head>
 
 			<div className="container is-widescreen">

@@ -3,30 +3,32 @@ import Link from "next/link";
 import Container from "../../components/layout/container"
 import Breadcrumb from "../../components/shared/breadcrumb";
 import Pagination from "../../components/shared/pagination";
+import { PROJECT } from "../../models/project";
 
 export async function getStaticProps(context) {
-	const musicsSearch = await (await fetch(`${process.env.NEXT_URL}/api/music/search`)).json();
+	const musicsSearch = await (await fetch(`${process.env.BASE_URL}/api/music/search`)).json();
 
 	return {
 		props: {
-			title: "Músicas",
 			musics: musicsSearch.musics
 		}
 	}
 }
 
 function Musicas(props) {
+	const pageTitle = "Músicas";
+
 	return (
 		<Container>
 			<Head>
-				<title>{props.title} | Drumtab</title>
+				<title>{pageTitle} | {PROJECT.TITLE}</title>
 			</Head>
 
 			<div className="container is-widescreen">
 				<section className="section">
 					<Breadcrumb />
 
-					<h1 className="title">Músicas</h1>
+					<h1 className="title">{pageTitle}</h1>
 					<h2 className="subtitle">Subtitle</h2>
 
 					<div className="columns is-multiline">

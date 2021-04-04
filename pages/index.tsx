@@ -1,11 +1,10 @@
 import Head from "next/head";
 import Link from "next/link";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Container from "../components/layout/container"
+import { PROJECT } from "../models/project";
 
 export async function getStaticProps(context) {
-	const musicsSearch = await (await fetch(`${process.env.NEXT_URL}/api/music/search`)).json();
+	const musicsSearch = await (await fetch(`${process.env.BASE_URL}/api/music/search`)).json();
 
 	return {
 		props: {
@@ -32,10 +31,12 @@ export async function getStaticProps(context) {
 }
 
 function Home(props) {
+	const pageTitle = "Home";
+
 	return (
 		<Container>
 			<Head>
-				<title>Home | Drumtab</title>
+				<title>{pageTitle} | {PROJECT.TITLE}</title>
 			</Head>
 
 			<section className="hero is-link is-medium">
@@ -43,7 +44,7 @@ function Home(props) {
 					<div className="container is-widescreen">
 						<div className="columns">
 							<div className="column">
-								<h2 className="title is-2">DrumTab</h2>
+								<h2 className="title is-2">{PROJECT.TITLE}</h2>
 								<h3 className="subtitle is-3 has-text-light">A forma mais simples de escrever e ler tablatura de baterias</h3>
 							</div>
 							<div className="column">
@@ -60,7 +61,12 @@ function Home(props) {
 				<section className="section">
 					<div className="columns">
 						<div className="column is-two-thirds">
-						<Link href="/music"><a className="is-pulled-right has-text-primary">ver todas as músicas <FontAwesomeIcon icon={faChevronRight} /></a></Link>
+							<Link href="/music">
+								<a className="is-pulled-right has-text-primary">
+									ver todas as músicas
+									<span className="icon"><i className="fas fa-chevron-right" /></span>
+								</a>
+							</Link>
 							<h2 className="title is-4 is-info">MÚSICAS POPULARES</h2>
 							<div className="columns">
 								<div className="column">
@@ -92,7 +98,12 @@ function Home(props) {
 							</div>
 						</div>
 						<div className="column">
-							<Link href="/music"><a className="is-pulled-right has-text-primary">ver todas os artistas <FontAwesomeIcon icon={faChevronRight} /></a></Link>
+							<Link href="/music">
+								<a className="is-pulled-right has-text-primary">
+									ver todas os artistas
+									<span className="icon"><i className="fas fa-chevron-right" /></span>
+								</a>
+							</Link>
 							<h1 className="title is-4 is-info">ARTISTAS</h1>
 							{props.artists.map((artist, a) => { return (
 								<Link key={`artist-${a}`} href="/music">
