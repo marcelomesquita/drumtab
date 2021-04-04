@@ -4,13 +4,6 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Container from "../components/layout/container"
 
-export async function getStaticPaths() {
-	return {
-		paths: [],
-		fallback: 'blocking'
-	}
-}
-
 export async function getStaticProps(context) {
 	const musicsSearch = await (await fetch('http://localhost:3000/api/music/search')).json();
 
