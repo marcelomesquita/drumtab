@@ -8,7 +8,7 @@ function Container({ children }) {
 
 			{children}
 
-			<Footer menu={true} />
+			<Footer />
 		</>
 	)
 }
