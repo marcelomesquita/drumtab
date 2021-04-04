@@ -5,7 +5,7 @@ import Breadcrumb from "../../components/shared/breadcrumb";
 import Pagination from "../../components/shared/pagination";
 
 export async function getStaticProps(context) {
-	const musicsSearch = await (await fetch('http://localhost:3000/api/music/search')).json();
+	const musicsSearch = await (await fetch(`${process.env.NEXT_URL}/api/music/search`)).json();
 
 	return {
 		props: {
