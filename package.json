@@ -6,6 +6,10 @@
   "author": "Marcelo Mesquita",
   "homepage": "https://marcelomesquita.com",
   "main": "index.js",
+  "repository": {
+	"type": "git",
+	"url": "git+https://github.com/marcelomesquita/drumtab.git"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
