@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
 	const slug = context.params.slug;
-	const musicSearch = await (await fetch(`http://localhost:3000/api/music/${slug}`)).json();
+	const musicSearch = await (await fetch(`${process.env.NEXT_URL}/api/music/${slug}`)).json();
 
 	return {
 		props: {
