@@ -61,13 +61,19 @@ function Home(props) {
 				<section className="section">
 					<div className="columns">
 						<div className="column is-two-thirds">
-							<Link href="/music">
-								<a className="is-pulled-right has-text-primary">
-									ver todas as músicas
-									<span className="icon is-small"><i className="fw fas fa-chevron-right" /></span>
-								</a>
-							</Link>
-							<h2 className="title is-4 is-info">MÚSICAS POPULARES</h2>
+							<div className="level">
+								<div className="level-left">
+									<h2 className="title is-4 is-info">MÚSICAS POPULARES</h2>
+								</div>
+								<div className="level-right">
+									<Link href="/music">
+										<a className="is-pulled-right has-text-primary">
+											ver todas as músicas
+											<span className="icon is-small"><i className="fw fas fa-chevron-right" /></span>
+										</a>
+									</Link>
+								</div>
+							</div>
 							<div className="columns">
 								<div className="column">
 									{props.musics.filter((music, m) => (m < 5)).map((music, m) => { return (

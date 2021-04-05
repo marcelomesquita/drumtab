@@ -37,13 +37,13 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	}
 
 	componentDidMount = () => {
-		if (typeof document !== 'undefined') {
+		if (this.state.edit && typeof document !== 'undefined') {
 			document.addEventListener('keydown', this.handleKeyboardEvent);
 		}
 	}
 
 	componentWillUnmount = () => {
-		if (typeof document !== 'undefined') {
+		if (this.state.edit && typeof document !== 'undefined') {
 			document.removeEventListener('keydown', this.handleKeyboardEvent);
 		}
 	}
@@ -77,10 +77,6 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 	}
 
-	playPause = () => {
-		this.state.timer ? this.pause() : this.counter();
-	}
-
 	counter = () => {
 		this.setCount(0);
 		this.setState({timer: setInterval(() => {
@@ -96,7 +92,6 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 
 	play = () => {
 		this.setState({timer: setInterval(() => {
-			console.log(new Date().getMilliseconds());
 			let pace = this.nextPace();
 
 			this.readNotes(this.state.tablature.staff[pace]);
@@ -138,7 +133,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	}
 
 	writeNote = (note, pace = this.state.pace) => {
-		if (this.state.tablature.hitNote(note, pace)) {
+		if (this.state.edit && this.state.tablature.hitNote(note, pace)) {
 			this.state.drum.hitNote(note);
 		}
 
@@ -154,11 +149,11 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	}
 
 	toggleRepeat = () => {
-		this.setState({repeat: !this.state.repeat});
+		this.setState({ repeat: !this.state.repeat });
 	}
 
 	toggleScrollLock = () => {
-		this.setState({scrollLock: !this.state.scrollLock});
+		this.setState({ scrollLock: !this.state.scrollLock });
 	}
 
 	clearTimer = () => {
@@ -179,6 +174,10 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	}
 
 	setBeats = (e) => {
+		if (!this.state.edit) {
+			return false;
+		}
+
 		const value = parseInt(e.target.value ? e.target.value : 0);
 		const min = parseInt(e.target.min);
 		const max = parseInt(e.target.max);
@@ -195,6 +194,10 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	}
 
 	setTimes = (e) => {
+		if (!this.state.edit) {
+			return false;
+		}
+
 		const value = parseInt(e.target.value ? e.target.value : 0);
 		const min = parseInt(e.target.min);
 		const max = parseInt(e.target.max);
@@ -238,13 +241,16 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 					<div className="column is-narrow">
 						<button className="button is-small" title="Stop" onClick={this.stop}><span className="icon is-small"><i className="fw fas fa-stop" /></span></button>
 						<button className="button is-small" title="Previous Bar" onClick={this.skipPrev}><span className="icon is-small"><i className="fw fas fa-step-backward" /></span></button>
-						<button className="button is-small" title="Play/Pause" onClick={this.playPause}><span className="icon is-small"><i className={`fw ${this.state.timer ? "fas fa-pause" : "fas fa-play"}`} /></span></button>
+						{!this.state.timer && (<button className="button is-small" title="Play" onClick={this.counter}><span className="icon is-small"><i className="fw fas fa-play" /></span></button>)}
+						{this.state.timer && (<button className="button is-small" title="Pause" onClick={this.pause}><span className="icon is-small"><i className="fw fas fa-pause" /></span></button>)}
 						<button className="button is-small" title="Next Bar" onClick={this.skipNext}><span className="icon is-small"><i className="fw fas fa-step-forward" /></span></button>
 					</div>
 
 					<div className="column is-narrow">
-						<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className={`fw ${this.state.repeat ? "fas fa-undo" : "far fa-window-minimize"}`} /></span></button>
-						<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className={`fw ${this.state.scrollLock ? "fas fa-lock" : "fas fa-lock-open"}`} /></span></button>
+						{this.state.repeat && (<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className="fw fas fa-undo" /></span></button>)}
+						{!this.state.repeat && (<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className="fw far fa-window-minimize" /></span></button>)}
+						{this.state.scrollLock && (<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className="fw fas fa-lock" /></span></button>)}
+						{!this.state.scrollLock && (<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className="fw fas fa-lock-open" /></span></button>)}
 					</div>
 
 					<div className="column is-narrow">
@@ -258,7 +264,8 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									max="16"
 									style={{width: "80px"}}
 									value={this.state.tablature.times}
-									onChange={(e) => this.setTimes(e)} />
+									onChange={(e) => this.setTimes(e)}
+									disabled={!this.state.edit} />
 								<span className="icon is-small is-left"><i className="fw fas fa-clock" /></span>
 							</span>
 							<span className="control has-icons-left">
@@ -270,7 +277,8 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 									max="16"
 									style={{width: "80px"}}
 									value={this.state.tablature.beats}
-									onChange={(e) => this.setBeats(e)} />
+									onChange={(e) => this.setBeats(e)}
+									disabled={!this.state.edit} />
 								<span className="icon is-small is-left"><i className="fw fas fa-music" /></span>
 							</span>
 							<span className="control has-icons-left">

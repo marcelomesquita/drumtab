@@ -12,7 +12,7 @@ function Header() {
 
 	const signInOut = () => {
 		if (!session) {
-			return <a className="navbar-item" onClick={() => signIn('auth0')} title="login"><span className="icon is-small"><i className="fas fa-sign-in-alt" /></span></a>;
+			return <a className="navbar-item" onClick={() => signIn()} title="login"><span className="icon is-small"><i className="fas fa-sign-in-alt" /></span></a>;
 		} else {
 			return <a className="navbar-item" onClick={() => signOut()} title={`sair (${session.user.email})`}><span className="icon is-small"><i className="fas fa-sign-out-alt" /></span></a>
 		}

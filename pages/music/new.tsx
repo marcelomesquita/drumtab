@@ -63,7 +63,7 @@ function NewMusic(props) {
 			</div>
 
 			<div className="container is-fluid has-background-grey-lighter">
-				<Drummer drum={drum} tablature={tablature} />
+				<Drummer drum={drum} tablature={tablature} edit={true} />
 			</div>
 
 			<div className="container is-widescreen">
