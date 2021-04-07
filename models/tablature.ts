@@ -6,6 +6,10 @@ export class Tablature {
 
 	constructor(init = null) {
 		Object.assign(this, init);
+
+		if (!init) {
+			this.addBar();
+		}
 	}
 
 	getTimes = () => {
@@ -32,7 +36,7 @@ export class Tablature {
 		this.beatsPerMin = beatsPerMin;
 	}
 
-	getBeatsPerSec() {
+	getBeatsPerSec = () => {
 		return 60 / this.getBeatsPerMin();
 	}
 

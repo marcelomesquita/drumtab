@@ -3,10 +3,16 @@ import Link from "next/link";
 import Container from "../../components/layout/container"
 import Breadcrumb from "../../components/shared/breadcrumb";
 import Pagination from "../../components/shared/pagination";
+import { Music } from "../../models/music";
 import { PROJECT } from "../../models/project";
 
+interface MusicsResponse {
+	message: string;
+	musics: Array<Music>;
+}
+
 export async function getStaticProps(context) {
-	const musicsSearch = await (await fetch(`${process.env.BASE_URL}/api/music/search`)).json();
+	const musicsSearch: MusicsResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`)).json();
 
 	return {
 		props: {
@@ -15,7 +21,7 @@ export async function getStaticProps(context) {
 	}
 }
 
-function Musicas(props) {
+function MusicsPage(props) {
 	const pageTitle = "Músicas";
 
 	return (
@@ -29,7 +35,7 @@ function Musicas(props) {
 					<Breadcrumb />
 
 					<h1 className="title">{pageTitle}</h1>
-					<h2 className="subtitle">Subtitle</h2>
+					<h2 className="subtitle">Não encontrou a música que queria? Que tal <Link href="/music/new"><a>cadastrá-la!</a></Link></h2>
 
 					<div className="columns is-multiline">
 						{props.musics.map((music) => { return (
@@ -62,4 +68,4 @@ function Musicas(props) {
 	)
 }
 
-export default Musicas;
+export default MusicsPage;

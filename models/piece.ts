@@ -1,13 +1,13 @@
 import { Howl } from "howler";
 
 export class Piece {
-	id;
-	abbr;
-	name;
-	brand;
-	type;
-	audios = [];
-	variation = 0;
+	id: number = null;
+	abbr: string = "";
+	name: string = "";
+	brand: string = "";
+	type: string = "";
+	audios: Array<Howl> = [];
+	variation: number = 0;
 
 	constructor(id, abbr, name, brand, type = 'normal') {
 		this.id = id;

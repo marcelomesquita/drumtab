@@ -5,8 +5,8 @@ import { Piece } from "./piece";
 export const PIECE_KEY = {
 	KeyC: PIECES.CRASH,
 	KeyH: PIECES.HAT,
-	KeyY: PIECES.HAT_CLOSE,
-	KeyN: PIECES.HAT_PEDAL,
+	//KeyY: PIECES.HAT_CLOSE,
+	//KeyN: PIECES.HAT_PEDAL,
 	KeyR: PIECES.RIDE,
 	KeyS: PIECES.SNARE,
 	Digit1: PIECES.TOM_HIGH,

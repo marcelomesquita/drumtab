@@ -7,17 +7,19 @@ interface DrummerProps {
 	drum: Drum;
 	tablature: Tablature;
 	edit?: boolean;
+	onTablatureChange?: any;
 }
 
 interface DrummerState {
 	drum: Drum;
 	tablature: Tablature;
 	timer: NodeJS.Timeout;
+	edit: boolean;
 	pace: number;
 	count: number;
-	edit: boolean;
 	repeat: boolean;
 	scrollLock: boolean;
+	onTablatureChange: any;
 }
 
 class Drummer extends React.Component<DrummerProps, DrummerState> {
@@ -32,7 +34,8 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 			pace: 0,
 			count: 0,
 			repeat: true,
-			scrollLock: true
+			scrollLock: true,
+			onTablatureChange: props.onTablatureChange ? props.onTablatureChange : null
 		}
 	}
 
@@ -49,7 +52,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	}
 
 	handleKeyboardEvent = (event) => {
-		if (PIECE_KEY[event.code] !== 'undefined') {
+		if (this.state.timer && PIECE_KEY[event.code] !== 'undefined') {
 			this.writeNote(PIECE_KEY[event.code], this.state.pace);
 		}
 	}
@@ -124,9 +127,13 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		if (this.state.pace == this.state.tablature.getTotalBeats() - 1) {
-			this.state.tablature.addBar();
+			if (this.state.edit) {
+				this.state.tablature.addBar();
 
-			this.setState(this.state);
+				this.setState(this.state);
+			} else {
+				this.stop();
+			}
 		}
 
 		return this.state.pace + 1;
@@ -138,6 +145,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		this.setState(this.state);
+		this.state.onTablatureChange(this.state.tablature);
 	}
 
 	readNotes = (notes) => {
@@ -191,6 +199,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		this.setState(this.state);
+		this.state.onTablatureChange(this.state.tablature);
 	}
 
 	setTimes = (e) => {
@@ -211,6 +220,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		this.setState(this.state);
+		this.state.onTablatureChange(this.state.tablature);
 	}
 
 	setBeatsPerMin = (e) => {
@@ -227,6 +237,7 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		this.setState(this.state);
+		this.state.onTablatureChange(this.state.tablature);
 
 		if (this.state.timer) {
 			this.clearTimer();
@@ -239,18 +250,18 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 			<div id="tablature">
 				<div className="columns">
 					<div className="column is-narrow">
-						<button className="button is-small" title="Stop" onClick={this.stop}><span className="icon is-small"><i className="fw fas fa-stop" /></span></button>
-						<button className="button is-small" title="Previous Bar" onClick={this.skipPrev}><span className="icon is-small"><i className="fw fas fa-step-backward" /></span></button>
-						{!this.state.timer && (<button className="button is-small" title="Play" onClick={this.counter}><span className="icon is-small"><i className="fw fas fa-play" /></span></button>)}
-						{this.state.timer && (<button className="button is-small" title="Pause" onClick={this.pause}><span className="icon is-small"><i className="fw fas fa-pause" /></span></button>)}
-						<button className="button is-small" title="Next Bar" onClick={this.skipNext}><span className="icon is-small"><i className="fw fas fa-step-forward" /></span></button>
+						<button type="button" className="button is-small" title="Stop" onClick={this.stop}><span className="icon is-small"><i className="fw fas fa-stop" /></span></button>
+						<button type="button" className="button is-small" title="Previous Bar" onClick={this.skipPrev}><span className="icon is-small"><i className="fw fas fa-step-backward" /></span></button>
+						{!this.state.timer && (<button type="button" className="button is-small" title="Play" onClick={this.counter}><span className="icon is-small"><i className="fw fas fa-play" /></span></button>)}
+						{this.state.timer && (<button type="button" className="button is-small" title="Pause" onClick={this.pause}><span className="icon is-small"><i className="fw fas fa-pause" /></span></button>)}
+						<button type="button" className="button is-small" title="Next Bar" onClick={this.skipNext}><span className="icon is-small"><i className="fw fas fa-step-forward" /></span></button>
 					</div>
 
 					<div className="column is-narrow">
-						{this.state.repeat && (<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className="fw fas fa-undo" /></span></button>)}
-						{!this.state.repeat && (<button className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className="fw far fa-window-minimize" /></span></button>)}
-						{this.state.scrollLock && (<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className="fw fas fa-lock" /></span></button>)}
-						{!this.state.scrollLock && (<button className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className="fw fas fa-lock-open" /></span></button>)}
+						{this.state.repeat && (<button type="button" className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className="fw fas fa-undo-alt" /></span></button>)}
+						{!this.state.repeat && (<button type="button" className="button is-small" title="Repeat Bar" onClick={this.toggleRepeat}><span className="icon is-small"><i className="fas fa-long-arrow-alt-right" /></span></button>)}
+						{this.state.scrollLock && (<button type="button" className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className="fw fas fa-lock" /></span></button>)}
+						{!this.state.scrollLock && (<button type="button" className="button is-small" title="Scroll Lock" onClick={this.toggleScrollLock}><span className="icon is-small"><i className="fw fas fa-lock-open" /></span></button>)}
 					</div>
 
 					<div className="column is-narrow">
@@ -299,22 +310,22 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 
 				<div id="staff" className="pb-2">
 					<div className={styles.pieces}>
-						<button className={styles.mark}></button>
+						<button type="button" className={styles.mark}></button>
 						{this.state.drum.pieces.map((piece) => { return (
-							<button key={`piece-${piece.id}`} className={styles.mark} title={piece.name} onMouseDown={() => this.writeNote(piece.id)}>{piece.abbr}</button>
+							<button type="button" key={`piece-${piece.id}`} className={styles.mark} title={piece.name} onMouseDown={() => this.writeNote(piece.id)}>{piece.abbr}</button>
 						)})}
-						<button className={styles.mark}></button>
+						<button type="button" className={styles.mark}></button>
 					</div>
 					<div id="beats" className={styles.beats}>
 						{this.state.tablature.staff.map((beat, b) => { return (
 							<div key={`beat-${b}`} className={`${styles.beat} ${b == this.state.pace ? styles.active : ""} ${(b % this.state.tablature.beats == 0) ? styles.time : ""} ${(b % this.state.tablature.getPrecision() == 0) ? styles.bar : ""}`}>
-								<button className={styles.mark} onMouseDown={() => this.setPace(b)}>{this.state.tablature.getCurrentTime(b) + 1}</button>
+								<button type="button" className={styles.mark} onMouseDown={() => this.setPace(b)}>{this.state.tablature.getCurrentTime(b) + 1}</button>
 								{beat.map((note, n) => { return (
-									<button key={`note-${note}${n}`} className={styles.note} onMouseDown={() => this.writeNote(n, b)}>
+									<button type="button" key={`note-${note}${n}`} className={styles.note} onMouseDown={() => this.writeNote(n, b)}>
 										{this.beatIcon(note)}
 									</button>
 								)})}
-								<button className={styles.mark} onMouseDown={() => this.setPace(b)}>{this.state.tablature.getCurrentTime(b) + 1}</button>
+								<button type="button" className={styles.mark} onMouseDown={() => this.setPace(b)}>{this.state.tablature.getCurrentTime(b) + 1}</button>
 							</div>
 						)})}
 					</div>
