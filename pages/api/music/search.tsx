@@ -1,8 +1,8 @@
-import { Db } from 'mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
-import connect from '../../../components/util/database';
+import mongoose from 'mongoose'
+import connect from "../../../databases/connect";
 
-interface MusicSearch {
+interface MusicsSearch {
 	title?: string;
 	artist?: string,
 	album?: string,
@@ -11,9 +11,10 @@ interface MusicSearch {
 
 async function search(req: NextApiRequest, res: NextApiResponse) {
 	try {
-		const search: MusicSearch = req.body;
-		const db: Db = await connect();
-		const result = await db.collection('musics').find(search).toArray();
+		await connect();
+
+		const search: MusicsSearch = req.body;
+		const result = await mongoose.models.Music.find(search);
 
 		if (result.length === 0) {
 			return res.status(404).json({message: "Not Found!"});
@@ -27,7 +28,6 @@ async function search(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	switch (req.method) {
-		case "GET":
 		case "POST":
 			return search(req, res);
 		default :

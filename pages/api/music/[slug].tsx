@@ -1,14 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
-import { Db, ObjectId } from "mongodb";
-import connect from "../../../components/util/database";
+import mongoose from 'mongoose'
+import connect from "../../../databases/connect";
 
 async function select(req: NextApiRequest, res: NextApiResponse) {
 	try {
+		await connect();
+
 		const slug: string = req.query.slug as string;
-		const db: Db = await connect();
-		const result = await db.collection("musics").findOne({slug});
+		const result = await mongoose.models.Music.findOne({slug}).populate('createdBy');
 
 		if (!result) {
 			return res.status(404).json({message: "Not Found!"});
@@ -28,9 +29,10 @@ async function remove(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(401).json({message: "Unauthorized!"});
 		}
 
+		await connect();
+
 		const slug: string = req.query.slug as string;
-		const db: Db = await connect();
-		const result = await db.collection('musics').deleteOne({slug});
+		const result = await mongoose.models.Music.deleteOne({slug});
 
 		if (result.deletedCount === 0) {
 			return res.status(404).json({message: "Not Found!"});

@@ -2,7 +2,7 @@ import { Db, MongoClient } from 'mongodb'
 
 const client = new MongoClient(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
-async function Connect(): Promise<Db> {
+async function connect(): Promise<Db> {
 	if (!client.isConnected()) {
 		await client.connect();
 	}
@@ -10,4 +10,4 @@ async function Connect(): Promise<Db> {
 	return client.db('drumtab');
 }
 
-export default Connect;
+export default connect;

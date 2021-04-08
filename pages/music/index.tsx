@@ -20,12 +20,25 @@ interface MusicsResponse {
 	musics: Array<Music>;
 }
 
+interface MusicsSearch {
+	title?: string;
+	artist?: string,
+	album?: string,
+	author?: string
+}
+
 export async function getStaticProps(context) {
-	const musicsSearch: MusicsResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`)).json();
+	const musicsSearch: MusicsSearch = {};
+
+	const musicsResponse: MusicsResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`, {
+		body: JSON.stringify(musicsSearch),
+		headers: { "Content-Type": "application/json" },
+		method: "POST"
+	})).json();
 
 	return {
 		props: {
-			musics: musicsSearch.musics
+			musics: musicsResponse.musics
 		}
 	}
 }

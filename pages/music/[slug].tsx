@@ -1,3 +1,4 @@
+import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
@@ -7,7 +8,6 @@ import Drummer from '../../components/shared/drummer';
 import { Drum } from '../../models/drum';
 import { PROJECT } from '../../models/project';
 import { Music } from '../../models/music';
-import React from 'react';
 import { Tablature } from '../../models/tablature';
 
 interface MusicProps {
@@ -117,7 +117,7 @@ class MusicPage extends React.Component<MusicProps, MusicState> {
 
 				<div className="container is-widescreen">
 					<section className="section">
-						<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.created_by}</a> em {moment(music.created_at).format('DD\/MM\/YYYY')}</p>
+						<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy.name}</a> em {moment(music.createdAt).format('DD\/MM\/YYYY')}</p>
 					</section>
 				</div>
 			</Container>
