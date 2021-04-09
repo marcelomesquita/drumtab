@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { PROJECT } from '../../models/project';
+import { PROJECT } from '../../project';
 
 function Footer() {
 	return (
@@ -42,7 +42,7 @@ function Footer() {
 					<div className="columns">
 						<div className="column">
 							<div className="content is-small has-text-grey">
-								<p>&copy; {process.env.TITLE} by <a href="https://marcelomesquita.com" target="_blank" className="has-text-primary">Marcelo Mesquita</a></p>
+								<p>&copy; {process.env.TITLE} by <a href={PROJECT.AUTHOR.url} target="_blank" className="has-text-primary">{PROJECT.AUTHOR.name}</a></p>
 							</div>
 						</div>
 						<div className="column">

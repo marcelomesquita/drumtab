@@ -1,6 +1,6 @@
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
-import { PROJECT } from '../../models/project';
+import { PROJECT } from '../../project';
 
 function Header() {
 	const [session, loading] = useSession();
@@ -8,14 +8,6 @@ function Header() {
 	const toggleStyles = (event) => {
 		document.querySelector('#burger').classList.toggle('is-active')
 		document.querySelector('#mainbar').classList.toggle('is-active')
-	}
-
-	const signInOut = () => {
-		if (!session) {
-			return <a className="navbar-item" onClick={() => signIn()} title="login"><span className="icon is-small"><i className="fas fa-sign-in-alt" /></span></a>;
-		} else {
-			return <a className="navbar-item" onClick={() => signOut()} title={`sair (${session.user.email})`}><span className="icon is-small"><i className="fas fa-sign-out-alt" /></span></a>
-		}
 	}
 
 	return (
@@ -45,7 +37,8 @@ function Header() {
 								</div>
 							</div>
 
-							{signInOut()}
+							{!session && (<a className="navbar-item" onClick={() => signIn()} title="login"><span className="icon is-small"><i className="fas fa-sign-in-alt" /></span></a>)}
+							{session && (<a className="navbar-item" onClick={() => signOut()} title={`sair (${session.user.email})`}><span className="icon is-small"><i className="fas fa-sign-out-alt" /></span></a>)}
 						</div>
 					</div>
 				</div>

@@ -5,7 +5,8 @@ import Container from "../../components/layout/container"
 import Breadcrumb from "../../components/shared/breadcrumb";
 import Pagination from "../../components/shared/pagination";
 import { Music } from "../../models/music";
-import { PROJECT } from "../../models/project";
+import { MusicSearch } from "../../models/search/musicSearch";
+import { PROJECT } from "../../project";
 
 interface MusicsProps {
 	music: Music
@@ -20,18 +21,11 @@ interface MusicsResponse {
 	musics: Array<Music>;
 }
 
-interface MusicsSearch {
-	title?: string;
-	artist?: string,
-	album?: string,
-	author?: string
-}
-
 export async function getStaticProps(context) {
-	const musicsSearch: MusicsSearch = {};
+	const search: MusicSearch = {};
 
 	const musicsResponse: MusicsResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`, {
-		body: JSON.stringify(musicsSearch),
+		body: JSON.stringify(search),
 		headers: { "Content-Type": "application/json" },
 		method: "POST"
 	})).json();
@@ -68,7 +62,7 @@ class MusicsPage extends React.Component<MusicsProps, MusicsState> {
 						<Breadcrumb />
 
 						<h1 className="title">{this.pageTitle}</h1>
-						<h2 className="subtitle">Não encontrou a música que queria? Que tal <Link href="/music/new"><a>cadastrá-la!</a></Link></h2>
+						<h2 className="subtitle">Não encontrou a música que queria? Que tal <Link href="/music/editor"><a>cadastrá-la!</a></Link></h2>
 
 						<div className="columns is-multiline">
 							{musics.map((music) => { return (
@@ -83,8 +77,8 @@ class MusicsPage extends React.Component<MusicsProps, MusicsState> {
 												</div>
 												<div className="card-content">
 													<div className="content">
-														<p className="title is-5">{music.title}</p>
-														<p className="subtitle is-6">{music.artist}</p>
+														<p className="title is-5">{music.name}</p>
+														<p className="subtitle is-6">{music.artist.name}</p>
 													</div>
 												</div>
 											</div>

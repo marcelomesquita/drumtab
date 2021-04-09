@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose'
 import connect from "../../../databases/connect";
-import { MusicSearch } from '../../../models/search/musicSearch';
+import { ArtistSearch } from '../../../models/search/artistSearch';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -11,14 +11,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		await connect();
 
-		const search: MusicSearch = req.body;
-		const result = await mongoose.models.Music.find(search).populate("artist");
+		const search: ArtistSearch = req.body;
+		const result = await mongoose.models.Artist.find(search);
 
 		if (result.length === 0) {
 			return res.status(404).json({ status: 404, message: "Not Found!" });
 		}
 
-		return res.status(200).json({ status: 200, message: "Resultados encontrados", musics: result });
+		return res.status(200).json({ status: 200, message: "Resultados encontrados", artists: result });
 	} catch (e) {
 		return res.status(500).json({ status: 500, message: e.toString() });
 	}

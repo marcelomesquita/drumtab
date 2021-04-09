@@ -6,30 +6,52 @@ import Drummer from "../../components/shared/drummer";
 import Breadcrumb from "../../components/shared/breadcrumb";
 import { Drum } from "../../models/drum";
 import { Music } from "../../models/music";
-import { PROJECT } from "../../models/project";
+import { PROJECT } from "../../project";
 import { Session } from "next-auth";
 import Slugify from "slugify";
+import { Tablature } from "../../models/tablature";
 
-interface NewMusicProps {
-	session: Session;
+interface MusicEditorProps {
+	session: Session,
+	music: Music
 }
 
-interface NewMusicState {
-	drum: Drum;
-	music: Music;
+interface MusicEditorState {
+	status: number,
+	message: string,
+	drum: Drum,
+	music: Music
 }
 
-interface NewMusicResponse {
-	message: string;
-	music: Music;
+interface MusicEditorResponse {
+	status: number,
+	message: string,
+	music: Music
 }
 
 export async function getServerSideProps(context) {
 	const session = await getSession(context);
+	const slug = "basket-case"; //context.body?.slug;
+	var musicEditorResponse: MusicEditorResponse = null;
+
+	if (slug) {
+		musicEditorResponse = await (await fetch(`${process.env.BASE_URL}/api/music/${slug}`)).json();
+	} else {
+		musicEditorResponse = {
+			status: 200,
+			message: null,
+			music: null
+		}
+	}
 
 	if (session) {
 		return {
-			props: { session }
+			props: {
+				session,
+				status: musicEditorResponse.status,
+				message: musicEditorResponse.message,
+				music: musicEditorResponse.music
+			}
 		}
 	} else {
 		return {
@@ -41,20 +63,22 @@ export async function getServerSideProps(context) {
 	}
 }
 
-class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
-	pageTitle: string = "Nova Música";
+class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState> {
+	pageTitle: string = "Cadastrar Música";
 
-	constructor(props: NewMusicProps) {
+	constructor(props: MusicEditorProps) {
 		super(props);
 
 		this.state = {
+			status: 200,
+			message: null,
 			drum: new Drum(),
-			music: new Music()
+			music: new Music(props.music)
 		}
 	}
 
-	setTitle = (value) => {
-		this.state.music.title = value;
+	setName = (value) => {
+		this.state.music.name = value;
 
 		this.setState(this.state);
 	}
@@ -91,7 +115,7 @@ class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
 
 	setDefaultSlug = () => {
 		if (!this.state.music.slug) {
-			this.state.music.slug = Slugify(this.state.music.title, { lower: true });
+			this.state.music.slug = Slugify(this.state.music.name, { lower: true });
 
 			this.setState(this.state);
 		}
@@ -107,7 +131,7 @@ class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
 		});
 
 		if (res.status === 200) {
-			let json: NewMusicResponse = await res.json();
+			let json: MusicEditorResponse = await res.json();
 			let music: Music = new Music(json.music);
 
 			this.setState({ music });
@@ -119,11 +143,13 @@ class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
 	render() {
 		let drum: Drum = this.state.drum;
 		let music: Music = this.state.music;
+		let tablature: Tablature = new Tablature(music.tablature);
+		let pageTitle: string = music.name ? `Atualizar Música "${music.name}"` : this.pageTitle;
 
 		return (
 			<Container>
 				<Head>
-					<title>{this.pageTitle} | {PROJECT.TITLE}</title>
+					<title>{pageTitle} | {PROJECT.TITLE}</title>
 				</Head>
 
 				<form onSubmit={this.handleSubmit}>
@@ -138,10 +164,10 @@ class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
 									<input
 										className="input is-large"
 										type="text"
-										name="title"
+										name="name"
 										placeholder="Música"
-										value={music.title}
-										onChange={(e) => this.setTitle(e.target.value)}
+										value={music.name}
+										onChange={(e) => this.setName(e.target.value)}
 										autoFocus />
 								</div>
 							</div>
@@ -166,7 +192,7 @@ class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
 												className="input"
 												type="text"
 												placeholder="Artista"
-												value={music.artist}
+												value={music.artist.name}
 												onChange={(e) => this.setArtist(e.target.value)} />
 										</div>
 									</div>
@@ -196,7 +222,7 @@ class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
 					</div>
 
 					<div className="container is-fluid has-background-grey-lighter">
-						<Drummer drum={drum} tablature={music.tablature} edit={true} onTablatureChange={this.setTablature} />
+						<Drummer drum={drum} tablature={tablature} edit={true} onTablatureChange={this.setTablature} />
 					</div>
 
 					<div className="container is-widescreen">
@@ -210,4 +236,4 @@ class NewMusicPage extends React.Component<NewMusicProps, NewMusicState> {
 	}
 }
 
-export default NewMusicPage;
+export default MusicEditorPage;

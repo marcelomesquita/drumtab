@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PROJECT } from "../../models/project";
+import { PROJECT } from "../../project";
 
 function Breadcrumb() {
 	return (

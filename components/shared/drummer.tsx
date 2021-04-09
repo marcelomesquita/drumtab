@@ -140,12 +140,19 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 	}
 
 	writeNote = (note, pace = this.state.pace) => {
-		if (this.state.edit && this.state.tablature.hitNote(note, pace)) {
+		if (!this.state.edit) {
+			return;
+		}
+
+		if (this.state.tablature.hitNote(note, pace)) {
 			this.state.drum.hitNote(note);
 		}
 
 		this.setState(this.state);
-		this.state.onTablatureChange(this.state.tablature);
+
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
+		}
 	}
 
 	readNotes = (notes) => {
@@ -199,7 +206,10 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		this.setState(this.state);
-		this.state.onTablatureChange(this.state.tablature);
+
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
+		}
 	}
 
 	setTimes = (e) => {
@@ -220,7 +230,10 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		this.setState(this.state);
-		this.state.onTablatureChange(this.state.tablature);
+
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
+		}
 	}
 
 	setBeatsPerMin = (e) => {
@@ -237,7 +250,10 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		}
 
 		this.setState(this.state);
-		this.state.onTablatureChange(this.state.tablature);
+
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
+		}
 
 		if (this.state.timer) {
 			this.clearTimer();

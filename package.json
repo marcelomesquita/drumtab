@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "license": "ISC",
   "description": "The easiest way to write drum tabs!",
-  "author": "Marcelo Mesquita",
-  "homepage": "https://marcelomesquita.com",
+  "author": {
+	"name" : "Marcelo Mesquita",
+	"email" : "contato@marcelomesquita.com",
+	"url" : "https://marcelomesquita.com"
+  },
+  "homepage": "https://drumtab.club",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -41,7 +45,7 @@
     "typescript": "^4.2.3",
     "url-loader": "^4.1.1"
   },
-  "optionalDependencies": {
+  "peerOptionalDependencies": {
     "mongodb": "^3.6.5"
   }
 }

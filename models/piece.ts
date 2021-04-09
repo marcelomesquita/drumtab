@@ -2,10 +2,10 @@ import { Howl } from "howler";
 
 export class Piece {
 	id: number = null;
-	abbr: string = "";
-	name: string = "";
-	brand: string = "";
-	type: string = "";
+	abbr: string = null;
+	name: string = null;
+	brand: string = null;
+	type: string = null;
 	audios: Array<Howl> = [];
 	variation: number = 0;
 

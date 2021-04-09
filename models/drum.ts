@@ -1,5 +1,5 @@
 import { Howl } from "howler";
-import { PIECES } from "./enum/pieces";
+import { PIECES } from "../enums/pieces";
 import { Piece } from "./piece";
 
 export const PIECE_KEY = {

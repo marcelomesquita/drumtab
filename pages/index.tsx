@@ -2,59 +2,51 @@ import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import Container from "../components/layout/container"
+import { Artist } from "../models/artist";
 import { Music } from "../models/music";
-import { PROJECT } from "../models/project";
+import { ArtistSearch } from "../models/search/artistSearch";
+import { MusicSearch } from "../models/search/musicSearch";
+import { PROJECT } from "../project";
 
-interface HomeProps {
-	music: Music
-}
+interface HomeProps { }
 
 interface HomeState {
 	musics: Array<Music>;
-	artists: Array<any>;
+	artists: Array<Artist>;
 }
 
-interface MusicsResponse {
+interface MusicResponse {
+	status: number,
 	message: string;
 	musics: Array<Music>;
 }
 
-interface MusicsSearch {
-	title?: string;
-	artist?: string,
-	album?: string,
-	author?: string
+interface ArtistResponse {
+	status: number,
+	message: string;
+	artists: Array<Artist>;
 }
 
 export async function getStaticProps(context) {
-	const musicsSearch: MusicsSearch = {};
+	const musicSearch: MusicSearch = {};
+	const artistSearch: ArtistSearch = {};
 
-	const musicsResponse: MusicsResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`, {
-		body: JSON.stringify(musicsSearch),
+	const musicResponse: MusicResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`, {
+		body: JSON.stringify(musicSearch),
+		headers: { "Content-Type": "application/json" },
+		method: "POST"
+	})).json();
+
+	const artistResponse: ArtistResponse = await (await fetch(`${process.env.BASE_URL}/api/artist/search`, {
+		body: JSON.stringify(artistSearch),
 		headers: { "Content-Type": "application/json" },
 		method: "POST"
 	})).json();
 
 	return {
 		props: {
-			musics: musicsResponse.musics,
-			artists: [
-				{
-					id: 1,
-					title: "Audioslave",
-					image: "https://bulma.io/images/placeholders/128x128.png"
-				},
-				{
-					id: 2,
-					title: "Green Day",
-					image: "https://bulma.io/images/placeholders/128x128.png"
-				},
-				{
-					id: 3,
-					title: "Slipknot",
-					image: "https://bulma.io/images/placeholders/128x128.png"
-				}
-			]
+			musics: musicResponse.musics,
+			artists: artistResponse.artists
 		}
 	}
 }
@@ -123,8 +115,8 @@ class Home extends React.Component<HomeProps, HomeState> {
 												<a className="has-text-primary">
 													<div className="box is-shadowless">
 														<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1}</span>
-														<h3 className="title is-5 mt-2 mb-0">{music.title}</h3>
-														<h4 className="title is-6 has-text-grey">{music.artist}</h4>
+														<h3 className="title is-5 mt-2 mb-0">{music.name}</h3>
+														<h4 className="title is-6 has-text-grey">{music.artist.name}</h4>
 													</div>
 												</a>
 											</Link>
@@ -136,8 +128,8 @@ class Home extends React.Component<HomeProps, HomeState> {
 												<a className="has-text-primary">
 													<div className="box is-shadowless">
 														<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1 + 5}</span>
-														<h3 className="title is-5 mt-2 mb-0">{music.title}</h3>
-														<h4 className="title is-6 has-text-grey">{music.artist}</h4>
+														<h3 className="title is-5 mt-2 mb-0">{music.name}</h3>
+														<h4 className="title is-6 has-text-grey">{music.artist.name}</h4>
 													</div>
 												</a>
 											</Link>
@@ -159,10 +151,10 @@ class Home extends React.Component<HomeProps, HomeState> {
 											<div className="box is-shadowless">
 												<div className="is-pulled-left mr-3">
 													<figure className="image is-48x48">
-														<img className="is-rounded" src={artist.image} />
+														<img className="is-rounded" src="" />
 													</figure>
 												</div>
-												<h3 className="title is-5 mt-3">{artist.title}</h3>
+												<h3 className="title is-5 mt-3">{artist.name}</h3>
 											</div>
 										</a>
 									</Link>

@@ -1,25 +1,31 @@
-import React from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-import moment from 'moment';
-import Container from '../../components/layout/container'
-import Breadcrumb from '../../components/shared/breadcrumb';
-import Drummer from '../../components/shared/drummer';
-import { Drum } from '../../models/drum';
-import { PROJECT } from '../../models/project';
-import { Music } from '../../models/music';
-import { Tablature } from '../../models/tablature';
+import React from "react";
+import Head from "next/head";
+import Link from "next/link";
+import Error from "next/error";
+import moment from "moment";
+import Container from "../../components/layout/container"
+import Breadcrumb from "../../components/shared/breadcrumb";
+import Drummer from "../../components/shared/drummer";
+import { Drum } from "../../models/drum";
+import { PROJECT } from "../../project";
+import { Music } from "../../models/music";
+import { Tablature } from "../../models/tablature";
 
 interface MusicProps {
+	status: number;
+	message: string;
 	music: Music
 }
 
 interface MusicState {
+	status: number;
+	message: string;
 	drum: Drum;
 	music: Music;
 }
 
 interface MusicResponse {
+	status: number;
 	message: string;
 	music: Music;
 }
@@ -27,49 +33,20 @@ interface MusicResponse {
 export async function getStaticPaths() {
 	return {
 		paths: [],
-		fallback: 'blocking'
+		fallback: "blocking"
 	}
 }
 
 export async function getStaticProps(context) {
 	const slug = context.params.slug;
-	const musicSearch: MusicResponse = await (await fetch(`${process.env.BASE_URL}/api/music/${slug}`)).json();
+	const response = await fetch(`${process.env.BASE_URL}/api/music/${slug}`);
+	const musicResponse: MusicResponse = await response.json();
 
 	return {
 		props: {
-			music: musicSearch.music
-		//	music: {
-		//		id: id,
-		//		title: "Basket Case",
-		//		artist: "Green Day",
-		//		album: "Dookie",
-		//		author: "Trè Cool",
-		//		tablature: {
-		//			beats: 4,
-		//			times: 4,
-		//			beatsPerMin: 60,
-		//			staff: [
-		//				[0, 1, 0, 0, 0, 0, 0, 1],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//				[0, 1, 0, 0, 0, 0, 0, 0],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//				[0, 1, 0, 1, 0, 0, 0, 0],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//				[0, 1, 0, 0, 0, 0, 0, 0],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//				[0, 1, 0, 0, 0, 0, 0, 1],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//				[0, 1, 0, 0, 0, 0, 0, 0],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//				[0, 1, 0, 1, 0, 0, 0, 0],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//				[0, 1, 0, 0, 0, 0, 0, 0],
-		//				[0, 0, 0, 0, 0, 0, 0, 0],
-		//			]
-		//		},
-		//		created_by: "Marcelo Mesquita",
-		//		created_at: new Date().toISOString()
-		//	}
+			status: musicResponse.status,
+			message: musicResponse.message,
+			music: musicResponse.music
 		}
 	}
 }
@@ -79,6 +56,8 @@ class MusicPage extends React.Component<MusicProps, MusicState> {
 		super(props);
 
 		this.state = {
+			status: props.status,
+			message: props.message,
 			drum: new Drum(),
 			music: new Music(props.music)
 		}
@@ -88,7 +67,9 @@ class MusicPage extends React.Component<MusicProps, MusicState> {
 		let drum: Drum = this.state.drum;
 		let music: Music = this.state.music;
 		let tablature: Tablature = new Tablature(music.tablature);
-		let pageTitle: string = music.title;
+		let pageTitle: string = music.name;
+
+		if (this.state.status !== 200) return <Error statusCode={this.state.status} />;
 
 		return (
 			<Container>
@@ -100,8 +81,8 @@ class MusicPage extends React.Component<MusicProps, MusicState> {
 					<section className="section is-clearfix">
 						<Breadcrumb />
 
-						<h1 className="title">{music.title}</h1>
-						<h2 className="subtitle has-text-grey">{music.artist} {music.album && (`/ ${music.album}`)} {music.author && (`(${music.author})`)}</h2>
+						<h1 className="title">{music.name}</h1>
+						<h2 className="subtitle has-text-grey">{music.artist.name} {music.album && (`/ ${music.album}`)} {music.author && (`(${music.author})`)}</h2>
 
 						<div className="tags">
 							<span className="tag is-primary">double tap</span>
@@ -112,12 +93,12 @@ class MusicPage extends React.Component<MusicProps, MusicState> {
 				</div>
 
 				<div className="container is-fluid has-background-grey-lighter">
-					<Drummer drum={drum} tablature={tablature} />
+					<Drummer drum={drum} tablature={tablature} edit={false} />
 				</div>
 
 				<div className="container is-widescreen">
 					<section className="section">
-						<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy.name}</a> em {moment(music.createdAt).format('DD\/MM\/YYYY')}</p>
+						<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy.name}</a> em {moment(music.createdAt).format("DD\/MM\/YYYY")}</p>
 					</section>
 				</div>
 			</Container>

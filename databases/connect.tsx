@@ -1,14 +1,19 @@
 import mongoose from 'mongoose'
-import musicsSchema from './schemas/music';
-import usersSchema from './schemas/user';
+import artistSchema from './schemas/artist';
+import musicSchema from './schemas/music';
+import userSchema from './schemas/user';
 
 async function connect() {
 	if (!mongoose.models.User) {
-		mongoose.model('User', usersSchema);
+		mongoose.model('User', userSchema);
 	}
 
 	if (!mongoose.models.Music) {
-		mongoose.model('Music', musicsSchema);
+		mongoose.model('Music', musicSchema);
+	}
+
+	if (!mongoose.models.Artist) {
+		mongoose.model('Artist', artistSchema);
 	}
 
 	if (mongoose.connection.readyState >= 1) {

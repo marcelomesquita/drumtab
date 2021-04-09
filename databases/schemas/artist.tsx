@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-const musicSchema = new Schema({
+const artistSchema = new Schema({
 	_id: {
 		type: Schema.Types.ObjectId,
 	},
@@ -12,20 +12,6 @@ const musicSchema = new Schema({
 		type: String,
 		require: true,
 	},
-	artist: {
-		type: Schema.Types.ObjectId,
-		ref: 'Artist',
-		required: true,
-	},
-	album: {
-		type: String,
-	},
-	author: {
-		type: String,
-	},
-	tablature: {
-		type: Object,
-	},
 	createdBy: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',
@@ -35,4 +21,4 @@ const musicSchema = new Schema({
 	},
 });
 
-export default musicSchema;
+export default artistSchema;
