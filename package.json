@@ -4,9 +4,9 @@
   "license": "ISC",
   "description": "The easiest way to write drum tabs!",
   "author": {
-	"name" : "Marcelo Mesquita",
-	"email" : "contato@marcelomesquita.com",
-	"url" : "https://marcelomesquita.com"
+    "name": "Marcelo Mesquita",
+    "email": "contato@marcelomesquita.com",
+    "url": "https://marcelomesquita.com"
   },
   "homepage": "https://drumtab.club",
   "main": "index.js",
@@ -31,7 +31,8 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "sass": "^1.32.8",
-    "slugify": "^1.5.0"
+    "slugify": "^1.5.0",
+    "validator": "^13.5.2"
   },
   "scripts": {
     "dev": "next dev"

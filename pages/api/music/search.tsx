@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose'
 import connect from "../../../databases/connect";
-import { MusicSearch } from '../../../models/search/musicSearch';
+import { MusicSearch } from '../../../models/search/music-search';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {

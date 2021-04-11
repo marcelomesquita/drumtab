@@ -7,13 +7,13 @@ import connect from "../../../../databases/connect";
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		if (req.method !== "DELETE") {
-			return res.status(400).json({message: "Method not allowed!"});
+			return res.status(400).json({ status: 400, message: "Method not allowed!" });
 		}
 
 		const session: Session = await getSession({ req });
 
 		if (!session) {
-			return res.status(401).json({message: "Unauthorized!"});
+			return res.status(401).json({ status: 401, message: "Unauthorized!" });
 		}
 
 		await connect();
@@ -22,11 +22,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		const result = await mongoose.models.Music.deleteOne({slug}); // TODO: verificar se é o dono
 
 		if (result.deletedCount === 0) {
-			return res.status(404).json({message: "Not Found!"});
+			return res.status(404).json({ status: 404, message: "Not Found!" });
 		}
 
-		return res.status(200).json({message: "Música deletada!"});
+		return res.status(200).json({ status:200, message: "Música deletada!" });
 	} catch (e) {
-		return res.status(500).json({message: e.toString()});
+		return res.status(500).json({ status: 500, message: e.toString() });
 	}
 }

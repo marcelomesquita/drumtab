@@ -4,8 +4,8 @@ import React from "react";
 import Container from "../components/layout/container"
 import { Artist } from "../models/artist";
 import { Music } from "../models/music";
-import { ArtistSearch } from "../models/search/artistSearch";
-import { MusicSearch } from "../models/search/musicSearch";
+import { ArtistSearch } from "../models/search/artist-search";
+import { MusicSearch } from "../models/search/music-search";
 import { PROJECT } from "../project";
 
 interface HomeProps { }

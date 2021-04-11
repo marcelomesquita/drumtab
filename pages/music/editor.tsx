@@ -10,6 +10,7 @@ import { PROJECT } from "../../project";
 import { Session } from "next-auth";
 import Slugify from "slugify";
 import { Tablature } from "../../models/tablature";
+import { MusicResponse } from "../../interface/music-response"
 
 interface MusicEditorProps {
 	session: Session,
@@ -20,19 +21,14 @@ interface MusicEditorState {
 	status: number,
 	message: string,
 	drum: Drum,
-	music: Music
-}
-
-interface MusicEditorResponse {
-	status: number,
-	message: string,
-	music: Music
+	music: Music,
+	loading: boolean
 }
 
 export async function getServerSideProps(context) {
 	const session = await getSession(context);
-	const slug = "basket-case"; //context.body?.slug;
-	var musicEditorResponse: MusicEditorResponse = null;
+	const slug = context.body?.slug;
+	var musicEditorResponse: MusicResponse = null;
 
 	if (slug) {
 		musicEditorResponse = await (await fetch(`${process.env.BASE_URL}/api/music/${slug}`)).json();
@@ -73,68 +69,91 @@ class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState
 			status: 200,
 			message: null,
 			drum: new Drum(),
-			music: new Music(props.music)
+			music: new Music(props.music),
+			loading: false
 		}
 	}
 
-	setName = (value) => {
-		this.state.music.name = value;
+	setName = (e) => {
+		(this.state.music.validateName(e.target.value)) ? e.target.classList.add("is-danger") : e.target.classList.remove("is-danger");
 
-		this.setState(this.state);
+		this.state.music.name = e.target.value;
+		this.setState({ music: this.state.music });
 	}
 
-	setSlug = (value) => {
-		this.state.music.slug = value;
+	setSlug = async (e) => {
+		if (this.state.music.validateSlug(e.target.value)) {
+			e.target.classList.add("is-danger");
+		} else {
+			//this.slugExists(e.target.value, (response) => {
+			//	if (response.exists) {
+			//		e.target.classList.add("is-danger");
+			//	} else {
+			//		e.target.classList.remove("is-danger");
+			//	}
+			//});
+			e.target.classList.remove("is-danger");
+		}
 
-		this.setState(this.state);
+		this.state.music.slug = e.target.value;
+		this.setState({ music: this.state.music });
 	}
 
 	setArtist = (value) => {
-		this.state.music.artist = value;
-
-		this.setState(this.state);
+		this.state.music.artist.name = value;
+		this.setState({ music: this.state.music });
 	}
 
 	setAlbum = (value) => {
 		this.state.music.album = value;
-
-		this.setState(this.state);
+		this.setState({ music: this.state.music });
 	}
 
 	setAuthor = (value) => {
 		this.state.music.author = value;
-
-		this.setState(this.state);
+		this.setState({ music: this.state.music });
 	}
 
 	setTablature = (tablature) => {
 		this.state.music.tablature = tablature;
-
-		this.setState(this.state);
+		this.setState({ music: this.state.music });
 	}
 
 	setDefaultSlug = () => {
-		if (!this.state.music.slug) {
+		if (this.state.music.name && !this.state.music.slug) {
 			this.state.music.slug = Slugify(this.state.music.name, { lower: true });
-
-			this.setState(this.state);
+			this.setState({ music: this.state.music });
 		}
+	}
+
+	slugExists = async (slug, callback) => {
+		this.setState({ loading: true });
+		let response = await (await fetch(`/api/music/${slug}/exists`)).json();
+		this.setState({ loading: false });
+
+		callback(response);
+	}
+
+	artistExists = async (slug, callback) => {
+		this.setState({ loading: true });
+		let response = await (await fetch(`/api/artist/${slug}/exists`)).json();
+		this.setState({ loading: false });
+
+		callback(response);
 	}
 
 	handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const res = await fetch("/api/music/insert", {
+		const res = await fetch(`/api/music/insert`, {
 			body: JSON.stringify(this.state.music),
 			headers: { "Content-Type": "application/json" },
 			method: "POST"
 		});
 
 		if (res.status === 200) {
-			let json: MusicEditorResponse = await res.json();
-			let music: Music = new Music(json.music);
-
-			this.setState({ music });
+			let json: MusicResponse = await res.json();
+			console.log(json);
 		} else {
 			console.error(res);
 		}
@@ -160,61 +179,80 @@ class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState
 							<h1 className="title">Nova Música</h1>
 
 							<div className="field">
-								<div className="control">
+								<div className="control has-icons-left has-icons-right">
 									<input
 										className="input is-large"
 										type="text"
 										name="name"
 										placeholder="Música"
 										value={music.name}
-										onChange={(e) => this.setName(e.target.value)}
+										onChange={(e) => this.setName(e)}
 										autoFocus />
+									<span className="icon is-small is-left">
+										<i className="fw fas fa-music"></i>
+									</span>
 								</div>
+								{music.validateName() && (<p className="help">{music.validateName()}</p>)}
 							</div>
 
 							<div className="field">
-								<div className="control">
+								<div className={`control has-icons-left has-icons-right is-small ${this.state.loading ? "is-loading" : ""}`}>
 									<input
 										className="input is-small"
 										type="text"
 										placeholder="Slug"
 										value={music.slug}
 										onFocus={this.setDefaultSlug}
-										onChange={(e) => this.setSlug(e.target.value)} />
+										onChange={(e) => this.setSlug(e)} />
+									<span className="icon is-small is-left">
+										<i className="fw fas fa-link"></i>
+									</span>
 								</div>
+								{this.state.loading}
+								{music.validateSlug() && (<p className="help">{music.validateSlug()}</p>)}
 							</div>
 
 							<div className="field is-horizontal">
 								<div className="field-body">
 									<div className="field">
-										<div className="control">
+										<div className="control has-icons-left has-icons-right">
 											<input
 												className="input"
 												type="text"
 												placeholder="Artista"
 												value={music.artist.name}
 												onChange={(e) => this.setArtist(e.target.value)} />
+											<span className="icon is-small is-left">
+												<i className="fw fas fa-users"></i>
+											</span>
 										</div>
+										{music.validateName() && (<p className="help">{music.validateName()}</p>)}
 									</div>
 									<div className="field">
-										<p className="control">
+										<div className="control has-icons-left has-icons-right">
 											<input
 												className="input"
 												type="text"
 												placeholder="Álbum"
 												value={music.album}
 												onChange={(e) => this.setAlbum(e.target.value)} />
-										</p>
+											<span className="icon is-small is-left">
+												<i className="fw fas fa-record-vinyl"></i>
+											</span>
+										</div>
 									</div>
 									<div className="field">
-										<p className="control">
+										<div className="control has-icons-left has-icons-right">
 											<input
 												className="input"
 												type="text"
 												placeholder="Batera"
 												value={music.author}
 												onChange={(e) => this.setAuthor(e.target.value)} />
-										</p>
+											<span className="icon is-small is-left">
+												<i className="fw fas fa-user"></i>
+											</span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -227,7 +265,7 @@ class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState
 
 					<div className="container is-widescreen">
 						<section className="section">
-							<button type="submit" className="button is-primary">Salvar</button>
+							<button type="submit" className="button is-primary" disabled={!music.isValid()}>Salvar</button>
 						</section>
 					</div>
 				</form>

@@ -11,13 +11,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		await connect();
 
 		const slug: string = req.query.slug as string;
-		const result = await mongoose.models.Artist.findOne({slug});
+		const result = await mongoose.models.Music.exists({slug});
 
-		if (!result) {
-			return res.status(404).json({ status: 404, message: "Not Found!" });
-		}
-
-		return res.status(200).json({ status: 200, message: "Música encontrada!", artist: result });
+		return res.status(200).json({ status: 200, message: "Música encontrada!", exists: result });
 	} catch (e) {
 		return res.status(500).json({ status: 500, message: e.toString() });
 	}

@@ -4,7 +4,7 @@ const artistSchema = new Schema({
 	_id: {
 		type: Schema.Types.ObjectId,
 	},
-	title: {
+	name: {
 		type: String,
 		required: true,
 	},

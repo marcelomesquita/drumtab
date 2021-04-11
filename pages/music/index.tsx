@@ -5,7 +5,7 @@ import Container from "../../components/layout/container"
 import Breadcrumb from "../../components/shared/breadcrumb";
 import Pagination from "../../components/shared/pagination";
 import { Music } from "../../models/music";
-import { MusicSearch } from "../../models/search/musicSearch";
+import { MusicSearch } from "../../models/search/music-search";
 import { PROJECT } from "../../project";
 
 interface MusicsProps {
