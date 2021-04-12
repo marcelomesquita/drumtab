@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-const artistSchema = new Schema({
+export default new Schema({
 	_id: {
 		type: Schema.Types.ObjectId,
 	},
@@ -20,5 +20,3 @@ const artistSchema = new Schema({
 		type: Date,
 	},
 });
-
-export default artistSchema;

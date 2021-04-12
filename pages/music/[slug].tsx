@@ -1,32 +1,24 @@
 import React from "react";
 import Head from "next/head";
-import Link from "next/link";
 import Error from "next/error";
 import moment from "moment";
+import { PROJECT } from "../../project";
 import Container from "../../components/layout/container"
 import Breadcrumb from "../../components/shared/breadcrumb";
 import Drummer from "../../components/shared/drummer";
-import { Drum } from "../../models/drum";
-import { PROJECT } from "../../project";
-import { Music } from "../../models/music";
-import { Tablature } from "../../models/tablature";
+import Drum from "../../models/drum";
+import Music from "../../models/music";
+import Tablature from "../../models/tablature";
+import MusicService from "../../services/music-service";
 
-interface MusicProps {
-	status: number;
-	message: string;
-	music: Music
-}
-
-interface MusicState {
-	status: number;
-	message: string;
-	drum: Drum;
+interface Props {
+	status: number,
 	music: Music;
 }
 
-interface MusicResponse {
-	status: number;
-	message: string;
+interface State {
+	status: number,
+	drum: Drum;
 	music: Music;
 }
 
@@ -38,26 +30,29 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
+	const musicService = new MusicService();
 	const slug = context.params.slug;
-	const response = await fetch(`${process.env.BASE_URL}/api/music/${slug}`);
-	const musicResponse: MusicResponse = await response.json();
+	let music: Music = null;
+	let status: number = 200;
+
+	await musicService.select(slug)
+		.then((success) => music = success)
+		.catch((failure) => status = failure);
 
 	return {
 		props: {
-			status: musicResponse.status,
-			message: musicResponse.message,
-			music: musicResponse.music
+			music,
+			status
 		}
 	}
 }
 
-class MusicPage extends React.Component<MusicProps, MusicState> {
-	constructor(props) {
+export default class MusicPage extends React.Component<Props, State> {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			status: props.status,
-			message: props.message,
 			drum: new Drum(),
 			music: new Music(props.music)
 		}
@@ -69,7 +64,7 @@ class MusicPage extends React.Component<MusicProps, MusicState> {
 		let tablature: Tablature = new Tablature(music.tablature);
 		let pageTitle: string = music.name;
 
-		if (this.state.status !== 200) return <Error statusCode={this.state.status} />;
+		if (this.state.status != 200) return <Error statusCode={this.state.status} />;
 
 		return (
 			<Container>
@@ -105,5 +100,3 @@ class MusicPage extends React.Component<MusicProps, MusicState> {
 		)
 	}
 }
-
-export default MusicPage;

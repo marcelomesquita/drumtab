@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-const userSchema = new Schema({
+export default new Schema({
 	_id: {
 		type: Schema.Types.ObjectId,
 	},
@@ -25,5 +25,3 @@ const userSchema = new Schema({
 		type: Date,
 	}
 });
-
-export default userSchema;

@@ -1,6 +1,6 @@
 import React from "react";
-import { Drum, PIECE_KEY } from "../../models/drum";
-import { Tablature } from "../../models/tablature";
+import Drum, { PIECE_KEY } from "../../models/drum";
+import Tablature from "../../models/tablature";
 import styles from "../../styles/drummer.module.sass";
 
 interface DrummerProps {
@@ -22,7 +22,7 @@ interface DrummerState {
 	onTablatureChange: any;
 }
 
-class Drummer extends React.Component<DrummerProps, DrummerState> {
+export default class Drummer extends React.Component<DrummerProps, DrummerState> {
 	constructor(props: DrummerProps) {
 		super(props);
 
@@ -354,5 +354,3 @@ class Drummer extends React.Component<DrummerProps, DrummerState> {
 		)
 	}
 }
-
-export default Drummer;

@@ -1,6 +1,6 @@
 import { Howl } from "howler";
 import { PIECES } from "../enums/pieces";
-import { Piece } from "./piece";
+import Piece from "./piece";
 
 export const PIECE_KEY = {
 	KeyC: PIECES.CRASH,
@@ -15,7 +15,7 @@ export const PIECE_KEY = {
 	KeyB: PIECES.BASS
 };
 
-export class Drum {
+export default class Drum {
 	pieces = [
 		new Piece(PIECES.CRASH, 'C', 'crash', 'cycdh'),
 		new Piece(PIECES.HAT, 'H', 'hat', 'cycdh'),

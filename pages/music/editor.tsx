@@ -1,28 +1,30 @@
 import React from "react";
 import Head from "next/head";
+import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
+import Slugify from "slugify";
+import { PROJECT } from "../../project";
 import Container from "../../components/layout/container"
 import Drummer from "../../components/shared/drummer";
 import Breadcrumb from "../../components/shared/breadcrumb";
-import { Drum } from "../../models/drum";
-import { Music } from "../../models/music";
-import { PROJECT } from "../../project";
-import { Session } from "next-auth";
-import Slugify from "slugify";
-import { Tablature } from "../../models/tablature";
-import { MusicResponse } from "../../interface/music-response"
+import Drum from "../../models/drum";
+import Music from "../../models/music";
+import Tablature from "../../models/tablature";
+import MusicResponse from "../../interfaces/music-response"
+import MusicService from "../../services/music-service";
 
-interface MusicEditorProps {
+interface Props {
 	session: Session,
 	music: Music
 }
 
-interface MusicEditorState {
+interface State {
 	status: number,
 	message: string,
 	drum: Drum,
 	music: Music,
-	loading: boolean
+	loading: boolean,
+	validation: Object
 }
 
 export async function getServerSideProps(context) {
@@ -59,10 +61,11 @@ export async function getServerSideProps(context) {
 	}
 }
 
-class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState> {
+export default class MusicEditorPage extends React.Component<Props, State> {
 	pageTitle: string = "Cadastrar Música";
+	musicService: MusicService = new MusicService();
 
-	constructor(props: MusicEditorProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -70,7 +73,8 @@ class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState
 			message: null,
 			drum: new Drum(),
 			music: new Music(props.music),
-			loading: false
+			loading: false,
+			validation: {}
 		}
 	}
 
@@ -85,14 +89,12 @@ class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState
 		if (this.state.music.validateSlug(e.target.value)) {
 			e.target.classList.add("is-danger");
 		} else {
-			//this.slugExists(e.target.value, (response) => {
-			//	if (response.exists) {
-			//		e.target.classList.add("is-danger");
-			//	} else {
-			//		e.target.classList.remove("is-danger");
-			//	}
-			//});
-			e.target.classList.remove("is-danger");
+			this.setState({ loading: true });
+
+			this.musicService.exists(e.target.value)
+				.then((exists) => exists ? e.target.classList.add("is-danger") : e.target.classList.remove("is-danger"))
+				.catch((failure) => console.error(failure))
+				.finally(() => this.setState({ loading: false }));
 		}
 
 		this.state.music.slug = e.target.value;
@@ -124,14 +126,6 @@ class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState
 			this.state.music.slug = Slugify(this.state.music.name, { lower: true });
 			this.setState({ music: this.state.music });
 		}
-	}
-
-	slugExists = async (slug, callback) => {
-		this.setState({ loading: true });
-		let response = await (await fetch(`/api/music/${slug}/exists`)).json();
-		this.setState({ loading: false });
-
-		callback(response);
 	}
 
 	artistExists = async (slug, callback) => {
@@ -273,5 +267,3 @@ class MusicEditorPage extends React.Component<MusicEditorProps, MusicEditorState
 		)
 	}
 }
-
-export default MusicEditorPage;

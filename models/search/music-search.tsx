@@ -1,4 +1,4 @@
-export interface MusicSearch {
+export default interface MusicSearch {
 	name?: string;
 	slug?: string;
 	artist?: string;

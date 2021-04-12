@@ -1,41 +1,32 @@
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import Container from "../components/layout/container"
-import { Artist } from "../models/artist";
-import { Music } from "../models/music";
-import { ArtistSearch } from "../models/search/artist-search";
-import { MusicSearch } from "../models/search/music-search";
 import { PROJECT } from "../project";
+import Container from "../components/layout/container"
+import ArtistResponse from "../interfaces/artists-response";
+import Artist from "../models/artist";
+import Music from "../models/music";
+import ArtistSearch from "../models/search/artist-search";
+import MusicSearch from "../models/search/music-search";
+import MusicService from "../services/music-service";
 
-interface HomeProps { }
-
-interface HomeState {
+interface Props {
 	musics: Array<Music>;
 	artists: Array<Artist>;
 }
 
-interface MusicResponse {
-	status: number,
-	message: string;
+interface State {
 	musics: Array<Music>;
-}
-
-interface ArtistResponse {
-	status: number,
-	message: string;
 	artists: Array<Artist>;
 }
 
 export async function getStaticProps(context) {
+	const musicService = new MusicService();
 	const musicSearch: MusicSearch = {};
 	const artistSearch: ArtistSearch = {};
+	let musics: Array<Music> = [];
 
-	const musicResponse: MusicResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`, {
-		body: JSON.stringify(musicSearch),
-		headers: { "Content-Type": "application/json" },
-		method: "POST"
-	})).json();
+	await musicService.search(musicSearch).then((success) => musics = success);
 
 	const artistResponse: ArtistResponse = await (await fetch(`${process.env.BASE_URL}/api/artist/search`, {
 		body: JSON.stringify(artistSearch),
@@ -45,16 +36,16 @@ export async function getStaticProps(context) {
 
 	return {
 		props: {
-			musics: musicResponse.musics,
+			musics,
 			artists: artistResponse.artists
 		}
 	}
 }
 
-class Home extends React.Component<HomeProps, HomeState> {
+export default class Home extends React.Component<Props, State> {
 	pageTitle = "Home";
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -167,5 +158,3 @@ class Home extends React.Component<HomeProps, HomeState> {
 		)
 	}
 }
-
-export default Home;

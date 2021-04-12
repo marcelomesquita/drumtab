@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { ObjectId } from "bson";
 import mongoose from 'mongoose'
 import connect from "../../../databases/connect";
-import { Artist } from "../../../models/artist";
+import Artist from "../../../models/artist";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {

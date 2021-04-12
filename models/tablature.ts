@@ -1,4 +1,4 @@
-export class Tablature {
+export default class Tablature {
 	times: number = 4;
 	beats: number = 4;
 	beatsPerMin: number = 60;

@@ -1,46 +1,40 @@
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
+import { PROJECT } from "../../project";
 import Container from "../../components/layout/container"
 import Breadcrumb from "../../components/shared/breadcrumb";
 import Pagination from "../../components/shared/pagination";
-import { Music } from "../../models/music";
-import { MusicSearch } from "../../models/search/music-search";
-import { PROJECT } from "../../project";
+import Music from "../../models/music";
+import MusicSearch from "../../models/search/music-search";
+import MusicService from "../../services/music-service";
 
-interface MusicsProps {
-	music: Music
+interface Props {
+	musics: Array<Music>
 }
 
-interface MusicsState {
-	musics: Array<Music>;
-}
-
-interface MusicsResponse {
-	message: string;
+interface State {
 	musics: Array<Music>;
 }
 
 export async function getStaticProps(context) {
+	const musicService = new MusicService();
 	const search: MusicSearch = {};
+	let musics: Array<Music> = [];
 
-	const musicsResponse: MusicsResponse = await (await fetch(`${process.env.BASE_URL}/api/music/search`, {
-		body: JSON.stringify(search),
-		headers: { "Content-Type": "application/json" },
-		method: "POST"
-	})).json();
+	await musicService.search(search).then((success) => musics = success);
 
 	return {
 		props: {
-			musics: musicsResponse.musics
+			musics
 		}
 	}
 }
 
-class MusicsPage extends React.Component<MusicsProps, MusicsState> {
+export default class MusicsPage extends React.Component<Props, State> {
 	pageTitle: string = "Músicas";
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -95,5 +89,3 @@ class MusicsPage extends React.Component<MusicsProps, MusicsState> {
 		)
 	}
 }
-
-export default MusicsPage;

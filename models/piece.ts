@@ -1,6 +1,6 @@
 import { Howl } from "howler";
 
-export class Piece {
+export default class Piece {
 	id: number = null;
 	abbr: string = null;
 	name: string = null;

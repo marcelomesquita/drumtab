@@ -1,7 +1,6 @@
 import { ObjectId } from 'bson';
-import { Music } from './music';
 
-export class User {
+export default class User {
 	_id?: ObjectId = null;
 	name: string = null;
 	email: string = null;

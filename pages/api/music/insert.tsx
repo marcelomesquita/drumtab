@@ -3,7 +3,7 @@ import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
 import mongoose from 'mongoose'
 import connect from "../../../databases/connect";
-import { Music } from "../../../models/music";
+import Music from "../../../models/music";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {

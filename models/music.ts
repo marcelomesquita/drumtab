@@ -1,10 +1,10 @@
 import { ObjectId } from "bson";
-import { Tablature } from "./tablature";
-import { User } from "./user";
-import { Artist } from "./artist";
+import Tablature from "./tablature";
+import User from "./user";
+import Artist from "./artist";
 import validator from "validator";
 
-export class Music {
+export default class Music {
 	public _id?: ObjectId = null;
 	public name: string = "";
 	public slug: string = "";

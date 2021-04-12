@@ -6,7 +6,7 @@ import "@fortawesome/fontawesome-free/js/all";
 
 import "../styles/global.sass"
 
-function DrumTab({ Component, pageProps }: AppProps): JSX.Element {
+export default function DrumTab({ Component, pageProps }: AppProps): JSX.Element {
 	return (
 		<Provider session={pageProps.session}>
 			<Head>
@@ -19,5 +19,3 @@ function DrumTab({ Component, pageProps }: AppProps): JSX.Element {
 	  	</Provider>
 	);
 }
-
-export default DrumTab;

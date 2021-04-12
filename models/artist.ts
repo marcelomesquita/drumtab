@@ -1,7 +1,7 @@
 import { ObjectId } from 'bson';
-import { User } from './user';
+import User from './user';
 
-export class Artist {
+export default class Artist {
 	public _id?: ObjectId = null;
 	public name: string = "";
 	public slug: string = "";
