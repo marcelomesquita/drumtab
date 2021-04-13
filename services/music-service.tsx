@@ -1,6 +1,8 @@
+import { PROJECT } from "../project";
+
 export default class MusicService {
 	search = async (search) => {
-		const response = await fetch(`${process.env.BASE_URL}/api/music/search`, {
+		const response = await fetch(`${PROJECT.URL}/api/music/search`, {
 			body: JSON.stringify(search),
 			headers: { "Content-Type": "application/json" },
 			method: "POST"
@@ -15,7 +17,7 @@ export default class MusicService {
 	}
 
 	select = async (slug) => {
-		const response = await fetch(`${process.env.BASE_URL}/api/music/${slug}`);
+		const response = await fetch(`${PROJECT.URL}/api/music/${slug}`);
 		const json = await response.json();
 
 		if (response.status == 200) {

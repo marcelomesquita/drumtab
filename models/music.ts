@@ -54,6 +54,10 @@ export default class Music {
 			return "must be lowercase";
 		}
 
+		if (!validator.isLength(value, { min: 3 })) {
+			return "too short";
+		}
+
 		if (!validator.isSlug(value)) {
 			return "must not contain special characters";
 		}

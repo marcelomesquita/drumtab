@@ -1,6 +1,8 @@
+import { PROJECT } from "../project";
+
 export default class ArtistService {
 	search = async (search) => {
-		const response = await fetch(`${process.env.BASE_URL}/api/artist/search`, {
+		const response = await fetch(`${PROJECT.URL}/api/artist/search`, {
 			body: JSON.stringify(search),
 			headers: { "Content-Type": "application/json" },
 			method: "POST"
@@ -15,7 +17,7 @@ export default class ArtistService {
 	}
 
 	select = async (slug) => {
-		const response = await fetch(`${process.env.BASE_URL}/api/artist/${slug}`);
+		const response = await fetch(`${PROJECT.URL}/api/artist/${slug}`);
 		const json = await response.json();
 
 		if (response.status == 200) {
