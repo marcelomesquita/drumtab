@@ -3,7 +3,7 @@ import artistSchema from './schemas/artist';
 import musicSchema from './schemas/music';
 import userSchema from './schemas/user';
 
-async function connect() {
+export default async function connect() {
 	if (!mongoose.models.User) {
 		mongoose.model('User', userSchema);
 	}
@@ -27,5 +27,3 @@ async function connect() {
 		useCreateIndex: true,
 	});
 }
-
-export default connect;

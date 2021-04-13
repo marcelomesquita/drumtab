@@ -7,11 +7,13 @@ import { PROJECT } from "../../project";
 import Container from "../../components/layout/container"
 import Drummer from "../../components/shared/drummer";
 import Breadcrumb from "../../components/shared/breadcrumb";
+import Notification from "../../components/shared/notification";
 import Drum from "../../models/drum";
 import Music from "../../models/music";
 import Tablature from "../../models/tablature";
 import MusicResponse from "../../interfaces/music-response"
 import MusicService from "../../services/music-service";
+import ArtistService from "../../services/artist-service";
 
 interface Props {
 	session: Session,
@@ -21,10 +23,13 @@ interface Props {
 interface State {
 	status: number,
 	message: string,
+	messageSlug: string,
+	messageArtist: string,
 	drum: Drum,
 	music: Music,
 	loading: boolean,
-	validation: Object
+	loadingSlug: boolean,
+	loadingArtist: boolean
 }
 
 export async function getServerSideProps(context) {
@@ -64,6 +69,7 @@ export async function getServerSideProps(context) {
 export default class MusicEditorPage extends React.Component<Props, State> {
 	pageTitle: string = "Cadastrar Música";
 	musicService: MusicService = new MusicService();
+	artistService: ArtistService = new ArtistService();
 
 	constructor(props: Props) {
 		super(props);
@@ -71,10 +77,13 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 		this.state = {
 			status: 200,
 			message: null,
+			messageSlug: null,
+			messageArtist: null,
 			drum: new Drum(),
 			music: new Music(props.music),
 			loading: false,
-			validation: {}
+			loadingSlug: false,
+			loadingArtist: false,
 		}
 	}
 
@@ -86,23 +95,41 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 	}
 
 	setSlug = async (e) => {
-		if (this.state.music.validateSlug(e.target.value)) {
+		let message = this.state.music.validateSlug(e.target.value);
+
+		if (message) {
 			e.target.classList.add("is-danger");
+			this.setState({ messageSlug: message });
 		} else {
-			this.setState({ loading: true });
+			this.setState({ loadingSlug: true });
 
 			this.musicService.exists(e.target.value)
-				.then((exists) => exists ? e.target.classList.add("is-danger") : e.target.classList.remove("is-danger"))
-				.catch((failure) => console.error(failure))
-				.finally(() => this.setState({ loading: false }));
+				.then((exists) => {
+					if (exists) {
+						e.target.classList.add("is-danger");
+						this.setState({ messageSlug: "slug already exists!" });
+					} else {
+						e.target.classList.remove("is-danger");
+						this.setState({ messageSlug: null });
+					}
+				})
+				.catch((failure) => this.setState({ message: failure }))
+				.finally(() => this.setState({ loadingSlug: false }));
 		}
 
 		this.state.music.slug = e.target.value;
 		this.setState({ music: this.state.music });
 	}
 
-	setArtist = (value) => {
-		this.state.music.artist.name = value;
+	setArtist = (e) => {
+		let message = this.state.music.validateArtist(e.target.value);
+
+		if (message) {
+			e.target.classList.add("is-danger");
+			this.setState({ messageArtist: message });
+		}
+
+		this.state.music.artist.name = e.target.value;
 		this.setState({ music: this.state.music });
 	}
 
@@ -128,29 +155,15 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 		}
 	}
 
-	artistExists = async (slug, callback) => {
-		this.setState({ loading: true });
-		let response = await (await fetch(`/api/artist/${slug}/exists`)).json();
-		this.setState({ loading: false });
-
-		callback(response);
-	}
-
 	handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const res = await fetch(`/api/music/insert`, {
-			body: JSON.stringify(this.state.music),
-			headers: { "Content-Type": "application/json" },
-			method: "POST"
-		});
+		this.setState({ loading: true });
 
-		if (res.status === 200) {
-			let json: MusicResponse = await res.json();
-			console.log(json);
-		} else {
-			console.error(res);
-		}
+		this.musicService.insert(this.state.music)
+			.then((music) => this.setState({ music: new Music(music) }))
+			.catch((failure) => this.setState({ message: failure.message }))
+			.finally(() => this.setState({ loading: false }));
 	}
 
 	render() {
@@ -164,6 +177,8 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 				<Head>
 					<title>{pageTitle} | {PROJECT.TITLE}</title>
 				</Head>
+
+				{this.state.message && (<Notification onClose={() => this.setState({ message: null })}>{this.state.message}</Notification>)}
 
 				<form onSubmit={this.handleSubmit}>
 					<div className="container is-widescreen">
@@ -190,7 +205,7 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 							</div>
 
 							<div className="field">
-								<div className={`control has-icons-left has-icons-right is-small ${this.state.loading ? "is-loading" : ""}`}>
+								<div className={`control has-icons-left has-icons-right is-small ${this.state.loadingSlug ? "is-loading" : ""}`}>
 									<input
 										className="input is-small"
 										type="text"
@@ -202,8 +217,7 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 										<i className="fw fas fa-link"></i>
 									</span>
 								</div>
-								{this.state.loading}
-								{music.validateSlug() && (<p className="help">{music.validateSlug()}</p>)}
+								{this.state.messageSlug && (<p className="help">{this.state.messageSlug}</p>)}
 							</div>
 
 							<div className="field is-horizontal">
@@ -215,12 +229,12 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 												type="text"
 												placeholder="Artista"
 												value={music.artist.name}
-												onChange={(e) => this.setArtist(e.target.value)} />
+												onChange={(e) => this.setArtist(e)} />
 											<span className="icon is-small is-left">
 												<i className="fw fas fa-users"></i>
 											</span>
 										</div>
-										{music.validateName() && (<p className="help">{music.validateName()}</p>)}
+										{this.state.messageArtist && (<p className="help">{this.state.messageArtist}</p>)}
 									</div>
 									<div className="field">
 										<div className="control has-icons-left has-icons-right">

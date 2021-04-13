@@ -21,7 +21,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		await connect();
 
-		music.artist = await mongoose.models.Artist.findOne({ name: music.artist.name });
+		const artist = await mongoose.models.Artist.findOne({ name: music.artist.name });
+
+		if (!artist) {
+			return res.status(404).json({ message: "Artist not founded!" });
+		}
+
+		music.artist = artist;
 		music.createdBy = music.updatedBy = await mongoose.models.User.findOne({ email: session.user.email });
 		music.createdAt = music.updatedAt = new Date();
 
@@ -37,6 +43,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		return res.status(200).json({ message: "Música cadastrada!", music: result });
 	} catch (e) {
-		return res.status(500).json({ message: e.toString() });
+		switch (e.code) {
+			case 11000:
+				return res.status(500).json({ message: `Chave duplicada!` });
+			default:
+				return res.status(500).json({ message: e.toString() });
+		}
 	}
 }

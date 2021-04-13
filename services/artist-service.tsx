@@ -1,6 +1,6 @@
-export default class MusicService {
+export default class ArtistService {
 	search = async (search) => {
-		const response = await fetch(`${process.env.BASE_URL}/api/music/search`, {
+		const response = await fetch(`${process.env.BASE_URL}/api/artist/search`, {
 			body: JSON.stringify(search),
 			headers: { "Content-Type": "application/json" },
 			method: "POST"
@@ -8,14 +8,14 @@ export default class MusicService {
 		const json = await response.json();
 
 		if (response.status == 200) {
-			return Promise.resolve(json.musics);
+			return Promise.resolve(json.artists);
 		}
 
 		return Promise.reject({ status: response.status, message: json.message });
 	}
 
 	select = async (slug) => {
-		const response = await fetch(`${process.env.BASE_URL}/api/music/${slug}`);
+		const response = await fetch(`${process.env.BASE_URL}/api/artist/${slug}`);
 		const json = await response.json();
 
 		if (response.status == 200) {
@@ -25,9 +25,9 @@ export default class MusicService {
 		return Promise.reject({ status: response.status, message: json.message });
 	}
 
-	insert = async (music) => {
-		const response = await fetch(`/api/music/insert`, {
-			body: JSON.stringify(music),
+	insert = async (artist) => {
+		const response = await fetch(`/api/artist/insert`, {
+			body: JSON.stringify(artist),
 			headers: { "Content-Type": "application/json" },
 			method: "POST"
 		});
@@ -44,7 +44,7 @@ export default class MusicService {
 	}
 
 	exists = async (slug) => {
-		const response = await fetch(`/api/music/${slug}/exists`);
+		const response = await fetch(`/api/artist/${slug}/exists`);
 		const json = await response.json();
 
 		if (response.status == 200) {

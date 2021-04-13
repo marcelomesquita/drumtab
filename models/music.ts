@@ -1,8 +1,8 @@
-import { ObjectId } from "bson";
 import Tablature from "./tablature";
 import User from "./user";
 import Artist from "./artist";
 import validator from "validator";
+import { ObjectId } from 'bson';
 
 export default class Music {
 	public _id?: ObjectId = null;

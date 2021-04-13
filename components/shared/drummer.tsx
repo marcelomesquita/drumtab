@@ -3,14 +3,14 @@ import Drum, { PIECE_KEY } from "../../models/drum";
 import Tablature from "../../models/tablature";
 import styles from "../../styles/drummer.module.sass";
 
-interface DrummerProps {
+interface Props {
 	drum: Drum;
 	tablature: Tablature;
 	edit?: boolean;
 	onTablatureChange?: any;
 }
 
-interface DrummerState {
+interface State {
 	drum: Drum;
 	tablature: Tablature;
 	timer: NodeJS.Timeout;
@@ -22,8 +22,8 @@ interface DrummerState {
 	onTablatureChange: any;
 }
 
-export default class Drummer extends React.Component<DrummerProps, DrummerState> {
-	constructor(props: DrummerProps) {
+export default class Drummer extends React.Component<Props, State> {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

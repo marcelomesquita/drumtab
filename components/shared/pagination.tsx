@@ -2,7 +2,7 @@ function Pagination(props) {
 	return (
 		<nav className="pagination" role="navigation" aria-label="pagination">
 			<a className="pagination-previous">Previous</a>
-			<a className="pagination-next">Next page</a>
+			<a className="pagination-next">Next</a>
 			<ul className="pagination-list">
 				<li><a className="pagination-link" aria-label="Goto page 1">1</a></li>
 				<li><span className="pagination-ellipsis">&hellip;</span></li>
