@@ -3,14 +3,16 @@ import User from "./user";
 import Artist from "./artist";
 import validator from "validator";
 import { ObjectId } from 'bson';
+import Author from "./author";
+import Album from "./album";
 
 export default class Music {
 	public _id?: ObjectId = null;
 	public name: string = "";
 	public slug: string = "";
 	public artist: Artist = new Artist();
-	public album?: string = "";
-	public author?: string = "";
+	public album?: Album = new Album();
+	public author?: Author = new Author();
 	public tablature: Tablature = new Tablature();
 	public createdBy?: User = null;
 	public createdAt?: Date = null;

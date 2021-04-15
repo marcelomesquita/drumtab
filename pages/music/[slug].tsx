@@ -77,7 +77,7 @@ export default class MusicPage extends React.Component<Props, State> {
 						<Breadcrumb />
 
 						<h1 className="title">{music.name}</h1>
-						<h2 className="subtitle has-text-grey">{music.artist.name} {music.album && (`/ ${music.album}`)} {music.author && (`(${music.author})`)}</h2>
+						<h2 className="subtitle has-text-grey">{music.artist.name} {music.album?.name && (`/ ${music.album.name}`)} {music.author?.name && (`(${music.author.name})`)}</h2>
 
 						<div className="tags">
 							<span className="tag is-primary">double tap</span>

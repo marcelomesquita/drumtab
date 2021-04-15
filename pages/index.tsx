@@ -9,6 +9,7 @@ import Music from "../models/music";
 import ArtistSearch from "../models/search/artist-search";
 import MusicSearch from "../models/search/music-search";
 import MusicService from "../services/music-service";
+import ArtistService from "../services/artist-service";
 
 interface Props {
 	musics: Array<Music>;
@@ -22,22 +23,19 @@ interface State {
 
 export async function getStaticProps(context) {
 	const musicService = new MusicService();
+	const artistService = new ArtistService();
 	const musicSearch: MusicSearch = {};
 	const artistSearch: ArtistSearch = {};
 	let musics: Array<Music> = [];
+	let artists: Array<Artist> = [];
 
 	await musicService.search(musicSearch).then((success) => musics = success);
-
-	const artistResponse: ArtistResponse = await (await fetch(`${process.env.BASE_URL}/api/artist/search`, {
-		body: JSON.stringify(artistSearch),
-		headers: { "Content-Type": "application/json" },
-		method: "POST"
-	})).json();
+	await artistService.search(artistSearch).then((success) => artists = success);
 
 	return {
 		props: {
 			musics,
-			artists: artistResponse.artists
+			artists
 		}
 	}
 }
@@ -70,7 +68,7 @@ export default class Home extends React.Component<Props, State> {
 							<div className="columns">
 								<div className="column">
 									<h2 className="title is-2">{PROJECT.TITLE}</h2>
-									<h3 className="subtitle is-3 has-text-light">A forma mais simples de escrever e ler tablatura de baterias</h3>
+									<h3 className="subtitle is-3 has-text-light">{PROJECT.DESCRIPTION}</h3>
 								</div>
 								<div className="column">
 								<figure className="image is-4by3">

@@ -18,10 +18,12 @@ export default new Schema({
 		required: true,
 	},
 	album: {
-		type: String,
+		type: Schema.Types.ObjectId,
+		ref: 'Album',
 	},
 	author: {
-		type: String,
+		type: Schema.Types.ObjectId,
+		ref: 'Author',
 	},
 	tablature: {
 		type: Object,
@@ -31,6 +33,13 @@ export default new Schema({
 		ref: 'User',
 	},
 	createdAt: {
+		type: Date,
+	},
+	updatedBy: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+	},
+	updatedAt: {
 		type: Date,
 	},
 });

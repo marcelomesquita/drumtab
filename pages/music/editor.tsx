@@ -164,7 +164,6 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 					let options = [];
 
 					artists.map((artist) => {
-						console.log(artist);
 						options.push({
 							label: artist.name,
 							value: artist.name,
@@ -270,7 +269,7 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 												className="input"
 												type="text"
 												placeholder="Álbum"
-												value={music.album}
+												value={music.album.name}
 												onChange={(e) => this.setAlbum(e.target.value)} />
 											<span className="icon is-small is-left">
 												<i className="fw fas fa-record-vinyl"></i>
@@ -286,7 +285,7 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 												className="input"
 												type="text"
 												placeholder="Batera"
-												value={music.author}
+												value={music.author.name}
 												onChange={(e) => this.setAuthor(e.target.value)} />
 											<span className="icon is-small is-left">
 												<i className="fw fas fa-user"></i>

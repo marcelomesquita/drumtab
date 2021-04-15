@@ -17,7 +17,7 @@ export default class MusicService {
 	}
 
 	select = async (slug) => {
-		const response = await fetch(`${PROJECT.URL}/api/music/${slug}`);
+		const response = await fetch(`${PROJECT.URL}/api/music/${slug}/select`);
 		const json = await response.json();
 
 		if (response.status == 200) {

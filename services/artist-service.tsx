@@ -17,7 +17,7 @@ export default class ArtistService {
 	}
 
 	select = async (slug) => {
-		const response = await fetch(`${PROJECT.URL}/api/artist/${slug}`);
+		const response = await fetch(`${PROJECT.URL}/api/artist/${slug}/select`);
 		const json = await response.json();
 
 		if (response.status == 200) {

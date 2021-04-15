@@ -3,6 +3,11 @@ import mongoose from 'mongoose'
 import connect from "../../../databases/connect";
 import ArtistSearch from '../../../models/search/artist-search';
 
+interface search {
+	name?,
+	slug?
+}
+
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		if (req.method !== "POST") {
@@ -11,10 +16,18 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		await connect();
 
-		const search: ArtistSearch = req.body;
-		const result = await mongoose.models.Artist.find({
-			"name": { "$regex": search.name, "$options": "i" }
-		});
+		let artistSearch: ArtistSearch = req.body;
+		let search: search = {};
+
+		if (artistSearch?.name) {
+			search.name = { "$regex": artistSearch.name, "$options": "i" }
+		}
+
+		if (artistSearch?.slug) {
+			search.slug = artistSearch.slug
+		}
+
+		const result = await mongoose.models.Artist.find(search);
 
 		if (result.length === 0) {
 			return res.status(404).json({ message: "Not Found!" });
