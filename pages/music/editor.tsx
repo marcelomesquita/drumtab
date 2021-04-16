@@ -159,24 +159,24 @@ export default class MusicEditorPage extends React.Component<Props, State> {
 		if (value.length < 3) {
 			callback();
 		} else {
-			this.artistService.search({ name: value })
-				.then((artists) => {
-					let options = [];
-
-					artists.map((artist) => {
-						options.push({
-							label: artist.name,
-							value: artist.name,
-							data: artist
-						});
-					});
-
-					callback(options);
-				})
-				.catch((failure) => {
-					this.setState({ createArtist: true })
-					callback();
-				});
+//			this.artistService.search({ name: value })
+//				.then((artists) => {
+//					let options = [];
+//
+//					artists.map((artist) => {
+//						options.push({
+//							label: artist.name,
+//							value: artist.name,
+//							data: artist
+//						});
+//					});
+//
+//					callback(options);
+//				})
+//				.catch((failure) => {
+//					this.setState({ createArtist: true })
+//					callback();
+//				});
 		}
 	}
 

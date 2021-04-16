@@ -30,7 +30,7 @@ export async function getStaticProps(context) {
 	let artists: Array<Artist> = [];
 
 	await musicService.search(musicSearch).then((success) => musics = success);
-	await artistService.search(artistSearch).then((success) => artists = success);
+	//await artistService.search(artistSearch).then((success) => artists = success);
 
 	return {
 		props: {
