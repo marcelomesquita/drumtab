@@ -1,58 +1,43 @@
-import { PROJECT } from "../project";
+import api from "./api";
 
 export default class ArtistService {
 	search = async (search) => {
-		const response = await fetch(`${PROJECT.URL}/api/artist/search`, {
-			body: JSON.stringify(search),
-			headers: { "Content-Type": "application/json" },
-			method: "POST"
-		});
-		const json = await response.json();
+		const response = await api.get("/api/artist/search", search);
 
 		if (response.status == 200) {
-			return Promise.resolve(json.artists);
+			return Promise.resolve(response.data.artists);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	select = async (slug) => {
-		const response = await fetch(`${PROJECT.URL}/api/artist/${slug}/select`);
-		const json = await response.json();
+		const response = await api.get(`/api/artist/${slug}/select`);
 
 		if (response.status == 200) {
-			return Promise.resolve(json.music);
+			return Promise.resolve(response.data.music);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	insert = async (artist) => {
-		const response = await fetch(`/api/artist/insert`, {
-			body: JSON.stringify(artist),
-			headers: { "Content-Type": "application/json" },
-			method: "POST"
-		});
-		const json = await response.json();
+		const response = await api.post(`/api/artist/insert`, artist);
 
 		if (response.status == 200) {
-			return Promise.resolve(json);
+			return Promise.resolve(response.data);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
-	}
-
-	delete = async (id) => {
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	exists = async (slug) => {
-		const response = await fetch(`/api/artist/${slug}/exists`);
-		const json = await response.json();
+		const response = await api.get(`/api/artist/${slug}/exists`);
 
 		if (response.status == 200) {
-			return Promise.resolve(json.exists);
+			return Promise.resolve(response.data.exists);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 }
