@@ -11,7 +11,7 @@ interface search {
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		if (req.method !== "GET") {
-			//return res.status(400).json({ message: "Method not allowed!" });
+			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
 		await connect();
