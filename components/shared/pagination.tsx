@@ -1,4 +1,4 @@
-function Pagination(props) {
+export default function Pagination(props) {
 	return (
 		<nav className="pagination" role="navigation" aria-label="pagination">
 			<a className="pagination-previous">Previous</a>
@@ -15,5 +15,3 @@ function Pagination(props) {
 		</nav>
 	);
 }
-
-export default Pagination;

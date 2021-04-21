@@ -21,6 +21,10 @@ export default class Music {
 
 	constructor(init = null) {
 		Object.assign(this, init);
+
+		if (init?.tablature) {
+			this.tablature = new Tablature(init.tablature);
+		}
 	}
 
 	isValid = (): boolean => {

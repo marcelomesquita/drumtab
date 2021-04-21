@@ -1,7 +1,7 @@
 import Footer from "./footer";
 import Header from "./header";
 
-function Container({ children }) {
+export default function Container({ children }) {
 	return (
 		<>
 			<Header />
@@ -12,5 +12,3 @@ function Container({ children }) {
 		</>
 	)
 }
-
-export default Container;

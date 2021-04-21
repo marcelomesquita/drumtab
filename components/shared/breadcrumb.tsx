@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PROJECT } from "../../project";
 
-function Breadcrumb() {
+export default function Breadcrumb() {
 	return (
 		<nav className="breadcrumb is-small" aria-label="breadcrumbs">
 			<ul>
@@ -11,5 +11,3 @@ function Breadcrumb() {
 		</nav>
 	)
 }
-
-export default Breadcrumb;

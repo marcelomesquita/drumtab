@@ -2,10 +2,10 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
 import { PROJECT } from '../../project';
 
-function Header() {
+export default function Header() {
 	const [session, loading] = useSession();
 
-	const toggleStyles = (event) => {
+	const toggleStyles = (e) => {
 		document.querySelector('#burger').classList.toggle('is-active')
 		document.querySelector('#mainbar').classList.toggle('is-active')
 	}
@@ -46,5 +46,3 @@ function Header() {
 		</header>
 	)
 }
-
-export default Header;

@@ -22,7 +22,7 @@ export default class ArtistService {
 	}
 
 	insert = async (artist) => {
-		const response = await api.post(`/api/artist/insert`, artist);
+		const response = await api.post("/api/artist/insert", artist);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);

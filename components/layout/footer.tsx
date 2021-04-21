@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { PROJECT } from '../../project';
 
-function Footer() {
+export default function Footer() {
 	return (
 		<footer className="footer has-background-light pb-0">
 			<div className="container is-widescreen">
@@ -56,5 +56,3 @@ function Footer() {
 		</footer>
 	)
 }
-
-export default Footer;

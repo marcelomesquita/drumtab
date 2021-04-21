@@ -3,15 +3,30 @@ import mongoose from 'mongoose'
 import connect from "../../../databases/connect";
 import MusicSearch from '../../../models/search/music-search';
 
+interface search {
+	name?,
+	slug?
+}
+
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
-		if (req.method !== "POST") {
+		if (req.method !== "GET") {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
 		await connect();
 
-		const search: MusicSearch = req.body;
+		let musicSearch: MusicSearch = req.body;
+		let search: search = {};
+
+		if (musicSearch?.name) {
+			search.name = { "$regex": musicSearch.name, "$options": "i" }
+		}
+
+		if (musicSearch?.slug) {
+			search.slug = musicSearch.slug
+		}
+
 		const result = await mongoose.models.Music.find(search).populate("artist");
 
 		if (result.length === 0) {

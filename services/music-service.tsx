@@ -1,58 +1,43 @@
-import { PROJECT } from "../project";
+import api from "./api";
 
 export default class MusicService {
 	search = async (search) => {
-		const response = await fetch(`${PROJECT.URL}/api/music/search`, {
-			body: JSON.stringify(search),
-			headers: { "Content-Type": "application/json" },
-			method: "POST"
-		});
-		const json = await response.json();
+		const response = await api.get("/api/music/search", search);
 
 		if (response.status == 200) {
-			return Promise.resolve(json.musics);
+			return Promise.resolve(response.data.musics);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	select = async (slug) => {
-		const response = await fetch(`${PROJECT.URL}/api/music/${slug}/select`);
-		const json = await response.json();
+		const response = await api.get(`/api/music/${slug}/select`);
 
 		if (response.status == 200) {
-			return Promise.resolve(json.music);
+			return Promise.resolve(response.data.music);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	insert = async (music) => {
-		const response = await fetch(`/api/music/insert`, {
-			body: JSON.stringify(music),
-			headers: { "Content-Type": "application/json" },
-			method: "POST"
-		});
-		const json = await response.json();
+		const response = await api.post("/api/music/insert", music)
 
 		if (response.status == 200) {
-			return Promise.resolve(json);
+			return Promise.resolve(response.data);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
-	}
-
-	delete = async (id) => {
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	exists = async (slug) => {
-		const response = await fetch(`/api/music/${slug}/exists`);
-		const json = await response.json();
+		const response = await api.get(`/api/music/${slug}/exists`);
 
 		if (response.status == 200) {
-			return Promise.resolve(json.exists);
+			return Promise.resolve(response.data.exists);
 		}
 
-		return Promise.reject({ status: response.status, message: json.message });
+		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 }
