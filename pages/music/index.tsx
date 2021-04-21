@@ -10,7 +10,7 @@ import MusicService from "../../services/music-service";
 
 export async function getStaticProps(context) {
 	const musicService = new MusicService();
-	const musics: Array<Music> = []; //await musicService.search({});
+	const musics: Array<Music> = await musicService.search({});
 
 	return {
 		props: {
