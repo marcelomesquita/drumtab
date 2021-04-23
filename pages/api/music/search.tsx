@@ -10,7 +10,7 @@ interface search {
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
-		if (req.method !== "GET") {
+		if (req.method !== "POST") {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
 

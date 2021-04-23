@@ -2,7 +2,7 @@ import api from "./api";
 
 export default class MusicService {
 	search = async (search) => {
-		const response = await api.get("/api/music/search", search);
+		const response = await api.post("/api/music/search", search);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.musics);

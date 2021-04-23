@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose'
 import connect from "../../../databases/connect";
-import ArtistSearch from '../../../models/search/artist-search';
+import AuthorSearch from '../../../models/search/author-search';
 
 interface search {
 	name?,
@@ -16,24 +16,24 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		await connect();
 
-		let artistSearch: ArtistSearch = req.body;
+		let authorSearch: AuthorSearch = req.body;
 		let search: search = {};
 
-		if (artistSearch?.name) {
-			search.name = { "$regex": artistSearch.name, "$options": "i" }
+		if (authorSearch?.name) {
+			search.name = { "$regex": authorSearch.name, "$options": "i" }
 		}
 
-		if (artistSearch?.slug) {
-			search.slug = artistSearch.slug
+		if (authorSearch?.slug) {
+			search.slug = authorSearch.slug
 		}
 
-		const result = await mongoose.models.Artist.find(search);
+		const result = await mongoose.models.Author.find(search);
 
 		if (result.length === 0) {
 			return res.status(404).json({ message: "Not Found!" });
 		}
 
-		return res.status(200).json({ message: "Resultados encontrados", artists: result });
+		return res.status(200).json({ message: "Resultados encontrados", authors: result });
 	} catch (e) {
 		return res.status(500).json({ message: e.toString() });
 	}

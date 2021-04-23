@@ -1,18 +1,18 @@
 import api from "./api";
 
-export default class ArtistService {
+export default class AlbumService {
 	search = async (search) => {
-		const response = await api.post("/api/artist/search", search);
+		const response = await api.post("/api/album/search", search);
 
 		if (response.status == 200) {
-			return Promise.resolve(response.data.artists);
+			return Promise.resolve(response.data.albums);
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	select = async (slug) => {
-		const response = await api.get(`/api/artist/${slug}/select`);
+		const response = await api.get(`/api/album/${slug}/select`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.album);
@@ -21,8 +21,8 @@ export default class ArtistService {
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	insert = async (artist) => {
-		const response = await api.post("/api/artist/insert", artist);
+	insert = async (album) => {
+		const response = await api.post("/api/album/insert", album);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,7 +32,7 @@ export default class ArtistService {
 	}
 
 	exists = async (slug) => {
-		const response = await api.get(`/api/artist/${slug}/exists`);
+		const response = await api.get(`/api/album/${slug}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);

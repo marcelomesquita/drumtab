@@ -71,8 +71,8 @@ export default class Music {
 		return "";
 	}
 
-	validateArtist = (value = this.artist.name): string => {
-		if (validator.isEmpty(value)) {
+	validateArtist = (value = this.artist): string => {
+		if (validator.isEmpty(value.name)) {
 			return "required";
 		}
 

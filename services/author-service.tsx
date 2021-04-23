@@ -1,28 +1,28 @@
 import api from "./api";
 
-export default class ArtistService {
+export default class AuthorService {
 	search = async (search) => {
-		const response = await api.post("/api/artist/search", search);
+		const response = await api.post("/api/author/search", search);
 
 		if (response.status == 200) {
-			return Promise.resolve(response.data.artists);
+			return Promise.resolve(response.data.authors);
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
 	select = async (slug) => {
-		const response = await api.get(`/api/artist/${slug}/select`);
+		const response = await api.get(`/api/author/${slug}/select`);
 
 		if (response.status == 200) {
-			return Promise.resolve(response.data.album);
+			return Promise.resolve(response.data.author);
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	insert = async (artist) => {
-		const response = await api.post("/api/artist/insert", artist);
+	insert = async (author) => {
+		const response = await api.post("/api/author/insert", author);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,7 +32,7 @@ export default class ArtistService {
 	}
 
 	exists = async (slug) => {
-		const response = await api.get(`/api/artist/${slug}/exists`);
+		const response = await api.get(`/api/author/${slug}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);
