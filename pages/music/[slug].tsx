@@ -1,13 +1,13 @@
 import React from "react";
 import Head from "next/head";
 import moment from "moment";
-import { PROJECT } from "../../project";
-import Container from "../../components/layout/container"
-import Breadcrumb from "../../components/shared/breadcrumb";
-import Drummer from "../../components/shared/drummer";
-import Drum from "../../models/drum";
-import Music from "../../models/music";
-import MusicService from "../../services/music-service";
+import { project } from "../../configs/project";
+import Container from "../../components/layout/Container"
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import Drummer from "../../components/shared/Drummer";
+import Drum from "../../structures/models/Drum";
+import Music from "../../structures/models/Music";
+import MusicService from "../../services/MusicService";
 
 export async function getStaticPaths() {
 	return {
@@ -36,7 +36,7 @@ export default function MusicPage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {PROJECT.TITLE}</title>
+				<title>{pageTitle} | {project.title}</title>
 			</Head>
 
 			<div className="container is-widescreen">

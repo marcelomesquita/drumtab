@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
 import mongoose from 'mongoose'
-import connect from "../../../databases/connect";
-import Author from "../../../models/author";
+import mongoConnection from "../../../configs/mongoConnection";
+import Author from "../../../structures/models/Author";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -19,7 +19,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		const author: Author = new Author(req.body);
 
-		await connect();
+		await mongoConnection();
 
 		author.createdBy = author.updatedBy = await mongoose.models.User.findOne({ email: session.user.email });
 		author.createdAt = author.updatedAt = new Date();

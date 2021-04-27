@@ -3,8 +3,8 @@ import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
 import { ObjectId } from "bson";
 import mongoose from 'mongoose'
-import connect from "../../../databases/connect";
-import Music from "../../../models/music";
+import mongoConnection from "../../../configs/mongoConnection";
+import Music from "../../../structures/models/Music";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -20,7 +20,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		const music: Music = new Music(req.body);
 
-		await connect();
+		await mongoConnection();
 
 		music._id = new ObjectId(music._id);
 

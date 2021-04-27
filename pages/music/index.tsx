@@ -1,12 +1,12 @@
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import { PROJECT } from "../../project";
-import Container from "../../components/layout/container"
-import Breadcrumb from "../../components/shared/breadcrumb";
-import Pagination from "../../components/shared/pagination";
-import Music from "../../models/music";
-import MusicService from "../../services/music-service";
+import { project } from "../../configs/project";
+import Container from "../../components/layout/Container"
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import Pagination from "../../components/shared/Pagination";
+import Music from "../../structures/models/Music";
+import MusicService from "../../services/MusicService";
 
 export async function getStaticProps(context) {
 	const musicService = new MusicService();
@@ -26,7 +26,7 @@ export default function MusicsPage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {PROJECT.TITLE}</title>
+				<title>{pageTitle} | {project.title}</title>
 			</Head>
 
 			<div className="container is-widescreen">

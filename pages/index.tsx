@@ -1,11 +1,12 @@
 import Head from "next/head";
 import Link from "next/link";
-import { PROJECT } from "../project";
-import Container from "../components/layout/container"
-import Artist from "../models/artist";
-import Music from "../models/music";
-import MusicService from "../services/music-service";
-import ArtistService from "../services/artist-service";
+import { project } from "../configs/project";
+import Container from "../components/layout/Container"
+import Artist from "../structures/models/Artist";
+import Music from "../structures/models/Music";
+import MusicService from "../services/MusicService";
+import ArtistService from "../services/ArtistService";
+import { FaChevronRight } from "react-icons/fa";
 
 export async function getStaticProps(context) {
 	const musicService = new MusicService();
@@ -29,7 +30,7 @@ export default function HomePage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {PROJECT.TITLE}</title>
+				<title>{pageTitle} | {project.title}</title>
 			</Head>
 
 			<section className="hero is-link is-medium">
@@ -37,8 +38,8 @@ export default function HomePage(props) {
 					<div className="container is-widescreen">
 						<div className="columns">
 							<div className="column">
-								<h2 className="title is-2">{PROJECT.TITLE}</h2>
-								<h3 className="subtitle is-3 has-text-light">{PROJECT.DESCRIPTION}</h3>
+								<h2 className="title is-2">{project.title}</h2>
+								<h3 className="subtitle is-3 has-text-light">{project.description}</h3>
 							</div>
 							<div className="column">
 							<figure className="image is-4by3">
@@ -62,7 +63,7 @@ export default function HomePage(props) {
 									<Link href="/music">
 										<a className="is-pulled-right has-text-primary">
 											ver todas as músicas
-											<span className="icon is-small"><i className="fw fas fa-chevron-right" /></span>
+											<span className="icon is-small"><FaChevronRight /></span>
 										</a>
 									</Link>
 								</div>
@@ -100,7 +101,7 @@ export default function HomePage(props) {
 							<Link href="/music">
 								<a className="is-pulled-right has-text-primary">
 									ver todas os artistas
-									<span className="icon is-small"><i className="fw fas fa-chevron-right" /></span>
+									<span className="icon is-small"><FaChevronRight /></span>
 								</a>
 							</Link>
 							<h1 className="title is-4 is-info">ARTISTAS</h1>

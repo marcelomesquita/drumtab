@@ -1,43 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Head from "next/head";
-import { Session } from "next-auth";
-import { getSession } from "next-auth/client";
 import Slugify from "slugify";
 import AsyncSelect from 'react-select/async';
-import { PROJECT } from "../../project";
-import Container from "../../components/layout/container"
-import Drummer from "../../components/shared/drummer";
-import Breadcrumb from "../../components/shared/breadcrumb";
-import Notification from "../../components/shared/notification";
-import Drum from "../../models/drum";
-import Music from "../../models/music";
-import MusicResponse from "../../interfaces/music-response"
-import MusicService from "../../services/music-service";
-import ArtistService from "../../services/artist-service";
-import AlbumService from "../../services/album-service";
-import AuthorService from "../../services/author-service";
-import Modal from "../../components/shared/modal";
-
-interface Props {
-	session: Session,
-	music: Music
-}
-
-interface State {
-	drum: Drum,
-	music: Music,
-	message: string,
-	messageSlug: string,
-	messageArtist: string,
-	loading: boolean,
-	loadingSlug: boolean,
-	loadingArtist: boolean,
-	createArtist: boolean,
-	modalArtist: boolean,
-}
+import { project } from "../../configs/project";
+import { AuthContext } from "../../contexts/Auth";
+import Container from "../../components/layout/Container"
+import Drummer from "../../components/shared/Drummer";
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import Notification from "../../components/shared/Notification";
+import Modal from "../../components/shared/Modal";
+import Drum from "../../structures/models/Drum";
+import Music from "../../structures/models/Music";
+import MusicResponse from "../../structures/interfaces/MusicResponse"
+import MusicService from "../../services/MusicService";
+import ArtistService from "../../services/ArtistService";
+import AlbumService from "../../services/AlbumService";
+import AuthorService from "../../services/AuthorService";
+import { FaLink, FaMusic } from "react-icons/fa";
 
 export async function getServerSideProps(context) {
-	const session = await getSession(context);
 	const slug = context.body?.slug;
 	var musicEditorResponse: MusicResponse = null;
 
@@ -50,10 +31,9 @@ export async function getServerSideProps(context) {
 		}
 	}
 
-	if (session) {
+	if (true) {
 		return {
 			props: {
-				session,
 				message: musicEditorResponse.message,
 				music: musicEditorResponse.music
 			}
@@ -69,6 +49,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function MusicEditorPage(props) {
+	const session = useContext(AuthContext);
+	console.log(session);
 	const musicService: MusicService = new MusicService();
 	const artistService: ArtistService = new ArtistService();
 	const albumService: AlbumService = new AlbumService();
@@ -244,7 +226,7 @@ export default function MusicEditorPage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {PROJECT.TITLE}</title>
+				<title>{pageTitle} | {project.title}</title>
 			</Head>
 
 			{message && (<Notification onClose={() => setMessage(null)}>{message}</Notification>)}
@@ -262,7 +244,7 @@ export default function MusicEditorPage(props) {
 
 						<div className="field">
 							<label className="label">Música *</label>
-							<div className="control has-icons-left has-icons-right">
+							<div className="control">
 								<input
 									className="input is-large"
 									type="text"
@@ -271,9 +253,6 @@ export default function MusicEditorPage(props) {
 									value={music.name}
 									onChange={(e) => setName(e.target.value)}
 									autoFocus />
-								<span className="icon is-small is-left">
-									<i className="fw fas fa-music"></i>
-								</span>
 							</div>
 						</div>
 
@@ -286,9 +265,7 @@ export default function MusicEditorPage(props) {
 									value={music.slug}
 									onFocus={setDefaultSlug}
 									onChange={(e) => setSlug(e.target.value)} />
-								<span className="icon is-small is-left">
-									<i className="fw fas fa-link"></i>
-								</span>
+								<span className="icon is-small is-left"><FaLink /></span>
 							</div>
 							{messageSlug && (<p className="help">{messageSlug}</p>)}
 						</div>

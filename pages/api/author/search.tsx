@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose'
-import connect from "../../../databases/connect";
-import AuthorSearch from '../../../models/search/author-search';
+import mongoConnection from "../../../configs/mongoConnection";
+import AuthorSearch from '../../../structures/models/search/AuthorSearch';
 
 interface search {
 	name?,
@@ -14,7 +14,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
-		await connect();
+		await mongoConnection();
 
 		let authorSearch: AuthorSearch = req.body;
 		let search: search = {};

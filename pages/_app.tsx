@@ -1,13 +1,11 @@
 import Head from "next/head";
-import { AppProps } from "next/dist/next-server/lib/router/router";
-import { Provider } from "next-auth/client";
+import AuthProvider from "../contexts/Auth";
 
-import "@fortawesome/fontawesome-free/js/all";
 import "../styles/global.sass"
 
-export default function DrumTab({ Component, pageProps }: AppProps) {
+export default function DrumTab({ Component, pageProps }) {
 	return (
-		<Provider session={pageProps.session}>
+		<AuthProvider>
 			<Head>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -15,6 +13,6 @@ export default function DrumTab({ Component, pageProps }: AppProps) {
 			</Head>
 
 			<Component {...pageProps} />
-	  	</Provider>
+	  	</AuthProvider>
 	);
 }

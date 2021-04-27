@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose"
-import connect from "../../../../databases/connect";
+import mongoConnection from "../../../../configs/mongoConnection";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -8,7 +8,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
-		await connect();
+		await mongoConnection();
 
 		const slug: string = req.query.slug as string;
 		const result = await mongoose.models.Artist.exists({slug});

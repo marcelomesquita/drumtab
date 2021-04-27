@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
 import mongoose from "mongoose"
-import connect from "../../../../databases/connect";
+import mongoConnection from "../../../../configs/mongoConnection";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -16,7 +16,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(401).json({ message: "Unauthorized!" });
 		}
 
-		await connect();
+		await mongoConnection();
 
 		const slug: string = req.query.slug as string;
 		const result = await mongoose.models.Music.deleteOne({slug}); // TODO: verificar se é o dono

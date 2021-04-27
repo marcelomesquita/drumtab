@@ -3,8 +3,8 @@ import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
 import { ObjectId } from "bson";
 import mongoose from 'mongoose'
-import connect from "../../../databases/connect";
-import Album from "../../../models/album";
+import mongoConnection from "../../../configs/mongoConnection";
+import Album from "../../../structures/models/Album";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -20,7 +20,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		const album: Album = new Album(req.body);
 
-		await connect();
+		await mongoConnection();
 
 		album._id = new ObjectId(album._id);
 
