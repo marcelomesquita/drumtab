@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import firebaseConnection from "../../../../configs/firebaseConnection";
+import firebaseClient from "../../../../configs/firebaseClient";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -9,7 +9,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 		const id: string = req.query.id as string;
 
-		const result = await firebaseConnection.firestore().collection("users").doc(id).get();
+		const result = await firebaseClient.firestore().collection("users").doc(id).get();
 
 		return res.status(200).json({ message: "Usuário encontrado!", user: result });
 	} catch (e) {

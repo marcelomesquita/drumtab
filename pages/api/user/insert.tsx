@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import firebaseConnection from "../../../configs/firebaseConnection";
+import firebaseClient from "../../../configs/firebaseClient";
 import User from "../../../structures/models/User";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
@@ -20,9 +20,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: "Invalid parameter!" });
 		}
 
-		await firebaseConnection.firestore().collection("users").doc(user.id).set(Object.assign({}, user))
+		await firebaseClient.firestore().collection("users").doc(user.id).set(Object.assign({}, user))
 			.then((result) => {
-				console.log(result);
 				return res.status(200).json({ message: "Usuário cadastrado!", user: result });
 			})
 			.catch((error) => {

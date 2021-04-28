@@ -1,54 +1,50 @@
-import { createContext, useEffect, useState } from "react";
-import firebaseConnection from "../configs/firebaseConnection";
+import { createContext, useContext, useEffect, useState } from "react";
+import nookies from "nookies";
+import firebaseClient from "../configs/firebaseClient";
 import User from "../structures/models/User";
 
-interface session {
+interface auth {
 	user,
 	loading,
 	signIn?,
 	signOut?
 };
 
-const auth: session = null;
-
-export const AuthContext = createContext(auth);
+export const AuthContext = createContext<auth>(null);
 
 export default function AuthProvider({ children }) {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		setLoading(true);
-
-		const storagedUser = localStorage.getItem('user');
-
-		if (storagedUser) {
-			setUser(JSON.parse(storagedUser));
-		}
-
-		setLoading(false);
+		return firebaseClient.auth().onIdTokenChanged(async (user) => {
+			if (!user) {
+				setUser(null);
+				nookies.set(undefined, 'token', '', { path: '/' });
+			} else {
+				const token = await user.getIdToken();
+				setUser(user);
+				nookies.set(undefined, 'token', token, { path: '/' });
+			}
+		});
 	}, []);
 
 	useEffect(() => {
-		localStorage.setItem('user', JSON.stringify(user));
-	}, [user]);
+		const handle = setInterval(async () => {
+			const user = firebaseClient.auth().currentUser;
+			if (user) await user.getIdToken(true);
+		}, 10 * 60 * 1000);
 
-	const storageUser = (user) => {
-		if (user) {
-			localStorage.setItem('user', JSON.stringify(user));
-		} else {
-			localStorage.removeItem('user');
-		}
-	}
+		return () => clearInterval(handle);
+	}, []);
 
 	const signIn = async () => {
 		setLoading(true);
 
-		const provider = new firebaseConnection.auth.GoogleAuthProvider();
+		const provider = new firebaseClient.auth.GoogleAuthProvider();
 
-		firebaseConnection.auth().signInWithPopup(provider)
+		firebaseClient.auth().signInWithPopup(provider)
 			.then(async (result) => {
-				console.log(result);
 				const credential = result.credential;
 				const user: User = new User({
 					id: result.user.uid,
@@ -57,7 +53,7 @@ export default function AuthProvider({ children }) {
 					avatar: result.user.photoURL
 				});
 
-				//await firebaseConnection.firestore().collection("users").doc(user.id).set(Object.assign({}, user))
+				//await firebaseClient.firestore().collection("users").doc(user.id).set(Object.assign({}, user))
 				//	.then((result) => {
 				//		setUser(user);
 				//	})
@@ -72,7 +68,7 @@ export default function AuthProvider({ children }) {
 	const signOut = async () => {
 		setLoading(true);
 
-		firebaseConnection.auth().signOut()
+		firebaseClient.auth().signOut()
 			.then((result) => {
 				setUser(null);
 			})
@@ -86,3 +82,7 @@ export default function AuthProvider({ children }) {
 		</AuthContext.Provider>
 	);
 }
+
+export const useAuth = () => {
+	return useContext(AuthContext);
+};

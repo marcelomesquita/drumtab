@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import Slugify from "slugify";
+import nookies from "nookies";
 import AsyncSelect from 'react-select/async';
+import { FaLink } from "react-icons/fa";
 import { project } from "../../configs/project";
 import { AuthContext } from "../../contexts/Auth";
 import Container from "../../components/layout/Container"
@@ -16,32 +18,35 @@ import MusicService from "../../services/MusicService";
 import ArtistService from "../../services/ArtistService";
 import AlbumService from "../../services/AlbumService";
 import AuthorService from "../../services/AuthorService";
-import { FaLink, FaMusic } from "react-icons/fa";
+import firebaseAdmin from "../../configs/firebaseAdmin";
 
 export async function getServerSideProps(context) {
-	const slug = context.body?.slug;
-	var musicEditorResponse: MusicResponse = null;
+	try {
+		const cookies = nookies.get(context);
+		const slug = context.body?.slug;
+		var musicEditorResponse: MusicResponse = null;
 
-	if (slug) {
-		musicEditorResponse = await (await fetch(`${process.env.BASE_URL}/api/music/${slug}`)).json();
-	} else {
-		musicEditorResponse = {
-			message: null,
-			music: null
+		await firebaseAdmin.auth().verifyIdToken(cookies.token);
+
+		if (slug) {
+			musicEditorResponse = await (await fetch(`${process.env.BASE_URL}/api/music/${slug}`)).json();
+		} else {
+			musicEditorResponse = {
+				message: null,
+				music: null
+			}
 		}
-	}
 
-	if (true) {
 		return {
 			props: {
 				message: musicEditorResponse.message,
 				music: musicEditorResponse.music
 			}
 		}
-	} else {
+	} catch (error) {
 		return {
 			redirect: {
-				destination: "/api/auth/signin",
+				destination: "/",
 				permanent: false,
 			}
 		}
@@ -49,8 +54,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function MusicEditorPage(props) {
-	const session = useContext(AuthContext);
-	console.log(session);
+	const auth = useContext(AuthContext);
+
 	const musicService: MusicService = new MusicService();
 	const artistService: ArtistService = new ArtistService();
 	const albumService: AlbumService = new AlbumService();

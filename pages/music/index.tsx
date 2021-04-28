@@ -9,12 +9,12 @@ import Music from "../../structures/models/Music";
 import MusicService from "../../services/MusicService";
 
 export async function getStaticProps(context) {
-	const musicService = new MusicService();
-	const musics: Array<Music> = await musicService.search({});
+	//const musicService = new MusicService();
+	//const musics: Array<Music> = await musicService.search({});
 
 	return {
 		props: {
-			musics
+			musics: []
 		}
 	}
 }

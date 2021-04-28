@@ -5,7 +5,7 @@ import { project } from '../../configs/project';
 import { AuthContext } from '../../contexts/Auth';
 
 export default function Header() {
-	const session = useContext(AuthContext);
+	const auth = useContext(AuthContext);
 
 	const toggleStyles = (e) => {
 		document.querySelector('#burger').classList.toggle('is-active')
@@ -39,9 +39,9 @@ export default function Header() {
 								</div>
 							</div>
 
-							{!session.user
-								? (<a className="navbar-item" onClick={session.signIn} title="login"><span className="icon is-small"><FaSignInAlt /></span></a>)
-								: (<a className="navbar-item" onClick={session.signOut} title={`sair (${session.user.email})`}><span className="icon is-small"><FaSignOutAlt /></span></a>)
+							{!auth.user
+								? (<a className="navbar-item" onClick={auth.signIn} title="login"><span className="icon is-small"><FaSignInAlt /></span></a>)
+								: (<a className="navbar-item" onClick={auth.signOut} title={`sair (${auth.user.email})`}><span className="icon is-small"><FaSignOutAlt /></span></a>)
 							}
 						</div>
 					</div>
