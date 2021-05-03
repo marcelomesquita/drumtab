@@ -1,8 +1,8 @@
-import api from "../configs/api";
+import axiosClient from "../configs/axiosClient";
 
 export default class AuthorService {
 	search = async (search) => {
-		const response = await api.post("/api/author/search", search);
+		const response = await axiosClient.post("/api/author/search", search);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.authors);
@@ -12,7 +12,7 @@ export default class AuthorService {
 	}
 
 	select = async (slug) => {
-		const response = await api.get(`/api/author/${slug}/select`);
+		const response = await axiosClient.get(`/api/author/${slug}/select`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.author);
@@ -22,7 +22,7 @@ export default class AuthorService {
 	}
 
 	insert = async (author) => {
-		const response = await api.post("/api/author/insert", author);
+		const response = await axiosClient.post("/api/author/insert", author);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,7 +32,7 @@ export default class AuthorService {
 	}
 
 	exists = async (slug) => {
-		const response = await api.get(`/api/author/${slug}/exists`);
+		const response = await axiosClient.get(`/api/author/${slug}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);

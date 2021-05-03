@@ -1,8 +1,8 @@
-import api from "../configs/api";
+import axiosClient from "../configs/axiosClient";
 
 export default class MusicService {
 	search = async (search) => {
-		const response = await api.post("/api/music/search", search);
+		const response = await axiosClient.post("/api/music/search", search);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.musics);
@@ -12,7 +12,7 @@ export default class MusicService {
 	}
 
 	select = async (slug) => {
-		const response = await api.get(`/api/music/${slug}/select`);
+		const response = await axiosClient.get(`/api/music/${slug}/select`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.music);
@@ -22,7 +22,7 @@ export default class MusicService {
 	}
 
 	insert = async (music) => {
-		const response = await api.post("/api/music/insert", music)
+		const response = await axiosClient.post("/api/music/insert", music)
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,7 +32,7 @@ export default class MusicService {
 	}
 
 	exists = async (slug) => {
-		const response = await api.get(`/api/music/${slug}/exists`);
+		const response = await axiosClient.get(`/api/music/${slug}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);

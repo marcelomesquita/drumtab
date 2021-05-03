@@ -1,8 +1,5 @@
 import * as firebaseAdmin from "firebase-admin";
 
-console.log("FIREBASE_PRIVATE_KEY");
-console.log(process.env.FIREBASE_PRIVATE_KEY);
-
 if (!firebaseAdmin.apps.length) {
 	firebaseAdmin.initializeApp({
 		credential: firebaseAdmin.credential.cert({

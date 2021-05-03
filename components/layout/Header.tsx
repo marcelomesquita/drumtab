@@ -40,8 +40,36 @@ export default function Header() {
 							</div>
 
 							{!auth.user
-								? (<a className="navbar-item" onClick={auth.signIn} title="login"><span className="icon is-small"><FaSignInAlt /></span></a>)
-								: (<a className="navbar-item" onClick={auth.signOut} title={`sair (${auth.user.email})`}><span className="icon is-small"><FaSignOutAlt /></span></a>)
+								? (<a className="navbar-item" onClick={() => auth.signIn()} title="login"><span className="icon is-small"><FaSignInAlt /></span></a>)
+								: (
+									<div className="navbar-item has-dropdown is-hoverable">
+										<a className="navbar-link is-arrowless">
+											<img src={auth.user.avatar} />
+										</a>
+										<div className="navbar-dropdown is-right">
+											<div className="navbar-item">
+												<strong>{auth.user.name}</strong>
+											</div>
+											<div className="navbar-item">
+												{auth.user.email}
+											</div>
+											<hr className="navbar-divider" />
+											<a className="navbar-item">
+												profile
+											</a>
+											<a className="navbar-item">
+												minhas músicas
+											</a>
+											<a className="navbar-item">
+												minha bateria
+											</a>
+											<hr className="navbar-divider" />
+											<a className="navbar-item has-text-danger" onClick={() => auth.signOut()} title="sair">
+												sair
+											</a>
+										</div>
+									</div>
+								)
 							}
 						</div>
 					</div>

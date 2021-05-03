@@ -1,8 +1,8 @@
-import api from "../configs/api";
+import axiosClient from "../configs/axiosClient";
 
 export default class AlbumService {
 	search = async (search) => {
-		const response = await api.post("/api/album/search", search);
+		const response = await axiosClient.post("/api/album/search", search);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.albums);
@@ -12,7 +12,7 @@ export default class AlbumService {
 	}
 
 	select = async (slug) => {
-		const response = await api.get(`/api/album/${slug}/select`);
+		const response = await axiosClient.get(`/api/album/${slug}/select`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.album);
@@ -22,7 +22,7 @@ export default class AlbumService {
 	}
 
 	insert = async (album) => {
-		const response = await api.post("/api/album/insert", album);
+		const response = await axiosClient.post("/api/album/insert", album);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,7 +32,7 @@ export default class AlbumService {
 	}
 
 	exists = async (slug) => {
-		const response = await api.get(`/api/album/${slug}/exists`);
+		const response = await axiosClient.get(`/api/album/${slug}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);

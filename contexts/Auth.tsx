@@ -1,7 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 import nookies from "nookies";
 import firebaseClient from "../configs/firebaseClient";
 import User from "../structures/models/User";
+import UserService from "../services/UserService";
 
 interface auth {
 	user,
@@ -10,69 +13,66 @@ interface auth {
 	signOut?
 };
 
+const userService = new UserService();
+
 export const AuthContext = createContext<auth>(null);
 
+export const useAuth = () => {
+	return useContext(AuthContext);
+};
+
 export default function AuthProvider({ children }) {
+	const router = useRouter();
 	const [user, setUser] = useState(null);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		return firebaseClient.auth().onIdTokenChanged(async (user) => {
-			if (!user) {
-				setUser(null);
-				nookies.set(undefined, 'token', '', { path: '/' });
-			} else {
+		firebaseClient.auth().onIdTokenChanged(async (user) => {
+			if (user) {
 				const token = await user.getIdToken();
-				setUser(user);
 				nookies.set(undefined, 'token', token, { path: '/' });
+				setUser(formatUser(user));
+			} else {
+				nookies.destroy(undefined, 'token');
+				setUser(null);
 			}
 		});
 	}, []);
 
-	useEffect(() => {
-		const handle = setInterval(async () => {
-			const user = firebaseClient.auth().currentUser;
-			if (user) await user.getIdToken(true);
-		}, 10 * 60 * 1000);
+	const formatUser = (user) => {
+		return new User({
+			id: user.uid,
+			name: user.displayName,
+			email: user.email,
+			avatar: user.photoURL,
+			createdAt: new Date(user.metadata.creationTime)
+		})
+	}
 
-		return () => clearInterval(handle);
-	}, []);
+	const registerUser = async (user: User) => {
+		await userService
+			.insert(user)
+			.catch((error) => toast.dark(error));
+	}
 
-	const signIn = async () => {
+	const signIn = async (redirect: string = "/") => {
 		setLoading(true);
 
-		const provider = new firebaseClient.auth.GoogleAuthProvider();
-
-		firebaseClient.auth().signInWithPopup(provider)
-			.then(async (result) => {
-				const credential = result.credential;
-				const user: User = new User({
-					id: result.user.uid,
-					name: result.user.displayName,
-					email: result.user.email,
-					avatar: result.user.photoURL
-				});
-
-				//await firebaseClient.firestore().collection("users").doc(user.id).set(Object.assign({}, user))
-				//	.then((result) => {
-				//		setUser(user);
-				//	})
-				//	.catch((error) => console.error(error));
-
-				setUser(user);
-			})
-			.catch((error) => console.error(error))
+		await firebaseClient
+			.auth()
+			.signInWithPopup(new firebaseClient.auth.GoogleAuthProvider())
+			.then(async (result) => await registerUser(formatUser(result.user)))
+			.catch((error) => toast.dark(error))
 			.finally(() => setLoading(false));
 	}
 
 	const signOut = async () => {
 		setLoading(true);
 
-		firebaseClient.auth().signOut()
-			.then((result) => {
-				setUser(null);
-			})
-			.catch((error) => console.error(error))
+		await firebaseClient
+			.auth()
+			.signOut()
+			.catch((error) => toast.dark(error))
 			.finally(() => setLoading(false));
 	}
 
@@ -82,7 +82,3 @@ export default function AuthProvider({ children }) {
 		</AuthContext.Provider>
 	);
 }
-
-export const useAuth = () => {
-	return useContext(AuthContext);
-};

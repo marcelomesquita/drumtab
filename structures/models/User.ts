@@ -7,7 +7,6 @@ export default class User {
 	avatar?: string = null;
 	createdAt?: Date = null;
 	updatedAt?: Date = null;
-	emailVerified?: Date = null;
 
 	constructor(init = null) {
 		Object.assign(this, init);
