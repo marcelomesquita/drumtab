@@ -13,10 +13,8 @@ if (!firebase.apps.length) {
 		appId: "1:838406673348:web:d8ad35ad355c03d221ca91",
 		measurementId: "G-2GXXSRVD69"
 	});
-
-	if (typeof window != undefined) {
-		firebase.analytics()
-	}
 }
 
-export default firebase;
+const analytics = firebase.analytics;
+
+export { firebase, analytics };

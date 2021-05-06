@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import firebaseClient from "../../../configs/firebaseClient";
+import { firebase } from "../../../configs/firebaseClient";
 import MusicSearch from '../../../structures/models/search/MusicSearch';
 
 interface search {
@@ -24,7 +24,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			search.slug = musicSearch.slug
 		}
 
-		const result = await firebaseClient.firestore().collection("musics").get();
+		const result = await firebase.firestore().collection("musics").get();
 
 		return res.status(200).json({ musics: result.docs });
 	} catch (e) {

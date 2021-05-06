@@ -11,4 +11,4 @@ if (!firebaseAdmin.apps.length) {
 	});
 }
 
-export default firebaseAdmin;
+export { firebaseAdmin };

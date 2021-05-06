@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nookies from "nookies";
-import firebaseAdmin from "../../../configs/firebaseAdmin";
-import firebaseClient from "../../../configs/firebaseClient";
+import { firebaseAdmin } from "../../../configs/firebaseAdmin";
+import { firebase } from "../../../configs/firebaseClient";
 import User from "../../../structures/models/User";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
@@ -20,7 +20,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: "Invalid parameter!" });
 		}
 
-		return await firebaseClient
+		return await firebase
 			.firestore()
 			.collection("users")
 			.doc(user.id)

@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import nookies from "nookies";
-import firebaseClient from "../configs/firebaseClient";
+import { firebase }  from "../configs/firebaseClient";
 import User from "../structures/models/User";
 import UserService from "../services/UserService";
 
@@ -27,7 +27,7 @@ export default function AuthProvider({ children }) {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		firebaseClient.auth().onIdTokenChanged(async (user) => {
+		firebase.auth().onIdTokenChanged(async (user) => {
 			if (user) {
 				const token = await user.getIdToken();
 				nookies.set(undefined, 'token', token, { path: '/' });
@@ -58,9 +58,9 @@ export default function AuthProvider({ children }) {
 	const signIn = async (redirect: string = "/") => {
 		setLoading(true);
 
-		await firebaseClient
+		await firebase
 			.auth()
-			.signInWithPopup(new firebaseClient.auth.GoogleAuthProvider())
+			.signInWithPopup(new firebase.auth.GoogleAuthProvider())
 			.then(async (result) => await registerUser(formatUser(result.user)))
 			.catch((error) => toast.dark(error))
 			.finally(() => setLoading(false));
@@ -69,7 +69,7 @@ export default function AuthProvider({ children }) {
 	const signOut = async () => {
 		setLoading(true);
 
-		await firebaseClient
+		await firebase
 			.auth()
 			.signOut()
 			.catch((error) => toast.dark(error))
