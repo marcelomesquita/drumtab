@@ -9,9 +9,10 @@ interface search {
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
-		if (req.method !== "POST") {
-			return res.status(400).json({ message: "Method not allowed!" });
-		}
+		console.log(req.method);
+		//if (req.method !== "POST") {
+		//	return res.status(400).json({ message: "Method not allowed!" });
+		//}
 
 		let musicSearch: MusicSearch = req.body;
 		let search: search = {};
