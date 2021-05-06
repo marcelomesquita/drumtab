@@ -11,8 +11,8 @@ import { FaChevronRight } from "react-icons/fa";
 export async function getStaticProps(context) {
 	const musicService = new MusicService();
 	const artistService = new ArtistService();
-	const musics: Array<Music> = []; //await musicService.search({});
-	const artists: Array<Artist> = []; //await artistService.search({});
+	const musics: Array<Music> = await musicService.search({});
+	const artists: Array<Artist> = await artistService.search({});
 
 	return {
 		props: {
