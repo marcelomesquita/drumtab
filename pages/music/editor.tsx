@@ -4,6 +4,7 @@ import Slugify from "slugify";
 import nookies from "nookies";
 import AsyncSelect from 'react-select/async';
 import { FaLink } from "react-icons/fa";
+import { firebaseAdmin } from "../../configs/firebaseAdmin";
 import { project } from "../../configs/project";
 import { AuthContext } from "../../contexts/Auth";
 import Container from "../../components/layout/Container"
@@ -18,7 +19,6 @@ import MusicService from "../../services/MusicService";
 import ArtistService from "../../services/ArtistService";
 import AlbumService from "../../services/AlbumService";
 import AuthorService from "../../services/AuthorService";
-import firebaseAdmin from "../../configs/firebaseAdmin";
 
 export async function getServerSideProps(context) {
 	try {
