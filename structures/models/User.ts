@@ -1,5 +1,3 @@
-import { ObjectId } from 'bson';
-
 export default class User {
 	id?: string = null;
 	name: string = null;

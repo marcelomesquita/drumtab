@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nookies from "nookies";
-import { firebaseAdmin } from "../../../configs/firebaseAdmin";
-import { firebase } from "../../../configs/firebaseClient";
+import { firebaseAdmin } from "../../../adapters/firebaseAdmin";
+import { firebase } from "../../../adapters/firebaseClient";
 import User from "../../../structures/models/User";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {

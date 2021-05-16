@@ -1,4 +1,4 @@
-import axiosClient from "../configs/axiosClient";
+import axiosClient from "../adapters/axiosClient";
 
 export default class UserService {
 	search = async (search) => {

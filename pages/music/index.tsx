@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import { project } from "../../configs/project";
 import Container from "../../components/layout/Container"
 import Breadcrumb from "../../components/shared/Breadcrumb";
 import Pagination from "../../components/shared/Pagination";
@@ -26,7 +25,7 @@ export default function MusicsPage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {project.title}</title>
+				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
 			</Head>
 
 			<div className="container is-widescreen">

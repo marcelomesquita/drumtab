@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import { analytics } from "../configs/firebaseClient";
+import { analytics } from "../adapters/firebaseClient";
 import AuthProvider from "../contexts/Auth";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -9,7 +9,6 @@ import "../styles/global.sass";
 
 export default function DrumTab({ Component, pageProps }) {
 	useEffect(() => {
-		console.log(process.env.NODE_ENV);
 		if (process.env.ENV === 'production') {
 			analytics();
 		}

@@ -1,11 +1,9 @@
-import { useContext } from 'react';
 import Link from 'next/link';
-import { FaSearch, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
-import { project } from '../../configs/project';
-import { AuthContext } from '../../contexts/Auth';
+import { FaSearch, FaSignInAlt } from 'react-icons/fa';
+import { useAuth } from '../../contexts/Auth';
 
 export default function Header() {
-	const auth = useContext(AuthContext);
+	const auth = useAuth();
 
 	const toggleStyles = (e) => {
 		document.querySelector('#burger').classList.toggle('is-active')
@@ -17,7 +15,7 @@ export default function Header() {
 			<nav className="navbar is-primary" role="navigation" aria-label="main navigation">
 				<div className="container is-widescreen">
 					<div className="navbar-brand">
-						<Link href="/"><a className="navbar-item"><strong>{project.title}</strong></a></Link>
+						<Link href="/"><a className="navbar-item"><strong>{process.env.NEXT_PUBLIC_TITLE}</strong></a></Link>
 
 						<a className="navbar-burger" onClick={toggleStyles} id="burger" role="button" aria-label="menu" aria-expanded="false" data-target="mainbar">
 							<span aria-hidden="true"></span>

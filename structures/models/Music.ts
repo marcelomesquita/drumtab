@@ -1,13 +1,12 @@
+import validator from "validator";
 import Tablature from "./Tablature";
 import User from "./User";
 import Artist from "./Artist";
-import validator from "validator";
-import { ObjectId } from 'bson';
 import Author from "./Author";
 import Album from "./Album";
 
 export default class Music {
-	public _id?: ObjectId = null;
+	public id?: string = null;
 	public name: string = "";
 	public slug: string = "";
 	public artist: Artist = new Artist();

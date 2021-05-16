@@ -1,7 +1,6 @@
 import React from "react";
 import Head from "next/head";
 import moment from "moment";
-import { project } from "../../configs/project";
 import Container from "../../components/layout/Container"
 import Breadcrumb from "../../components/shared/Breadcrumb";
 import Drummer from "../../components/shared/Drummer";
@@ -36,7 +35,7 @@ export default function MusicPage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {project.title}</title>
+				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
 			</Head>
 
 			<div className="container is-widescreen">

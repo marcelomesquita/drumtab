@@ -1,8 +1,7 @@
-import { ObjectId } from 'bson';
 import User from './User';
 
 export default class Album {
-	public _id?: ObjectId = null;
+	public id?: string = null;
 	public name: string = "";
 	public slug: string = "";
 	public createdBy?: User = null;
@@ -10,8 +9,12 @@ export default class Album {
 	public updatedBy?: User = null;
 	public updatedAt?: Date = null;
 
-	constructor(init = null) {
+	constructor(init = null, id = null) {
 		Object.assign(this, init);
+
+		if (id) {
+			this.id = id;
+		}
 	}
 
 	isValid = (): boolean => {

@@ -1,18 +1,15 @@
 import Head from "next/head";
 import Link from "next/link";
-import { project } from "../configs/project";
+import { FaChevronRight } from "react-icons/fa";
 import Container from "../components/layout/Container"
 import Artist from "../structures/models/Artist";
 import Music from "../structures/models/Music";
-import MusicService from "../services/MusicService";
-import ArtistService from "../services/ArtistService";
-import { FaChevronRight } from "react-icons/fa";
+import ArtistRepository from "../repository/ArtistRepository";
+import MusicRepository from "../repository/MusicRepository";
 
 export async function getStaticProps(context) {
-	const musicService = new MusicService();
-	const artistService = new ArtistService();
-	const musics: Array<Music> = await musicService.search({});
-	const artists: Array<Artist> = await artistService.search({});
+	const musics = await MusicRepository.search({});
+	const artists = await ArtistRepository.search({});
 
 	return {
 		props: {
@@ -24,13 +21,13 @@ export async function getStaticProps(context) {
 
 export default function HomePage(props) {
 	const pageTitle: string = "Home";
-	const artists: Array<Artist> = props.artists;
-	const musics: Array<Music> = props.musics;
-
+	const artists = props.artists;
+	const musics = props.musics;
+	
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {project.title}</title>
+				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
 			</Head>
 
 			<section className="hero is-link is-medium">
@@ -38,8 +35,8 @@ export default function HomePage(props) {
 					<div className="container is-widescreen">
 						<div className="columns">
 							<div className="column">
-								<h2 className="title is-2">{project.title}</h2>
-								<h3 className="subtitle is-3 has-text-light">{project.description}</h3>
+								<h2 className="title is-2">{process.env.NEXT_PUBLIC_TITLE}</h2>
+								<h3 className="subtitle is-3 has-text-light">{process.env.NEXT_PUBLIC_DESCRIPTION}</h3>
 							</div>
 							<div className="column">
 							<figure className="image is-4by3">

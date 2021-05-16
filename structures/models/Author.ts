@@ -1,8 +1,7 @@
-import { ObjectId } from 'bson';
 import User from './User';
 
 export default class Author {
-	public _id?: ObjectId = null;
+	public id?: string = null;
 	public name: string = "";
 	public slug: string = "";
 	public createdBy?: User = null;
@@ -10,7 +9,7 @@ export default class Author {
 	public updatedBy?: User = null;
 	public updatedAt?: Date = null;
 
-	constructor(init = null) {
+	constructor(init = null, id = null) {
 		Object.assign(this, init);
 	}
 

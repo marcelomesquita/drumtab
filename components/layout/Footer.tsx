@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import React from 'react';
-import { project } from '../../configs/project';
+import Link from "next/link";
+import React from "react";
+import packageJson from "../../package.json";
 
 export default function Footer() {
 	return (
@@ -9,7 +9,7 @@ export default function Footer() {
 				<section className="section">
 					<div className="columns">
 						<div className="column is-one-third">
-							<h2 className="title is-2">{project.title}</h2>
+							<h2 className="title is-2">{process.env.NEXT_PUBLIC_TITLE}</h2>
 						</div>
 						<div className="column">
 							<h6 className="title is-7 has-text-primary-dark">MÚSICAS</h6>
@@ -42,12 +42,12 @@ export default function Footer() {
 					<div className="columns">
 						<div className="column">
 							<div className="content is-small has-text-grey">
-								<p>&copy; {project.title} by <a href={project.author.url} target="_blank" className="has-text-primary">{project.author.name}</a></p>
+								<p>&copy; {process.env.NEXT_PUBLIC_TITLE} by <a href={packageJson.author.url} target="_blank" className="has-text-primary">{packageJson.author.name}</a></p>
 							</div>
 						</div>
 						<div className="column">
 							<div className="content is-small has-text-grey has-text-right">
-								<p>{project.version}</p>
+								<p>{packageJson.version}</p>
 							</div>
 						</div>
 					</div>

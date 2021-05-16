@@ -4,9 +4,8 @@ import Slugify from "slugify";
 import nookies from "nookies";
 import AsyncSelect from 'react-select/async';
 import { FaLink } from "react-icons/fa";
-import { firebaseAdmin } from "../../configs/firebaseAdmin";
-import { project } from "../../configs/project";
-import { AuthContext } from "../../contexts/Auth";
+import { firebaseAdmin } from "../../adapters/firebaseAdmin";
+import { useAuth } from "../../contexts/Auth";
 import Container from "../../components/layout/Container"
 import Drummer from "../../components/shared/Drummer";
 import Breadcrumb from "../../components/shared/Breadcrumb";
@@ -54,7 +53,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function MusicEditorPage(props) {
-	const auth = useContext(AuthContext);
+	const auth = useAuth();
 
 	const musicService: MusicService = new MusicService();
 	const artistService: ArtistService = new ArtistService();
@@ -231,7 +230,7 @@ export default function MusicEditorPage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>{pageTitle} | {project.title}</title>
+				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
 			</Head>
 
 			{message && (<Notification onClose={() => setMessage(null)}>{message}</Notification>)}

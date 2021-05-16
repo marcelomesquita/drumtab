@@ -1,33 +1,17 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { firebase } from "../../../configs/firebaseClient";
-import MusicSearch from '../../../structures/models/search/MusicSearch';
-
-interface search {
-	name?,
-	slug?
-}
+import { NextApiRequest, NextApiResponse } from "next";
+import MusicRepository from "../../../repository/MusicRepository";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
+	const musicRepository = new MusicRepository();
+
 	try {
-		console.log(req.method);
-		//if (req.method !== "POST") {
-		//	return res.status(400).json({ message: "Method not allowed!" });
-		//}
-
-		let musicSearch: MusicSearch = req.body;
-		let search: search = {};
-
-		if (musicSearch?.name) {
-			search.name = { "$regex": musicSearch.name, "$options": "i" }
+		if (req.method !== "POST") {
+			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
-		if (musicSearch?.slug) {
-			search.slug = musicSearch.slug
-		}
+		const musics = musicRepository.search(req.body);
 
-		const result = await firebase.firestore().collection("musics").get();
-
-		return res.status(200).json({ musics: result.docs });
+		return res.status(200).json({ musics });
 	} catch (e) {
 		return res.status(500).json({ message: e.toString() });
 	}
