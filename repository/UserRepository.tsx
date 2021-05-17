@@ -7,6 +7,8 @@ interface search {
 	slug?
 }
 
+const usersRef = firebase.firestore().collection("users");
+
 export default class UserRepository {
 	static search = async (userSearch: UserSearch) => {
 		let search: search = {};
@@ -19,9 +21,7 @@ export default class UserRepository {
 			search.slug = userSearch.slug
 		}
 
-		return firebase
-			.firestore()
-			.collection("users")
+		return usersRef
 			.get()
 			.then((result) => {
 				let users = [];
@@ -38,9 +38,7 @@ export default class UserRepository {
 	}
 
 	static select = (id: string) => {
-		return firebase
-			.firestore()
-			.collection("users")
+		return usersRef
 			.doc(id)
 			.get()
 			.then((result) => Promise.resolve(result))
@@ -48,9 +46,7 @@ export default class UserRepository {
 	}
 
 	static insert = (user: User) => {
-		return firebase
-			.firestore()
-			.collection("users")
+		return usersRef
 			.doc(user.id)
 			.set(Object.assign({}, user))
 			.then((result) => Promise.resolve(result))
