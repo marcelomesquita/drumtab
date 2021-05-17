@@ -5,15 +5,14 @@ import Container from "../../components/layout/Container"
 import Breadcrumb from "../../components/shared/Breadcrumb";
 import Pagination from "../../components/shared/Pagination";
 import Music from "../../structures/models/Music";
-import MusicService from "../../services/MusicService";
+import MusicRepository from "../../repository/MusicRepository";
 
 export async function getStaticProps(context) {
-	//const musicService = new MusicService();
-	//const musics: Array<Music> = await musicService.search({});
+	const musics = await MusicRepository.search({});
 
 	return {
 		props: {
-			musics: []
+			musics
 		}
 	}
 }

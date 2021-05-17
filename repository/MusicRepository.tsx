@@ -24,35 +24,35 @@ export default class MusicRepository {
 		return musicsRef
 			.get()
 			.then(async (result) => {
-				let musics = [];
+				const musics = await Promise.all(
+					result.docs.map(async (music) => {
+						const [album, artist, author] = await Promise.all([
+							music.data().album.get(),
+							music.data().artist.get(),
+							music.data().author.get()
+						]);
 
-				result.forEach(async (music) => {
-					const [album, artist, author] = await Promise.all([
-						music.data().album.get(),
-						music.data().artist.get(),
-						music.data().author.get()
-					]);
-
-					musics.push({
-						id: music.id,
-						name: music.data().name,
-						slug: music.data().slug,
-						tablature: music.data().tablature,
-						album: {
-							id: album.id,
-							name: album.data().name,
-						},
-						artist: {
-							id: artist.id,
-							name: artist.data().name,
-						},
-						author: {
-							id: author.id,
-							name: author.data().name,
-						},
-					});
-				});
-
+						return {
+							id: music.id,
+							name: music.data().name,
+							slug: music.data().slug,
+							tablature: music.data().tablature,
+							album: {
+								id: album.id,
+								name: album.data().name,
+							},
+							artist: {
+								id: artist.id,
+								name: artist.data().name,
+							},
+							author: {
+								id: author.id,
+								name: author.data().name,
+							},
+						};
+					})
+				);
+				
 				return Promise.resolve(musics);
 			})
 			.catch((error) => Promise.reject(error));

@@ -2,14 +2,16 @@ import Head from "next/head";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import Container from "../components/layout/Container"
-import Artist from "../structures/models/Artist";
-import Music from "../structures/models/Music";
 import ArtistRepository from "../repository/ArtistRepository";
 import MusicRepository from "../repository/MusicRepository";
+import Artist from "../structures/models/Artist";
+import Music from "../structures/models/Music";
 
 export async function getStaticProps(context) {
-	const musics = await MusicRepository.search({});
-	const artists = await ArtistRepository.search({});
+	const [musics, artists] = await Promise.all([
+		MusicRepository.search({}),
+		ArtistRepository.search({}),
+	]);
 
 	return {
 		props: {
@@ -21,8 +23,8 @@ export async function getStaticProps(context) {
 
 export default function HomePage(props) {
 	const pageTitle: string = "Home";
-	const artists = props.artists;
-	const musics = props.musics;
+	const artists: Array<Artist> = props.artists;
+	const musics: Array<Music> = props.musics;
 	
 	return (
 		<Container>
