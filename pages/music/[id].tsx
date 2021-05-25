@@ -6,7 +6,8 @@ import Breadcrumb from "../../components/shared/Breadcrumb";
 import Drummer from "../../components/shared/Drummer";
 import Drum from "../../structures/models/Drum";
 import Music from "../../structures/models/Music";
-import MusicService from "../../services/MusicService";
+import Tablature from "../../structures/models/Tablature";
+import MusicRepository from "../../repository/MusicRepository";
 
 export async function getStaticPaths() {
 	return {
@@ -16,9 +17,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-	const musicService = new MusicService();
-	const slug = context.params.slug;
-	const music: Music = await musicService.select(slug);
+	const music = await MusicRepository.select(context.params.id);
 
 	return {
 		props: {
@@ -30,6 +29,7 @@ export async function getStaticProps(context) {
 export default function MusicPage(props) {
 	const drum: Drum = new Drum();
 	const music: Music = new Music(props.music);
+	const tablature: Tablature = new Tablature(music.tablature);
 	const pageTitle: string = music.name;
 
 	return (
@@ -54,12 +54,12 @@ export default function MusicPage(props) {
 			</div>
 
 			<div className="container is-fluid has-background-grey-lighter">
-				<Drummer drum={drum} tablature={music.tablature} edit={false} />
+				<Drummer drum={drum} tablature={tablature} edit={false} />
 			</div>
 
 			<div className="container is-widescreen">
 				<section className="section">
-					<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy.name}</a> em {moment(music.createdAt).format("DD\/MM\/YYYY")}</p>
+					<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy?.name}</a> em {moment(music.createdAt).format("DD\/MM\/YYYY")}</p>
 				</section>
 			</div>
 		</Container>

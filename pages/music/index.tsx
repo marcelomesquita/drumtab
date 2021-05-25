@@ -37,7 +37,7 @@ export default function MusicsPage(props) {
 					<div className="columns is-multiline">
 						{musics.map((music) => { return (
 							<div key={music.slug} className="column is-4">
-								<Link href={`/music/${music.slug}`}>
+								<Link href={`/music/${music.id}`}>
 									<a>
 										<div className="card">
 											<div className="card-image">

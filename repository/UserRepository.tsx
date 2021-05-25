@@ -24,13 +24,13 @@ export default class UserRepository {
 		return usersRef
 			.get()
 			.then((result) => {
-				let users = [];
-
-				result.forEach((user) => users.push({
-					id: user.id,
-					name: user.data().name,
-					slug: user.data().slug
-				}));
+				const users = result.docs.map((user) => {
+					return {
+						id: user.id,
+						name: user.data().name,
+						slug: user.data().slug,
+					}
+				});
 
 				return Promise.resolve(users);
 			})

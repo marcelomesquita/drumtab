@@ -19,7 +19,7 @@ export const useAuth = () => {
 	return useContext(AuthContext);
 };
 
-export default function AuthProvider({ children }) {
+export default function AuthProvider(props) {
 	const router = useRouter();
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function AuthProvider({ children }) {
 			email: user.email,
 			avatar: user.photoURL,
 			createdAt: new Date(user.metadata.creationTime)
-		})
+		});
 	}
 
 	const registerUser = async (user: User) => {
@@ -76,7 +76,7 @@ export default function AuthProvider({ children }) {
 
 	return (
 		<AuthContext.Provider value={{ user, loading, signIn, signOut }}>
-			{children}
+			{props.children}
 		</AuthContext.Provider>
 	);
 }

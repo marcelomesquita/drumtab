@@ -70,7 +70,7 @@ export default function HomePage(props) {
 							<div className="columns">
 								<div className="column">
 									{musics.filter((music, m) => (m < 5)).map((music, m) => { return (
-										<Link key={`music-${m}`} href={`/music/${music.slug}`}>
+										<Link key={`music-${m}`} href={`/music/${music.id}`}>
 											<a className="has-text-primary">
 												<div className="box is-shadowless">
 													<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1}</span>
@@ -83,7 +83,7 @@ export default function HomePage(props) {
 								</div>
 								<div className="column">
 									{musics.filter((music, m) => (m >= 5)).map((music, m) => { return (
-										<Link key={`music-${m}`} href={`/music/${music.slug}`}>
+										<Link key={`music-${m}`} href={`/music/${music.id}`}>
 											<a className="has-text-primary">
 												<div className="box is-shadowless">
 													<span className="title is-1 is-pulled-left has-text-grey-light mr-2">{m + 1 + 5}</span>

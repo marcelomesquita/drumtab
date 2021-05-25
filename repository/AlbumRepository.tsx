@@ -22,16 +22,15 @@ export default class AlbumRepository {
 		}
 
 		return albumsRef
-			.withConverter(albumConverter)
 			.get()
 			.then((result) => {
-				let albums = [];
-
-				result.forEach((album) => albums.push({
-					id: album.id,
-					name: album.data().name,
-					slug: album.data().slug,
-				}));
+				const albums = result.docs.map((album) => {
+					return {
+						id: album.id,
+						name: album.data().name,
+						slug: album.data().slug,
+					}
+				});
 
 				return Promise.resolve(albums);
 			})
@@ -56,18 +55,8 @@ export default class AlbumRepository {
 
 	static insert = (album: Album) => {
 		return albumsRef
-			.withConverter(albumConverter)
 			.add(album)
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
-}
-
-const albumConverter = {
-	toFirestore: (album) => Object.assign({}, album),
-    fromFirestore: (snapshot, options) => {
-		console.log("snapshot.data(options)");
-		console.log(snapshot.data(options));
-		return new Album(snapshot.data(options), snapshot.id);
 	}
 }
