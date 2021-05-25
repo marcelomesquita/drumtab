@@ -62,9 +62,9 @@ export default function MusicEditorPage(props) {
 	const drum: Drum = new Drum();
 	const [music, setMusic] = useState(new Music(props.music));
 	const [message, setMessage] = useState(null);
-	const [messageSlug, setMessageSlug] = useState(null);
+	const [messageId, setMessageId] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const [loadingSlug, setLoadingSlug] = useState(false);
+	const [loadingId, setLoadingId] = useState(false);
 	const [createArtist, setCreateArtist] = useState(false);
 	const [createAlbum, setCreateAlbum] = useState(false);
 	const [createAuthor, setCreateAuthor] = useState(false);
@@ -82,22 +82,22 @@ export default function MusicEditorPage(props) {
 		setMusic(newMusic);
 	}
 
-	const setSlug = async (slug) => {
+	const setId = async (id) => {
 		let newMusic = new Music(music);
 
-		newMusic.slug = slug;
+		newMusic.id = id;
 
-		let message = newMusic.validateSlug(slug);
+		let message = newMusic.validateId(id);
 
 		if (message) {
-			setMessageSlug(message);
+			setMessageId(message);
 		} else {
-			setLoadingSlug(true);
+			setLoadingId(true);
 
-			musicService.exists(slug)
-				.then((result) => (result) ? setMessageSlug("slug already exists!") : setMessageSlug(null))
+			musicService.exists(id)
+				.then((result) => (result) ? setMessageId("slug already exists!") : setMessageId(null))
 				.catch((result) => setMessage(result))
-				.finally(() => setLoadingSlug(false));
+				.finally(() => setLoadingId(false));
 		}
 
 		setMusic(newMusic);
@@ -135,9 +135,9 @@ export default function MusicEditorPage(props) {
 		setMusic(newMusic);
 	}
 
-	const setDefaultSlug = () => {
-		if (music.name && !music.slug) {
-			setSlug(Slugify(music.name, { lower: true }));
+	const setDefaultId = () => {
+		if (music.name && !music.id) {
+			setId(Slugify(music.name, { lower: true }));
 		}
 	}
 
@@ -261,17 +261,17 @@ export default function MusicEditorPage(props) {
 						</div>
 
 						<div className="field">
-							<div className={`control has-icons-left has-icons-right is-small ${loadingSlug ? "is-loading" : ""}`}>
+							<div className={`control has-icons-left has-icons-right is-small ${loadingId ? "is-loading" : ""}`}>
 								<input
 									className="input is-small"
 									type="text"
 									placeholder="Slug"
-									value={music.slug}
-									onFocus={setDefaultSlug}
-									onChange={(e) => setSlug(e.target.value)} />
+									value={music.id}
+									onFocus={setDefaultId}
+									onChange={(e) => setId(e.target.value)} />
 								<span className="icon is-small is-left"><FaLink /></span>
 							</div>
-							{messageSlug && (<p className="help">{messageSlug}</p>)}
+							{messageId && (<p className="help">{messageId}</p>)}
 						</div>
 
 						<div className="columns">

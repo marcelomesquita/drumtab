@@ -4,7 +4,6 @@ import MusicSearch from "../structures/models/search/MusicSearch";
 
 interface search {
 	name?,
-	slug?
 }
 
 const musicsRef = firebase.firestore().collection("musics");
@@ -15,10 +14,6 @@ export default class MusicRepository {
 
 		if (musicSearch?.name) {
 			search.name = { "$regex": musicSearch.name, "$options": "i" }
-		}
-
-		if (musicSearch?.slug) {
-			search.slug = musicSearch.slug
 		}
 
 		return musicsRef
@@ -37,7 +32,6 @@ export default class MusicRepository {
 						return {
 							id: music.id,
 							name: music.data().name,
-							slug: music.data().slug,
 							tablature: music.data().tablature,
 							album: {
 								id: album.id,
@@ -84,7 +78,6 @@ export default class MusicRepository {
 				return Promise.resolve({
 					id: result.id,
 					name: result.data().name,
-					slug: result.data().slug,
 					tablature: result.data().tablature,
 					album: {
 						id: album.id,

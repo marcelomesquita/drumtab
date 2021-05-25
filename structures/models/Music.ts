@@ -6,9 +6,8 @@ import Author from "./Author";
 import Album from "./Album";
 
 export default class Music {
-	public id?: string = null;
+	public id: string = null;
 	public name: string = "";
-	public slug: string = "";
 	public artist: Artist = new Artist();
 	public album?: Album = new Album();
 	public author?: Author = new Author();
@@ -27,11 +26,11 @@ export default class Music {
 	}
 
 	isValid = (): boolean => {
-		if (this.validateName()) {
+		if (this.validateId()) {
 			return false;
 		}
-
-		if (this.validateSlug()) {
+		
+		if (this.validateName()) {
 			return false;
 		}
 
@@ -41,16 +40,8 @@ export default class Music {
 
 		return true;
 	}
-
-	validateName = (value = this.name): string => {
-		if (validator.isEmpty(value)) {
-			return "required";
-		}
-
-		return "";
-	}
-
-	validateSlug = (value = this.slug): string => {
+	
+	validateId = (value = this.id): string => {
 		if (validator.isEmpty(value)) {
 			return "required";
 		}
@@ -65,6 +56,14 @@ export default class Music {
 
 		if (!validator.isSlug(value)) {
 			return "must not contain special characters";
+		}
+
+		return "";
+	}
+
+	validateName = (value = this.name): string => {
+		if (validator.isEmpty(value)) {
+			return "required";
 		}
 
 		return "";
