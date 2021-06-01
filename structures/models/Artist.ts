@@ -9,7 +9,7 @@ export default class Artist {
 	public updatedBy?: User = null;
 	public updatedAt?: Date = null;
 
-	constructor(init = null, id = null) {
+	constructor(init = null) {
 		Object.assign(this, init);
 	}
 

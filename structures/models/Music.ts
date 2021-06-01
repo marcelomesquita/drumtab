@@ -6,7 +6,7 @@ import Author from "./Author";
 import Album from "./Album";
 
 export default class Music {
-	public id: string = null;
+	public id: string = "";
 	public name: string = "";
 	public artist: Artist = new Artist();
 	public album?: Album = new Album();
@@ -26,9 +26,9 @@ export default class Music {
 	}
 
 	isValid = (): boolean => {
-		if (this.validateId()) {
-			return false;
-		}
+		//if (this.validateId()) {
+		//	return false;
+		//}
 		
 		if (this.validateName()) {
 			return false;

@@ -2,36 +2,22 @@ import { firebase } from "../adapters/firebaseClient";
 import Artist from "../structures/models/Artist";
 import ArtistSearch from "../structures/models/search/ArtistSearch";
 
-interface search {
-	name?,
-	slug?
-}
-
 const artistsRef = firebase.firestore().collection("artists");
 
 export default class ArtistRepository {
-	static search = async (artistSearch: ArtistSearch) => {
-		let search: search = {};
-
-		if (artistSearch?.name) {
-			search.name = { "$regex": artistSearch.name, "$options": "i" }
-		}
-
-		if (artistSearch?.slug) {
-			search.slug = artistSearch.slug
-		}
-
+	static search = async (search: ArtistSearch) => {
 		return artistsRef
-			.withConverter(artistConverter)
+			.orderBy('name')
+			.startAt(search.name)
+			.endAt(search.name + '\uf8ff')
 			.get()
 			.then((result) => {
-				let artists = [];
-
-				result.forEach((artist) => artists.push({
-					id: artist.id,
-					name: artist.data().name,
-					slug: artist.data().slug,
-				}));
+				const artists = result.docs.map((artist) => {
+					return {
+						id: artist.id,
+						name: artist.data().name,
+					}
+				});
 
 				return Promise.resolve(artists);
 			})
@@ -43,11 +29,10 @@ export default class ArtistRepository {
 			.doc(id)
 			.get()
 			.then((result) => {
-				const artist = new Artist({
+				const artist = {
 					id: result.id,
 					name: result.data().name,
-					slug: result.data().slug,
-				});
+				};
 
 				return Promise.resolve(artist);
 			})
@@ -56,16 +41,8 @@ export default class ArtistRepository {
 
 	static insert = (artist: Artist) => {
 		return artistsRef
-			.withConverter(artistConverter)
 			.add(artist)
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
-}
-
-const artistConverter = {
-	toFirestore: (album) => Object.assign({}, album),
-    fromFirestore: (snapshot, options) => {
-		return new Artist(snapshot.data(options), snapshot.id);
 	}
 }

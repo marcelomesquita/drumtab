@@ -28,7 +28,8 @@ export default class UserRepository {
 					return {
 						id: user.id,
 						name: user.data().name,
-						slug: user.data().slug,
+						email: user.data().email,
+						avatar: user.data().avatar,
 					}
 				});
 
@@ -41,7 +42,16 @@ export default class UserRepository {
 		return usersRef
 			.doc(id)
 			.get()
-			.then((result) => Promise.resolve(result))
+			.then((result) => {
+				const user = {
+					id: result.id,
+					name: result.data().name,
+					email: result.data().email,
+					avatar: result.data().avatar,
+				};
+
+				return Promise.resolve(user);
+			})
 			.catch((error) => Promise.reject(error));
 	}
 

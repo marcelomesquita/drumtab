@@ -18,6 +18,10 @@ import MusicService from "../../services/MusicService";
 import ArtistService from "../../services/ArtistService";
 import AlbumService from "../../services/AlbumService";
 import AuthorService from "../../services/AuthorService";
+import MusicRepository from "../../repository/MusicRepository";
+import ArtistRepository from "../../repository/ArtistRepository";
+import AlbumRepository from "../../repository/AlbumRepository";
+import AuthorRepository from "../../repository/AuthorRepository";
 
 export async function getServerSideProps(context) {
 	try {
@@ -55,12 +59,12 @@ export async function getServerSideProps(context) {
 export default function MusicEditorPage(props) {
 	const auth = useAuth();
 
+	let [music, setMusic] = useState(new Music(props.music));
+	const drum: Drum = new Drum();
 	const musicService: MusicService = new MusicService();
 	const artistService: ArtistService = new ArtistService();
 	const albumService: AlbumService = new AlbumService();
 	const authorService: AuthorService = new AuthorService();
-	const drum: Drum = new Drum();
-	const [music, setMusic] = useState(new Music(props.music));
 	const [message, setMessage] = useState(null);
 	const [messageId, setMessageId] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -83,56 +87,48 @@ export default function MusicEditorPage(props) {
 	}
 
 	const setId = async (id) => {
-		let newMusic = new Music(music);
+		if (id) {
+			music.id = id;
+			
+			let message = music.validateId(id);
 
-		newMusic.id = id;
+			if (message) {
+				setMessageId(message);
+			} else {
+				setLoadingId(true);
 
-		let message = newMusic.validateId(id);
+				MusicRepository.exists(id)
+					.then((result) => (result) ? setMessageId("slug already exists!") : setMessageId(null))
+					.catch((result) => setMessage(result))
+					.finally(() => setLoadingId(false));
+			}
 
-		if (message) {
-			setMessageId(message);
-		} else {
-			setLoadingId(true);
-
-			musicService.exists(id)
-				.then((result) => (result) ? setMessageId("slug already exists!") : setMessageId(null))
-				.catch((result) => setMessage(result))
-				.finally(() => setLoadingId(false));
+			setMusic(music);
 		}
-
-		setMusic(newMusic);
 	}
 
 	const setArtist = (artist) => {
-		let newMusic = new Music(music);
+		music.artist = artist.data;
 
-		newMusic.artist = artist.data;
-
-		setMusic(newMusic);
+		setMusic(music);
 	}
 
 	const setAlbum = (album) => {
-		let newMusic = new Music(music);
+		music.album = album;
 
-		newMusic.album = album;
-
-		setMusic(newMusic);
+		setMusic(music);
 	}
 
 	const setAuthor = (author) => {
-		let newMusic = new Music(music);
+		music.author = author;
 
-		newMusic.author = author;
-
-		setMusic(newMusic);
+		setMusic(music);
 	}
 
 	const setTablature = (tablature) => {
-		let newMusic = new Music(music);
+		music.tablature = tablature;
 
-		newMusic.tablature = tablature;
-
-		setMusic(newMusic);
+		setMusic(music);
 	}
 
 	const setDefaultId = () => {
@@ -145,7 +141,7 @@ export default function MusicEditorPage(props) {
 		if (value.length < 3) {
 			callback();
 		} else {
-			artistService.search({ name: value })
+			ArtistRepository.search({ name: value })
 				.then((result) => {
 					let options = [];
 
@@ -170,7 +166,7 @@ export default function MusicEditorPage(props) {
 		if (value.length < 3) {
 			callback();
 		} else {
-			albumService.search({ name: value })
+			AlbumRepository.search({ name: value })
 				.then((result) => {
 					let options = [];
 
@@ -195,7 +191,7 @@ export default function MusicEditorPage(props) {
 		if (value.length < 3) {
 			callback();
 		} else {
-			authorService.search({ name: value })
+			AuthorRepository.search({ name: value })
 				.then((result) => {
 					let options = [];
 

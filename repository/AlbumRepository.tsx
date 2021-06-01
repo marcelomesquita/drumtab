@@ -2,33 +2,20 @@ import { firebase } from "../adapters/firebaseClient";
 import Album from "../structures/models/Album";
 import AlbumSearch from "../structures/models/search/AlbumSearch";
 
-interface search {
-	name?,
-	slug?
-}
-
 const albumsRef = firebase.firestore().collection("albums");
 
 export default class AlbumRepository {
-	static search = async (albumSearch: AlbumSearch) => {
-		let search: search = {};
-
-		if (albumSearch?.name) {
-			search.name = { "$regex": albumSearch.name, "$options": "i" }
-		}
-
-		if (albumSearch?.slug) {
-			search.slug = albumSearch.slug
-		}
-
+	static search = async (search: AlbumSearch) => {
 		return albumsRef
+			.orderBy('name')
+			.startAt(search.name)
+			.endAt(search.name + '\uf8ff')
 			.get()
 			.then((result) => {
 				const albums = result.docs.map((album) => {
 					return {
 						id: album.id,
 						name: album.data().name,
-						slug: album.data().slug,
 					}
 				});
 
@@ -42,11 +29,10 @@ export default class AlbumRepository {
 			.doc(id)
 			.get()
 			.then((result) => {
-				const album = new Album({
+				const album = {
 					id: result.id,
 					name: result.data().name,
-					slug: result.data().slug,
-				});
+				};
 
 				return Promise.resolve(album);
 			})

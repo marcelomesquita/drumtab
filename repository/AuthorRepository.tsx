@@ -2,35 +2,22 @@ import { firebase } from "../adapters/firebaseClient";
 import Author from "../structures/models/Author";
 import AuthorSearch from "../structures/models/search/AuthorSearch";
 
-interface search {
-	name?,
-	slug?
-}
-
 const authorsRef = firebase.firestore().collection("authors");
 
 export default class AuthorRepository {
-	static search = async (authorSearch: AuthorSearch) => {
-		let search: search = {};
-
-		if (authorSearch?.name) {
-			search.name = { "$regex": authorSearch.name, "$options": "i" }
-		}
-
-		if (authorSearch?.slug) {
-			search.slug = authorSearch.slug
-		}
-
+	static search = async (search: AuthorSearch) => {
 		return authorsRef
+			.orderBy('name')
+			.startAt(search.name)
+			.endAt(search.name + '\uf8ff')
 			.get()
 			.then((result) => {
-				let authors = [];
-
-				result.forEach((author) => authors.push({
-					id: author.id,
-					name: author.data().name,
-					slug: author.data().slug
-				}));
+				const authors = result.docs.map((author) => {
+					return {
+						id: author.id,
+						name: author.data().name,
+					}
+				});
 
 				return Promise.resolve(authors);
 			})
@@ -42,11 +29,10 @@ export default class AuthorRepository {
 			.doc(id)
 			.get()
 			.then((result) => {
-				const author = new Author({
+				const author = {
 					id: result.id,
 					name: result.data().name,
-					slug: result.data().slug,
-				});
+				};
 
 				return Promise.resolve(author);
 			})
@@ -55,16 +41,8 @@ export default class AuthorRepository {
 
 	static insert = (author: Author) => {
 		return authorsRef
-			.withConverter(authorConverter)
 			.add(author)
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
-}
-
-const authorConverter = {
-	toFirestore: (author) => Object.assign({}, author),
-    fromFirestore: (snapshot, options) => {
-		return new Author(snapshot.data(options), snapshot.id);
 	}
 }

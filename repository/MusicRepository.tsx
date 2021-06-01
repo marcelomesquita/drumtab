@@ -62,6 +62,14 @@ export default class MusicRepository {
 			.catch((error) => Promise.reject(error));
 	}
 
+	static exists = (id: string) => {
+		return musicsRef
+			.doc(id)
+			.get()
+			.then(async (result) => Promise.resolve(result.exists))
+			.catch((error) => Promise.reject(error));
+	}
+
 	static select = (id: string) => {
 		return musicsRef
 			.doc(id)
@@ -75,7 +83,7 @@ export default class MusicRepository {
 					result.data().updatedBy.get(),
 				]);
 
-				return Promise.resolve({
+				const music = {
 					id: result.id,
 					name: result.data().name,
 					tablature: result.data().tablature,
@@ -101,7 +109,9 @@ export default class MusicRepository {
 						id: updatedBy.id,
 						name: updatedBy.data().name,
 					},
-				});
+				};
+
+				return Promise.resolve(music);
 			})
 			.catch((error) => Promise.reject(error));
 	}

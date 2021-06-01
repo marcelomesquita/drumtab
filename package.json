@@ -37,9 +37,9 @@
     "validator": "^13.5.2"
   },
   "scripts": {
-	"dev": "next dev",
-	"build": "next build",
-	"start": "next start"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "devDependencies": {
     "@types/mongodb": "^3.6.10",
