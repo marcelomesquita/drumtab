@@ -49,7 +49,7 @@ export default function AuthProvider(props) {
 
 	const registerUser = async (user: User) => {
 		await UserRepository
-			.insert(user)
+			.save(user)
 			.catch((error) => toast.dark(error));
 	}
 

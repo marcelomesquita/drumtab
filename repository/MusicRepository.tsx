@@ -1,21 +1,10 @@
 import { firebase } from "../adapters/firebaseClient";
 import Music from "../structures/models/Music";
-import MusicSearch from "../structures/models/search/MusicSearch";
-
-interface search {
-	name?,
-}
 
 const musicsRef = firebase.firestore().collection("musics");
 
 export default class MusicRepository {
-	static search = async (musicSearch: MusicSearch) => {
-		let search: search = {};
-
-		if (musicSearch?.name) {
-			search.name = { "$regex": musicSearch.name, "$options": "i" }
-		}
-
+	static listByPopularity = async () => {
 		return musicsRef
 			.get()
 			.then(async (result) => {
@@ -62,15 +51,7 @@ export default class MusicRepository {
 			.catch((error) => Promise.reject(error));
 	}
 
-	static exists = (id: string) => {
-		return musicsRef
-			.doc(id)
-			.get()
-			.then(async (result) => Promise.resolve(result.exists))
-			.catch((error) => Promise.reject(error));
-	}
-
-	static select = (id: string) => {
+	static load = (id: string) => {
 		return musicsRef
 			.doc(id)
 			.get()
@@ -116,10 +97,19 @@ export default class MusicRepository {
 			.catch((error) => Promise.reject(error));
 	}
 
-	static insert = (music: Music) => {
+	static save = (music: Music) => {
 		return musicsRef
-			.add(Object.assign({}, music))
+			.doc(music.id)
+			.set(Object.assign({}, music))
 			.then((result) => Promise.resolve(result))
+			.catch((error) => Promise.reject(error));
+	}
+
+	static exists = (id: string) => {
+		return musicsRef
+			.doc(id)
+			.get()
+			.then(async (result) => Promise.resolve(result.exists))
 			.catch((error) => Promise.reject(error));
 	}
 }

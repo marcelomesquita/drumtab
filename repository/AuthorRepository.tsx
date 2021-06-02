@@ -1,15 +1,11 @@
 import { firebase } from "../adapters/firebaseClient";
 import Author from "../structures/models/Author";
-import AuthorSearch from "../structures/models/search/AuthorSearch";
 
 const authorsRef = firebase.firestore().collection("authors");
 
 export default class AuthorRepository {
-	static search = async (search: AuthorSearch) => {
+	static listByPopularity = async () => {
 		return authorsRef
-			.orderBy('name')
-			.startAt(search.name)
-			.endAt(search.name + '\uf8ff')
 			.get()
 			.then((result) => {
 				const authors = result.docs.map((author) => {
@@ -24,7 +20,26 @@ export default class AuthorRepository {
 			.catch((error) => Promise.reject(error));
 	}
 
-	static select = async (id: string) => {
+	static listByName = async (name: string) => {
+		return authorsRef
+			.orderBy('name')
+			.startAt(name)
+			.endAt(name + '\uf8ff')
+			.get()
+			.then((result) => {
+				const authors = result.docs.map((author) => {
+					return {
+						id: author.id,
+						name: author.data().name,
+					}
+				});
+
+				return Promise.resolve(authors);
+			})
+			.catch((error) => Promise.reject(error));
+	}
+
+	static load = async (id: string) => {
 		return authorsRef
 			.doc(id)
 			.get()
@@ -39,9 +54,10 @@ export default class AuthorRepository {
 			.catch((error) => Promise.reject(error));
 	}
 
-	static insert = (author: Author) => {
+	static save = (author: Author) => {
 		return authorsRef
-			.add(author)
+			.doc(author.id)
+			.set(Object.assign({}, author))
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
 	}

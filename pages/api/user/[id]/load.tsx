@@ -10,7 +10,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		const id: string = req.query.id as string;
 
 		return UserRepository
-			.select(id)
+			.load(id)
 			.then((result) => res.status(200).json({ message: "Usuário encontrado!", user: result }))
 			.catch((error) => res.status(500).json({ message: error }));
 	} catch (e) {

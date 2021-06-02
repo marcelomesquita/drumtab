@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Author from "../../../structures/models/Author";
+import Artist from "../../../../structures/models/Artist";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -7,7 +7,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
-		return res.status(200).json({ message: "Música cadastrada!", author: {} });
+		return res.status(200).json({ message: "Música cadastrada!", artist: {} });
 
 //		const session: Session = await getSession({ req });
 //
@@ -15,22 +15,22 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 //			return res.status(401).json({ message: "Unauthorized!" });
 //		}
 //
-//		const author: Author = new Author(req.body);
+//		const artist: Artist = new Artist(req.body);
 //
-//		author.createdBy = author.updatedBy = await mongoose.models.User.findOne({ email: session.user.email });
-//		author.createdAt = author.updatedAt = new Date();
+//		artist.createdBy = artist.updatedBy = await mongoose.models.User.findOne({ email: session.user.email });
+//		artist.createdAt = artist.updatedAt = new Date();
 //
-//		if (!author.isValid()) {
+//		if (!artist.isValid()) {
 //			return res.status(400).json({ message: "Invalid parameter!" });
 //		}
 //
-//		const result = await mongoose.models.Author.create(author);
+//		const result = await mongoose.models.Artist.create(artist);
 //
 //		if (result.insertedCount === 0) {
 //			return res.status(500).json({ message: result });
 //		}
 //
-//		return res.status(200).json({ message: "Música cadastrada!", author: result });
+//		return res.status(200).json({ message: "Música cadastrada!", artist: result });
 	} catch (e) {
 		return res.status(500).json({ message: e.toString() });
 	}

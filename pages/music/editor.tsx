@@ -14,14 +14,14 @@ import Modal from "../../components/shared/Modal";
 import Drum from "../../structures/models/Drum";
 import Music from "../../structures/models/Music";
 import MusicResponse from "../../structures/interfaces/MusicResponse"
-import MusicService from "../../services/MusicService";
 import ArtistService from "../../services/ArtistService";
 import AlbumService from "../../services/AlbumService";
 import AuthorService from "../../services/AuthorService";
-import MusicRepository from "../../repository/MusicRepository";
+import MusicService from "../../services/MusicService";
 import ArtistRepository from "../../repository/ArtistRepository";
 import AlbumRepository from "../../repository/AlbumRepository";
 import AuthorRepository from "../../repository/AuthorRepository";
+import MusicRepository from "../../repository/MusicRepository";
 
 export async function getServerSideProps(context) {
 	try {
@@ -61,10 +61,6 @@ export default function MusicEditorPage(props) {
 
 	let [music, setMusic] = useState(new Music(props.music));
 	const drum: Drum = new Drum();
-	const musicService: MusicService = new MusicService();
-	const artistService: ArtistService = new ArtistService();
-	const albumService: AlbumService = new AlbumService();
-	const authorService: AuthorService = new AuthorService();
 	const [message, setMessage] = useState(null);
 	const [messageId, setMessageId] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -138,78 +134,66 @@ export default function MusicEditorPage(props) {
 	}
 
 	const searchArtists = (value, callback) => {
-		if (value.length < 3) {
-			callback();
-		} else {
-			ArtistRepository.search({ name: value })
-				.then((result) => {
-					let options = [];
+		ArtistService.listByName(value)
+			.then((result) => {
+				let options = [];
 
-					result.map((artist) => {
-						options.push({
-							label: artist.name,
-							value: artist.name,
-							data: artist
-						});
+				result.map((artist) => {
+					options.push({
+						label: artist.name,
+						value: artist.name,
+						data: artist
 					});
-
-					callback(options);
-				})
-				.catch((error) => {
-					setCreateArtist(true)
-					callback();
 				});
-		}
+
+				callback(options);
+			})
+			.catch((error) => {
+				setCreateArtist(true)
+				callback();
+			});
 	}
 
 	const searchAlbum = (value, callback) => {
-		if (value.length < 3) {
-			callback();
-		} else {
-			AlbumRepository.search({ name: value })
-				.then((result) => {
-					let options = [];
+		AlbumService.listByName(value)
+			.then((result) => {
+				let options = [];
 
-					result.map((album) => {
-						options.push({
-							label: album.name,
-							value: album.name,
-							data: album
-						});
+				result.map((album) => {
+					options.push({
+						label: album.name,
+						value: album.name,
+						data: album
 					});
-
-					callback(options);
-				})
-				.catch((error) => {
-					setCreateAlbum(true)
-					callback();
 				});
-		}
+
+				callback(options);
+			})
+			.catch((error) => {
+				setCreateAlbum(true)
+				callback();
+			});
 	}
 
 	const searchAuthor = (value, callback) => {
-		if (value.length < 3) {
-			callback();
-		} else {
-			AuthorRepository.search({ name: value })
-				.then((result) => {
-					let options = [];
+		AuthorService.listByName(value)
+			.then((result) => {
+				let options = [];
 
-					result.map((author) => {
-						options.push({
-							label: author.name,
-							value: author.name,
-							data: author
-						});
+				result.map((author) => {
+					options.push({
+						label: author.name,
+						value: author.name,
+						data: author
 					});
-
-					callback(options);
-				})
-				.catch((error) => {
-					setCreateAuthor(true)
-					callback();
 				});
-		}
+
+				callback(options);
+			})
+			.catch((error) => {
+				setCreateAuthor(true)
+				callback();
+			});
 	}
 
 	const handleSubmit = async (e) => {
@@ -217,7 +201,7 @@ export default function MusicEditorPage(props) {
 
 		setLoading(true);
 
-		musicService.insert(music)
+		MusicService.save(music)
 			.then((result) => setMusic(new Music(result)))
 			.catch((error) => setMessage(error.message))
 			.finally(() => setLoading(false));

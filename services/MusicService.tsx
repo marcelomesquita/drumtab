@@ -1,7 +1,7 @@
 import axiosClient from "../adapters/axiosClient";
 
 export default class MusicService {
-	search = async (search) => {
+	static search = async (search) => {
 		const response = await axiosClient.post("/api/music/search", search);
 
 		if (response.status == 200) {
@@ -11,7 +11,7 @@ export default class MusicService {
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	select = async (slug) => {
+	static load = async (slug) => {
 		const response = await axiosClient.get(`/api/music/${slug}/select`);
 
 		if (response.status == 200) {
@@ -21,7 +21,7 @@ export default class MusicService {
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	insert = async (music) => {
+	static save = async (music) => {
 		const response = await axiosClient.post("/api/music/insert", music)
 
 		if (response.status == 200) {
@@ -31,7 +31,7 @@ export default class MusicService {
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	exists = async (slug) => {
+	static exists = async (slug) => {
 		const response = await axiosClient.get(`/api/music/${slug}/exists`);
 
 		if (response.status == 200) {

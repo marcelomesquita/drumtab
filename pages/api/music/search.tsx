@@ -7,7 +7,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
-		const musics = MusicRepository.search(req.body);
+		const musics = MusicRepository.listByPopularity();
 
 		return res.status(200).json({ musics });
 	} catch (e) {

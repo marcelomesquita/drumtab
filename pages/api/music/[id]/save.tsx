@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Music from "../../../structures/models/Music";
+import Music from "../../../../structures/models/Music";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {

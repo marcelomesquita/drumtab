@@ -1,15 +1,11 @@
 import { firebase } from "../adapters/firebaseClient";
 import Album from "../structures/models/Album";
-import AlbumSearch from "../structures/models/search/AlbumSearch";
 
 const albumsRef = firebase.firestore().collection("albums");
 
 export default class AlbumRepository {
-	static search = async (search: AlbumSearch) => {
+	static listByPopularity = async () => {
 		return albumsRef
-			.orderBy('name')
-			.startAt(search.name)
-			.endAt(search.name + '\uf8ff')
 			.get()
 			.then((result) => {
 				const albums = result.docs.map((album) => {
@@ -24,7 +20,26 @@ export default class AlbumRepository {
 			.catch((error) => Promise.reject(error));
 	}
 
-	static select = async (id: string) => {
+	static listByName = async (name: string) => {
+		return albumsRef
+			.orderBy('name')
+			.startAt(name)
+			.endAt(name + '\uf8ff')
+			.get()
+			.then((result) => {
+				const albums = result.docs.map((album) => {
+					return {
+						id: album.id,
+						name: album.data().name,
+					}
+				});
+
+				return Promise.resolve(albums);
+			})
+			.catch((error) => Promise.reject(error));
+	}
+
+	static load = async (id: string) => {
 		return albumsRef
 			.doc(id)
 			.get()
@@ -39,9 +54,10 @@ export default class AlbumRepository {
 			.catch((error) => Promise.reject(error));
 	}
 
-	static insert = (album: Album) => {
+	static save = (album: Album) => {
 		return albumsRef
-			.add(album)
+			.doc(album.id)
+			.set(Object.assign({}, album))
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
 	}

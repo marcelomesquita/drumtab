@@ -9,8 +9,8 @@ import Music from "../structures/models/Music";
 
 export async function getStaticProps(context) {
 	const [musics, artists] = await Promise.all([
-		MusicRepository.search({}),
-		ArtistRepository.search({}),
+		MusicRepository.listByPopularity(),
+		ArtistRepository.listByPopularity(),
 	]);
 
 	return {

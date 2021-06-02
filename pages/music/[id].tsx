@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-	const music = await MusicRepository.select(context.params.id);
+	const music = await MusicRepository.load(context.params.id);
 
 	return {
 		props: {

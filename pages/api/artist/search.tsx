@@ -1,37 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import ArtistSearch from '../../../structures/models/search/ArtistSearch';
-
-interface search {
-	name?,
-	slug?
-}
+import ArtistRepository from '../../../repository/ArtistRepository';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		if (req.method !== "POST") {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
-
-		return res.status(200).json({ message: "Resultados encontrados", artists: [] });
-
-//		let artistSearch: ArtistSearch = req.body;
-//		let search: search = {};
-//
-//		if (artistSearch?.name) {
-//			search.name = { "$regex": artistSearch.name, "$options": "i" }
-//		}
-//
-//		if (artistSearch?.slug) {
-//			search.slug = artistSearch.slug
-//		}
-//
-//		const result = await mongoose.models.Artist.find(search);
-//
-//		if (result.length === 0) {
-//			return res.status(404).json({ message: "Not Found!" });
-//		}
-//
-//		return res.status(200).json({ message: "Resultados encontrados", artists: result });
+		
+		return ArtistRepository
+			.listByName(req.body.name)
+			.then((result) => res.status(200).json({ message: "Resultados encontrados", artists: result }))
+			.catch((error) => res.status(500).json({ message: error }));
 	} catch (e) {
 		return res.status(500).json({ message: e.toString() });
 	}

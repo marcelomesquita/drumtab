@@ -1,10 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import AlbumSearch from '../../../structures/models/search/AlbumSearch';
-
-interface search {
-	name?,
-	slug?
-}
+import AlbumRepository from '../../../repository/AlbumRepository';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
@@ -12,26 +7,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: "Method not allowed!" });
 		}
 
-		return res.status(200).json({ message: "Resultados encontrados", albums: [] });
-
-//		let albumSearch: AlbumSearch = req.body;
-//		let search: search = {};
-//
-//		if (albumSearch?.name) {
-//			search.name = { "$regex": albumSearch.name, "$options": "i" }
-//		}
-//
-//		if (albumSearch?.slug) {
-//			search.slug = albumSearch.slug
-//		}
-//
-//		const result = await mongoose.models.Album.find(search);
-//
-//		if (result.length === 0) {
-//			return res.status(404).json({ message: "Not Found!" });
-//		}
-//
-//		return res.status(200).json({ message: "Resultados encontrados", albums: result });
+		return AlbumRepository
+			.listByName(req.body.name)
+			.then((result) => res.status(200).json({ message: "Resultados encontrados", albums: result }))
+			.catch((error) => res.status(500).json({ message: error }));
 	} catch (e) {
 		return res.status(500).json({ message: e.toString() });
 	}

@@ -1,8 +1,8 @@
 import axiosClient from "../adapters/axiosClient";
 
 export default class AlbumService {
-	search = async (search) => {
-		const response = await axiosClient.post("/api/album/search", search);
+	static listByName = async (search) => {
+		const response = await axiosClient.post("/api/album/search", { name: search });
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.albums);
@@ -11,8 +11,8 @@ export default class AlbumService {
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	select = async (slug) => {
-		const response = await axiosClient.get(`/api/album/${slug}/select`);
+	static load = async (id) => {
+		const response = await axiosClient.get(`/api/album/${id}/load`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.album);
@@ -21,8 +21,8 @@ export default class AlbumService {
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	insert = async (album) => {
-		const response = await axiosClient.post("/api/album/insert", album);
+	static save = async (album) => {
+		const response = await axiosClient.post(`/api/album/${album.id}/save`, album);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -31,8 +31,8 @@ export default class AlbumService {
 		return Promise.reject({ status: response.status, message: response.data.message });
 	}
 
-	exists = async (slug) => {
-		const response = await axiosClient.get(`/api/album/${slug}/exists`);
+	static exists = async (id) => {
+		const response = await axiosClient.get(`/api/album/${id}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);
