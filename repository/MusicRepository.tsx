@@ -49,7 +49,7 @@ export default class MusicRepository {
 				return Promise.resolve(musics);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static load = (id: string) => {
 		return musicsRef
@@ -95,7 +95,7 @@ export default class MusicRepository {
 				return Promise.resolve(music);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static save = (music: Music) => {
 		return musicsRef
@@ -103,7 +103,7 @@ export default class MusicRepository {
 			.set(Object.assign({}, music))
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static exists = (id: string) => {
 		return musicsRef
@@ -111,5 +111,5 @@ export default class MusicRepository {
 			.get()
 			.then(async (result) => Promise.resolve(result.exists))
 			.catch((error) => Promise.reject(error));
-	}
+	};
 }

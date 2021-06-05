@@ -8,8 +8,11 @@ export default class ArtistService {
 			return Promise.resolve(response.data.artists);
 		}
 
-		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+		return Promise.reject({
+			status: response.status,
+			message: response.data.message,
+		});
+	};
 
 	static load = async (id) => {
 		const response = await axiosClient.get(`/api/artist/${id}/load`);
@@ -18,8 +21,11 @@ export default class ArtistService {
 			return Promise.resolve(response.data.album);
 		}
 
-		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+		return Promise.reject({
+			status: response.status,
+			message: response.data.message,
+		});
+	};
 
 	static save = async (artist) => {
 		const response = await axiosClient.post(`/api/artist/${artist.id}/save`, artist);
@@ -28,8 +34,11 @@ export default class ArtistService {
 			return Promise.resolve(response.data);
 		}
 
-		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+		return Promise.reject({
+			status: response.status,
+			message: response.data.message,
+		});
+	};
 
 	static exists = async (id) => {
 		const response = await axiosClient.get(`/api/artist/${id}/exists`);
@@ -38,6 +47,9 @@ export default class ArtistService {
 			return Promise.resolve(response.data.exists);
 		}
 
-		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+		return Promise.reject({
+			status: response.status,
+			message: response.data.message,
+		});
+	};
 }
