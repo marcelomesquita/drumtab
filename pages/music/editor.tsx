@@ -1,56 +1,57 @@
 import React, { useContext, useEffect, useState } from "react";
+import Error from 'next/error'
 import Head from "next/head";
 import Slugify from "slugify";
 import nookies from "nookies";
 import AsyncSelect from "react-select/async";
 import { FaLink } from "react-icons/fa";
-import { firebaseAdmin } from "../../../adapters/firebaseAdmin";
-import { useAuth } from "../../../contexts/Auth";
-import Container from "../../../components/layout/Container";
-import Drummer from "../../../components/shared/Drummer";
-import Breadcrumb from "../../../components/shared/Breadcrumb";
-import Notification from "../../../components/shared/Notification";
-import Modal from "../../../components/shared/Modal";
-import Drum from "../../../structures/models/Drum";
-import Music from "../../../structures/models/Music";
-import ArtistService from "../../../services/ArtistService";
-import AlbumService from "../../../services/AlbumService";
-import AuthorService from "../../../services/AuthorService";
-import MusicService from "../../../services/MusicService";
-import MusicRepository from "../../../repository/MusicRepository";
-import Tablature from "../../../structures/models/Tablature";
+import { firebaseAdmin } from "../../adapters/firebaseAdmin";
+import { useAuth } from "../../contexts/Auth";
+import Container from "../../components/layout/Container";
+import Drummer from "../../components/shared/Drummer";
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import Notification from "../../components/shared/Notification";
+import Modal from "../../components/shared/Modal";
+import Drum from "../../structures/models/Drum";
+import Music from "../../structures/models/Music";
+import ArtistService from "../../services/ArtistService";
+import AlbumService from "../../services/AlbumService";
+import AuthorService from "../../services/AuthorService";
+import MusicService from "../../services/MusicService";
+import MusicRepository from "../../repository/MusicRepository";
 
 export async function getServerSideProps(context) {
 	try {
 		const cookies = nookies.get(context);
 		const id = context.query?.id;
 
+		if (!cookies.token) {
+			return { props: { error: { code: 403, message: "You must login to access this page" }}};
+		}
+
 		await firebaseAdmin.auth().verifyIdToken(cookies.token);
 
-		const musicEditorResponse = (id) ? await MusicService.load(id) : null;
+		if (id) {
+			return MusicRepository.load(id)
+				.then((result) => ({ props: { music: result }}))
+				.catch((error) => ({ props: { error: { code: 404, message: "Page not found" }}}));
+		}
 
-		return {
-			props: {
-				music: musicEditorResponse,
-			},
-		};
-	} catch (error) {
-		console.log(error);
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
+		return { props: {}};
+	} catch (e) {
+		return { props: { error: { code: 500, message: e.toString() }}};
 	}
 }
 
 export default function MusicEditorPage(props) {
+	if (props.error) {
+		return <Error statusCode={props.error.code} title={props.error.message} />
+	}
+
 	const auth = useAuth();
 
-	let [music, setMusic] = useState(new Music(props.music));
-	const tablature: Tablature = new Tablature(music.tablature);
 	const drum: Drum = new Drum();
+	const [music, setMusic] = useState(new Music(props.music));
 	const [message, setMessage] = useState(null);
 	const [messageId, setMessageId] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -64,55 +65,54 @@ export default function MusicEditorPage(props) {
 
 	let pageTitle: string = music.name ? `Atualizar Música "${music.name}"` : "Cadastrar Música";
 
+	const setId = async (id) => {
+		music.id = id;
+
+		let message = music.validateId(id);
+
+		if (message) {
+			setMessageId(message);
+		} else {
+			setLoadingId(true);
+
+			MusicRepository
+				.exists(id)
+				.then((result) => result ? setMessageId("slug already exists!") : setMessageId(null))
+				.catch((result) => setMessage(result))
+				.finally(() => setLoadingId(false));
+		}
+
+		setMusic(new Music(music));
+	};
+
 	const setName = (name) => {
 		music.name = name;
 
-		setMusic(music);
-	};
-
-	const setId = async (id) => {
-		if (id) {
-			music.id = id;
-
-			let message = music.validateId(id);
-
-			if (message) {
-				setMessageId(message);
-			} else {
-				setLoadingId(true);
-
-				MusicRepository.exists(id)
-					.then((result) => result ? setMessageId("slug already exists!") : setMessageId(null))
-					.catch((result) => setMessage(result))
-					.finally(() => setLoadingId(false));
-			}
-
-			setMusic(music);
-		}
+		setMusic(new Music(music));
 	};
 
 	const setArtist = (artist) => {
-		music.artist = artist.data;
+		music.artist = artist;
 
-		setMusic(music);
+		setMusic(new Music(music));
 	};
 
 	const setAlbum = (album) => {
 		music.album = album;
 
-		setMusic(music);
+		setMusic(new Music(music));
 	};
 
 	const setAuthor = (author) => {
 		music.author = author;
 
-		setMusic(music);
+		setMusic(new Music(music));
 	};
 
 	const setTablature = (tablature) => {
 		music.tablature = tablature;
 
-		setMusic(music);
+		setMusic(new Music(music));
 	};
 
 	const setDefaultId = () => {
@@ -124,15 +124,10 @@ export default function MusicEditorPage(props) {
 	const searchArtists = (value, callback) => {
 		ArtistService.listByName(value)
 			.then((result) => {
-				let options = [];
-
-				result.map((artist) => {
-					options.push({
-						label: artist.name,
-						value: artist.name,
-						data: artist,
-					});
-				});
+				const options = result.map((artist) => ({
+					label: artist.name,
+					value: artist,
+				}));
 
 				callback(options);
 			})
@@ -145,15 +140,10 @@ export default function MusicEditorPage(props) {
 	const searchAlbum = (value, callback) => {
 		AlbumService.listByName(value)
 			.then((result) => {
-				let options = [];
-
-				result.map((album) => {
-					options.push({
-						label: album.name,
-						value: album.name,
-						data: album,
-					});
-				});
+				const options = result.map((album) => ({
+					label: album.name,
+					value: album,
+				}));
 
 				callback(options);
 			})
@@ -166,15 +156,10 @@ export default function MusicEditorPage(props) {
 	const searchAuthor = (value, callback) => {
 		AuthorService.listByName(value)
 			.then((result) => {
-				let options = [];
-
-				result.map((author) => {
-					options.push({
-						label: author.name,
-						value: author.name,
-						data: author,
-					});
-				});
+				const options = result.map((author) => ({
+					label: author.name,
+					value: author,
+				}));
 
 				callback(options);
 			})
@@ -224,7 +209,6 @@ export default function MusicEditorPage(props) {
 									className="input is-large"
 									type="text"
 									name="name"
-									placeholder="Música"
 									value={music.name}
 									onChange={(e) => setName(e.target.value)}
 									autoFocus
@@ -237,7 +221,6 @@ export default function MusicEditorPage(props) {
 								<input
 									className="input is-small"
 									type="text"
-									placeholder="Slug"
 									value={music.id}
 									onFocus={setDefaultId}
 									onChange={(e) => setId(e.target.value)}
@@ -253,10 +236,11 @@ export default function MusicEditorPage(props) {
 									<label className="label">Artista *</label>
 									<div className="control">
 										<AsyncSelect
-											placeholder="Artist"
 											instanceId="artist"
+											defaultValue={{ value: music.artist, label: music.artist?.name }}
 											loadOptions={searchArtists}
-											onChange={(e) => setArtist(e)}
+											onChange={(e) => setArtist(e.value)}
+											isClearable={true}
 										/>
 									</div>
 									{createArtist && (
@@ -271,10 +255,11 @@ export default function MusicEditorPage(props) {
 									<label className="label">Álbum</label>
 									<div className="control">
 										<AsyncSelect
-											placeholder="Album"
 											instanceId="album"
+											defaultValue={{ value: music.album, label: music.album?.name }}
 											loadOptions={searchAlbum}
-											onChange={(e) => setAlbum(e)}
+											onChange={(e) => setAlbum(e.value)}
+											isClearable={true}
 										/>
 									</div>
 									{createAlbum && (
@@ -289,10 +274,11 @@ export default function MusicEditorPage(props) {
 									<label className="label">Batera</label>
 									<div className="control">
 										<AsyncSelect
-											placeholder="Drummer"
 											instanceId="author"
+											defaultValue={{ value: music.author, label: music.author?.name }}
 											loadOptions={searchAuthor}
-											onChange={(e) => setAuthor(e)}
+											onChange={(e) => setAuthor(e.value)}
+											isClearable={true}
 										/>
 									</div>
 									{createAuthor && (
@@ -309,7 +295,7 @@ export default function MusicEditorPage(props) {
 				<div className="container is-fluid has-background-grey-lighter">
 					<Drummer
 						drum={drum}
-						tablature={tablature}
+						tablature={music.tablature}
 						edit={true}
 						onTablatureChange={() => setTablature.bind(this)}
 					/>

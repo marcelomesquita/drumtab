@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaAdjust, FaBan, FaCircle, FaClock, FaDotCircle, FaLock, FaLockOpen, FaLongArrowAltRight, FaMusic, FaPause, FaPlay, FaStepBackward, FaStepForward, FaStop, FaTachometerAlt, FaUndoAlt } from "react-icons/fa";
 import Drum, { PIECE_KEY } from "../../structures/models/Drum";
+import Tablature from "../../structures/models/Tablature";
 import styles from "../../styles/drummer.module.sass";
 
 export default function Drummer(props) {
 	const drum: Drum = new Drum();
-	const [tablature, setTablature] = useState(props.tablature);
+	const [tablature, setTablature] = useState(new Tablature(props.tablature));
 	const [edit, setEdit] = useState(props.edit);
 	const [timer, setTimer] = useState(undefined);
 	const [pace, setPace] = useState(0);
@@ -36,7 +37,7 @@ export default function Drummer(props) {
 		if (onTablatureChange) {
 			onTablatureChange(tablature);
 		}
-	},  [tablature])
+	}, [tablature])
 
 	const handleKeyboardEvent = (event) => {
 		if (timer && PIECE_KEY[event.code] !== 'undefined') {

@@ -4,10 +4,10 @@ import Artist from "../../../../structures/models/Artist";
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		if (req.method != "POST") {
-			return res.status(400).json({ message: "Method not allowed!" });
+			return res.status(400).json({ error: { code: 400, message: "Method not allowed!" }});
 		}
 
-		return res.status(200).json({ message: "Música cadastrada!", artist: {} });
+		return res.status(200).json({ artist: {} });
 
 //		const session: Session = await getSession({ req });
 //
@@ -32,6 +32,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 //
 //		return res.status(200).json({ message: "Música cadastrada!", artist: result });
 	} catch (e) {
-		return res.status(500).json({ message: e.toString() });
+		return res.status(500).json({ error: { code: 500, message: e.toString() }});
 	}
 }

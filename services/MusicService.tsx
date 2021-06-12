@@ -9,8 +9,8 @@ export default class MusicService {
 		}
 
 		return Promise.reject({
-			status: response.status,
-			message: response.data.message,
+			code: response.data.error.code,
+			message: response.data.error.message,
 		});
 	};
 
@@ -22,8 +22,8 @@ export default class MusicService {
 		}
 
 		return Promise.reject({
-			status: response.status,
-			message: response.data.message,
+			code: response.data.error.code,
+			message: response.data.error.message,
 		});
 	};
 
@@ -35,8 +35,8 @@ export default class MusicService {
 		}
 
 		return Promise.reject({
-			status: response.status,
-			message: response.data.message,
+			code: response.data.error.code,
+			message: response.data.error.message,
 		});
 	};
 
@@ -48,8 +48,8 @@ export default class MusicService {
 		}
 
 		return Promise.reject({
-			status: response.status,
-			message: response.data.message,
+			code: response.data.error.code,
+			message: response.data.error.message,
 		});
 	};
 }

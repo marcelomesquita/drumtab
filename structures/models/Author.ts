@@ -3,7 +3,6 @@ import User from './User';
 export default class Author {
 	public id?: string = null;
 	public name: string = "";
-	public slug: string = "";
 	public createdBy?: User = null;
 	public createdAt?: Date = null;
 	public updatedBy?: User = null;
@@ -13,7 +12,7 @@ export default class Author {
 		Object.assign(this, init);
 	}
 
-	isValid = (): boolean => {
+	isValid(): boolean {
 		return true;
 	}
 }

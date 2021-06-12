@@ -1,33 +1,34 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nookies from "nookies";
 import { firebaseAdmin } from "../../../../adapters/firebaseAdmin";
-import { firebase } from "../../../../adapters/firebaseClient";
 import User from "../../../../structures/models/User";
+import UserRepository from "../../../../repository/UserRepository";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		if (req.method != "POST") {
-			return res.status(400).json({ message: "Method not allowed!" });
+			return res.status(400).json({ error: { code: 400, message: "Method not allowed!" }});
 		}
 
 		const cookies = nookies.get({ req });
-		const identity = await firebaseAdmin.auth().verifyIdToken(cookies.token);
-		const user: User = new User(req.body);
-
-		user.updatedAt = new Date();
-
-		if (!user.isValid()) {
-			return res.status(400).json({ message: "Invalid parameter!" });
+		
+		if (!cookies.token) {
+			throw { code: 403, message: "Forbidden" }
 		}
 
-		return await firebase
-			.firestore()
-			.collection("users")
-			.doc(user.id)
-			.set(Object.assign({}, user))
-			.then((result) => res.status(200).json({ message: "Usuário cadastrado!", user: result }))
-			.catch((error) => res.status(500).json({ message: error }));
+		await firebaseAdmin.auth().verifyIdToken(cookies.token);
+		
+		const user: User = new User(req.body);
+
+		if (!user.isValid()) {
+			return res.status(500).json({ error: { code: 500, message: "Invalid parameter!" }});
+		}
+
+		return UserRepository
+			.save(user)
+			.then((result) => res.status(200).json({ user: result }))
+			.catch((error) => res.status(500).json({ error: { code: 500, message: error }}));
 	} catch (e) {
-		return res.status(e.statusCode).json({ message: e.toString() });
+		return res.status(500).json({ error: { code: 500, message: e.toString() }});
 	}
 }

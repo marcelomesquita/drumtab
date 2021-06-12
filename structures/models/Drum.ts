@@ -16,7 +16,8 @@ export const PIECE_KEY = {
 };
 
 export default class Drum {
-	pieces = [
+	public stick = new Howl({src: [`/assets/audios/drum/stick/cycdh/normal-0.mp3`]});
+	public pieces = [
 		new Piece(PIECES.CRASH, 'C', 'crash', 'cycdh'),
 		new Piece(PIECES.HAT, 'H', 'hat', 'cycdh'),
 		new Piece(PIECES.RIDE, 'R', 'ride', 'cycdh'),
@@ -27,9 +28,7 @@ export default class Drum {
 		new Piece(PIECES.BASS, 'B', 'bass', 'cycdh')
 	];
 
-	stick = new Howl({src: [`/assets/audios/drum/stick/cycdh/normal-0.mp3`]});
-
-	hitNote = (note) => {
+	hitNote(note) {
 		if (this.pieces[note]) {
 			this.pieces[note].hit();
 		}

@@ -25,11 +25,11 @@ export default class Music {
 		}
 	}
 
-	isValid = (): boolean => {
-		//if (this.validateId()) {
-		//	return false;
-		//}
-		
+	isValid(): boolean {
+		if (this.validateId()) {
+			return false;
+		}
+
 		if (this.validateName()) {
 			return false;
 		}
@@ -41,7 +41,7 @@ export default class Music {
 		return true;
 	}
 	
-	validateId = (value = this.id): string => {
+	validateId(value = this.id): string {
 		if (validator.isEmpty(value)) {
 			return "required";
 		}
@@ -61,7 +61,7 @@ export default class Music {
 		return "";
 	}
 
-	validateName = (value = this.name): string => {
+	validateName(value = this.name): string {
 		if (validator.isEmpty(value)) {
 			return "required";
 		}
@@ -69,7 +69,7 @@ export default class Music {
 		return "";
 	}
 
-	validateArtist = (value = this.artist): string => {
+	validateArtist(value = this.artist): string {
 		if (validator.isEmpty(value.name)) {
 			return "required";
 		}

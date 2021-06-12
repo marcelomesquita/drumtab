@@ -1,6 +1,5 @@
 import { firebase } from "../adapters/firebaseClient";
 import User from "../structures/models/User";
-import UserSearch from "../structures/models/search/UserSearch";
 
 const usersRef = firebase.firestore().collection("users");
 
@@ -23,6 +22,8 @@ export default class UserRepository {
 	}
 
 	static save = (user: User) => {
+		user.updatedAt = new Date();
+		
 		return usersRef
 			.doc(user.id)
 			.set(Object.assign({}, user))

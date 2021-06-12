@@ -1,13 +1,13 @@
 import { Howl } from "howler";
 
 export default class Piece {
-	id: number = null;
-	abbr: string = null;
-	name: string = null;
-	brand: string = null;
-	type: string = null;
-	audios: Array<Howl> = [];
-	variation: number = 0;
+	public id: number = null;
+	public abbr: string = null;
+	public name: string = null;
+	public brand: string = null;
+	public type: string = null;
+	public audios: Array<Howl> = [];
+	public variation: number = 0;
 
 	constructor(id, abbr, name, brand, type = 'normal') {
 		this.id = id;
@@ -22,11 +22,11 @@ export default class Piece {
 		}));
 	}
 
-	hit = () => {
+	hit() {
 		this.audios[this.nextVariation()].play();
 	}
 
-	nextVariation = () => {
+	nextVariation() {
 		this.variation = (this.variation == this.audios.length - 1) ? 0 : ++this.variation;
 
 		return this.variation;
