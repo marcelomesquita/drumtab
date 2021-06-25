@@ -1,7 +1,7 @@
-import { firebase } from "../adapters/firebaseClient";
-import Author from "../structures/models/Author";
+import { firebase } from 'adapters/firebaseClient';
+import Author from 'structures/models/Author';
 
-const authorsRef = firebase.firestore().collection("authors");
+const authorsRef = firebase.firestore().collection('authors');
 
 export default class AuthorRepository {
 	static listByPopularity = async () => {
@@ -12,13 +12,13 @@ export default class AuthorRepository {
 					return {
 						id: author.id,
 						name: author.data().name,
-					}
+					};
 				});
 
 				return Promise.resolve(authors);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static listByName = async (name: string) => {
 		return authorsRef
@@ -31,13 +31,13 @@ export default class AuthorRepository {
 					return {
 						id: author.id,
 						name: author.data().name,
-					}
+					};
 				});
 
 				return Promise.resolve(authors);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static load = async (id: string) => {
 		return authorsRef
@@ -52,7 +52,7 @@ export default class AuthorRepository {
 				return Promise.resolve(author);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static save = (author: Author) => {
 		return authorsRef
@@ -60,5 +60,5 @@ export default class AuthorRepository {
 			.set(Object.assign({}, author))
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
+	};
 }

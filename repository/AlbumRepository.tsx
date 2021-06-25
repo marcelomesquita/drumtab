@@ -1,7 +1,7 @@
-import { firebase } from "../adapters/firebaseClient";
-import Album from "../structures/models/Album";
+import { firebase } from 'adapters/firebaseClient';
+import Album from 'structures/models/Album';
 
-const albumsRef = firebase.firestore().collection("albums");
+const albumsRef = firebase.firestore().collection('albums');
 
 export default class AlbumRepository {
 	static listByPopularity = async () => {
@@ -12,13 +12,13 @@ export default class AlbumRepository {
 					return {
 						id: album.id,
 						name: album.data().name,
-					}
+					};
 				});
 
 				return Promise.resolve(albums);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static listByName = async (name: string) => {
 		return albumsRef
@@ -31,13 +31,13 @@ export default class AlbumRepository {
 					return {
 						id: album.id,
 						name: album.data().name,
-					}
+					};
 				});
 
 				return Promise.resolve(albums);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static load = async (id: string) => {
 		return albumsRef
@@ -52,7 +52,7 @@ export default class AlbumRepository {
 				return Promise.resolve(album);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static save = (album: Album) => {
 		return albumsRef
@@ -60,5 +60,5 @@ export default class AlbumRepository {
 			.set(Object.assign({}, album))
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
+	};
 }

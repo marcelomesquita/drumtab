@@ -1,8 +1,8 @@
-import axiosClient from "../adapters/axiosClient";
+import axiosClient from 'adapters/axiosClient';
 
 export default class ArtistService {
 	static listByName = async (search) => {
-		const response = await axiosClient.post("/api/artist/search", { name: search });
+		const response = await axiosClient.post('/api/artist/search', { name: search });
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.artists);

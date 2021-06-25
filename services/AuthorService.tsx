@@ -1,15 +1,15 @@
-import axiosClient from "../adapters/axiosClient";
+import axiosClient from 'adapters/axiosClient';
 
 export default class AuthorService {
 	static listByName = async (search) => {
-		const response = await axiosClient.post("/api/author/search", { name: search });
+		const response = await axiosClient.post('/api/author/search', { name: search });
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.authors);
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 
 	static load = async (id) => {
 		const response = await axiosClient.get(`/api/author/${id}/load`);
@@ -19,7 +19,7 @@ export default class AuthorService {
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 
 	static save = async (author) => {
 		const response = await axiosClient.post(`/api/author/${author.id}/save`, author);
@@ -29,7 +29,7 @@ export default class AuthorService {
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 
 	static exists = async (id) => {
 		const response = await axiosClient.get(`/api/author/${id}/exists`);
@@ -39,5 +39,5 @@ export default class AuthorService {
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 }

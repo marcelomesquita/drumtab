@@ -1,13 +1,13 @@
 import React from "react";
 import Head from "next/head";
 import moment from "moment";
-import Container from "../../components/layout/Container"
-import Breadcrumb from "../../components/shared/Breadcrumb";
-import Drummer from "../../components/shared/Drummer";
-import Drum from "../../structures/models/Drum";
-import Music from "../../structures/models/Music";
-import Tablature from "../../structures/models/Tablature";
-import MusicRepository from "../../repository/MusicRepository";
+import Container from "components/layout/Container"
+import Breadcrumb from "components/shared/Breadcrumb";
+import Drummer from "components/shared/Drummer";
+import Drum from "structures/models/Drum";
+import Music from "structures/models/Music";
+import Tablature from "structures/models/Tablature";
+import MusicRepository from "repository/MusicRepository";
 
 export async function getStaticPaths() {
 	return {
@@ -59,7 +59,7 @@ export default function MusicPage(props) {
 
 			<div className="container is-widescreen">
 				<section className="section">
-					<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy?.name}</a> em {moment(music.createdAt).format("DD\/MM\/YYYY")}</p>
+					<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy?.name}</a> em {music.createdAt}</p>
 				</section>
 			</div>
 		</Container>

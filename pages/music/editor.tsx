@@ -1,24 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
-import Error from 'next/error'
-import Head from "next/head";
-import Slugify from "slugify";
-import nookies from "nookies";
-import AsyncSelect from "react-select/async";
-import { FaLink } from "react-icons/fa";
-import { firebaseAdmin } from "../../adapters/firebaseAdmin";
-import { useAuth } from "../../contexts/Auth";
-import Container from "../../components/layout/Container";
-import Drummer from "../../components/shared/Drummer";
-import Breadcrumb from "../../components/shared/Breadcrumb";
-import Notification from "../../components/shared/Notification";
-import Modal from "../../components/shared/Modal";
-import Drum from "../../structures/models/Drum";
-import Music from "../../structures/models/Music";
-import ArtistService from "../../services/ArtistService";
-import AlbumService from "../../services/AlbumService";
-import AuthorService from "../../services/AuthorService";
-import MusicService from "../../services/MusicService";
-import MusicRepository from "../../repository/MusicRepository";
+import React, { useState } from 'react';
+import Error from 'next/error';
+import Head from 'next/head';
+import Slugify from 'slugify';
+import nookies from 'nookies';
+import AsyncSelect from 'react-select/async';
+import { FaLink } from 'react-icons/fa';
+import { firebaseAdmin } from 'adapters/firebaseAdmin';
+import { useAuth } from 'contexts/Auth';
+import Container from 'components/layout/Container';
+import Drummer from 'components/shared/Drummer';
+import Breadcrumb from 'components/shared/Breadcrumb';
+import Modal from 'components/shared/Modal';
+import Drum from 'structures/models/Drum';
+import Music from 'structures/models/Music';
+import ArtistService from 'services/ArtistService';
+import AlbumService from 'services/AlbumService';
+import AuthorService from 'services/AuthorService';
+import MusicService from 'services/MusicService';
+import MusicRepository from 'repository/MusicRepository';
 
 export async function getServerSideProps(context) {
 	try {
@@ -26,26 +25,26 @@ export async function getServerSideProps(context) {
 		const id = context.query?.id;
 
 		if (!cookies.token) {
-			return { props: { error: { code: 403, message: "You must login to access this page" }}};
+			return { props: { error: { code: 403, message: 'You must login to access this page' } } };
 		}
 
 		await firebaseAdmin.auth().verifyIdToken(cookies.token);
 
 		if (id) {
 			return MusicRepository.load(id)
-				.then((result) => ({ props: { music: result }}))
-				.catch((error) => ({ props: { error: { code: 404, message: "Page not found" }}}));
+				.then((result) => ({ props: { music: result } }))
+				.catch((error) => ({ props: { error: { code: 404, message: 'Page not found' } } }));
 		}
 
-		return { props: {}};
+		return { props: {} };
 	} catch (e) {
-		return { props: { error: { code: 500, message: e.toString() }}};
+		return { props: { error: { code: 500, message: e.toString() } } };
 	}
 }
 
 export default function MusicEditorPage(props) {
 	if (props.error) {
-		return <Error statusCode={props.error.code} title={props.error.message} />
+		return <Error statusCode={props.error.code} title={props.error.message} />;
 	}
 
 	const auth = useAuth();
@@ -63,7 +62,7 @@ export default function MusicEditorPage(props) {
 	const [modalAlbum, setModalAlbum] = useState(false);
 	const [modalAuthor, setModalAuthor] = useState(false);
 
-	let pageTitle: string = music.name ? `Atualizar Música "${music.name}"` : "Cadastrar Música";
+	let pageTitle: string = music.name ? `Atualizar Música "${music.name}"` : 'Cadastrar Música';
 
 	const setId = async (id) => {
 		music.id = id;
@@ -75,9 +74,8 @@ export default function MusicEditorPage(props) {
 		} else {
 			setLoadingId(true);
 
-			MusicRepository
-				.exists(id)
-				.then((result) => result ? setMessageId("slug already exists!") : setMessageId(null))
+			MusicRepository.exists(id)
+				.then((result) => (result ? setMessageId('slug already exists!') : setMessageId(null)))
 				.catch((result) => setMessage(result))
 				.finally(() => setLoadingId(false));
 		}
@@ -174,9 +172,8 @@ export default function MusicEditorPage(props) {
 
 		setLoading(true);
 
-		MusicService
-			.save(music)
-			.then((result) => setMusic(new Music(result)))
+		MusicService.save(music)
+			.then((result) => setMessage(result.message))
 			.catch((error) => setMessage(error.message))
 			.finally(() => setLoading(false));
 	};
@@ -184,126 +181,94 @@ export default function MusicEditorPage(props) {
 	return (
 		<Container>
 			<Head>
-				<title>
-					{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}
-				</title>
+				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
 			</Head>
 
-			{message && (<Notification onClose={() => setMessage(null)}>{message}</Notification>)}
-
-			{modalArtist && (<Modal title="Artist" onClose={() => setModalArtist(false)}>Lorem ipsum dolor</Modal>)}
-			{modalAlbum && (<Modal title="Album" onClose={() => setModalAlbum(false)}>Lorem ipsum dolor</Modal>)}
-			{modalAuthor && (<Modal title="Author" onClose={() => setModalAuthor(false)}>Lorem ipsum dolor</Modal>)}
+			{modalArtist && (<Modal title='Artist' onClose={() => setModalArtist(false)}>Lorem ipsum dolor</Modal>)}
+			{modalAlbum && (<Modal title='Album' onClose={() => setModalAlbum(false)}>Lorem ipsum dolor</Modal>)}
+			{modalAuthor && (<Modal title='Author' onClose={() => setModalAuthor(false)}>Lorem ipsum dolor</Modal>)}
 
 			<form onSubmit={handleSubmit}>
-				<div className="container is-widescreen">
-					<section className="section is-clearfix">
+				<div className='container is-widescreen'>
+					<section className='section is-clearfix'>
 						<Breadcrumb />
 
-						<h1 className="title">Nova Música</h1>
+						<h1 className='title'>Nova Música</h1>
 
-						<div className="field">
-							<label className="label">Música *</label>
-							<div className="control">
-								<input
-									className="input is-large"
-									type="text"
-									name="name"
-									value={music.name}
-									onChange={(e) => setName(e.target.value)}
-									autoFocus
-								/>
+						<div className='field'>
+							<label className='label'>Música *</label>
+							<div className='control'>
+								<input className='input is-large' type='text' name='name' value={music.name} onChange={(e) => setName(e.target.value)} autoFocus />
 							</div>
 						</div>
 
-						<div className="field">
-							<div className={`control has-icons-left has-icons-right is-small ${loadingId ? "is-loading" : ""}`}>
-								<input
-									className="input is-small"
-									type="text"
-									value={music.id}
-									onFocus={setDefaultId}
-									onChange={(e) => setId(e.target.value)}
-								/>
-								<span className="icon is-small is-left"><FaLink /></span>
+						<div className='field'>
+							<div className={`control has-icons-left has-icons-right is-small ${loadingId ? 'is-loading' : ''}`}>
+								<input className='input is-small' type='text' value={music.id} onFocus={setDefaultId} onChange={(e) => setId(e.target.value)} />
+								<span className='icon is-small is-left'>
+									<FaLink />
+								</span>
 							</div>
-							{messageId && <p className="help">{messageId}</p>}
+							{messageId && <p className='help'>{messageId}</p>}
 						</div>
 
-						<div className="columns">
-							<div className="column is-4">
-								<div className="field">
-									<label className="label">Artista *</label>
-									<div className="control">
+						<div className='columns'>
+							<div className='column is-4'>
+								<div className='field'>
+									<label className='label'>Artista *</label>
+									<div className='control'>
 										<AsyncSelect
-											instanceId="artist"
+											instanceId='artist'
 											defaultValue={{ value: music.artist, label: music.artist?.name }}
 											loadOptions={searchArtists}
 											onChange={(e) => setArtist(e.value)}
 											isClearable={true}
 										/>
 									</div>
-									{createArtist && (
-										<p className="help">
-											artista não encontrado... gostaria de <a onClick={() => setModalArtist(true)}>cadastra-lo</a>?
-										</p>
-									)}
+									{createArtist && (<p className='help'>artista não encontrado... gostaria de <a onClick={() => setModalArtist(true)}>cadastra-lo</a>?</p>)}
 								</div>
 							</div>
-							<div className="column is-4">
-								<div className="field">
-									<label className="label">Álbum</label>
-									<div className="control">
+							<div className='column is-4'>
+								<div className='field'>
+									<label className='label'>Álbum</label>
+									<div className='control'>
 										<AsyncSelect
-											instanceId="album"
+											instanceId='album'
 											defaultValue={{ value: music.album, label: music.album?.name }}
 											loadOptions={searchAlbum}
 											onChange={(e) => setAlbum(e.value)}
 											isClearable={true}
 										/>
 									</div>
-									{createAlbum && (
-										<p className="help">
-											album não encontrado... gostaria de <a onClick={() => setModalAlbum(true)}>cadastra-lo</a>?
-										</p>
-									)}
+									{createAlbum && (<p className='help'>album não encontrado... gostaria de <a onClick={() => setModalAlbum(true)}>cadastra-lo</a>?</p>)}
 								</div>
 							</div>
-							<div className="column is-4">
-								<div className="field">
-									<label className="label">Batera</label>
-									<div className="control">
+							<div className='column is-4'>
+								<div className='field'>
+									<label className='label'>Batera</label>
+									<div className='control'>
 										<AsyncSelect
-											instanceId="author"
+											instanceId='author'
 											defaultValue={{ value: music.author, label: music.author?.name }}
 											loadOptions={searchAuthor}
 											onChange={(e) => setAuthor(e.value)}
 											isClearable={true}
 										/>
 									</div>
-									{createAuthor && (
-										<p className="help">
-											batera não encontrado... gostaria de <a onClick={() => setModalAuthor(true)}>cadastra-lo</a>?
-										</p>
-									)}
+									{createAuthor && (<p className='help'>batera não encontrado... gostaria de <a onClick={() => setModalAuthor(true)}>cadastra-lo</a>?</p>)}
 								</div>
 							</div>
 						</div>
 					</section>
 				</div>
 
-				<div className="container is-fluid has-background-grey-lighter">
-					<Drummer
-						drum={drum}
-						tablature={music.tablature}
-						edit={true}
-						onTablatureChange={() => setTablature.bind(this)}
-					/>
+				<div className='container is-fluid has-background-grey-lighter'>
+					<Drummer drum={drum} tablature={music.tablature} edit={true} onTablatureChange={() => setTablature.bind(this)} />
 				</div>
 
-				<div className="container is-widescreen">
-					<section className="section">
-						<button type="submit" className="button is-primary" disabled={!music.isValid()}>
+				<div className='container is-widescreen'>
+					<section className='section'>
+						<button type='submit' className='button is-primary' disabled={!music.isValid()}>
 							Salvar
 						</button>
 					</section>

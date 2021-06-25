@@ -1,7 +1,7 @@
-import { firebase } from "../adapters/firebaseClient";
-import Artist from "../structures/models/Artist";
+import { firebase } from 'adapters/firebaseClient';
+import Artist from 'structures/models/Artist';
 
-const artistsRef = firebase.firestore().collection("artists");
+const artistsRef = firebase.firestore().collection('artists');
 
 export default class ArtistRepository {
 	static listByPopularity = async () => {
@@ -12,13 +12,13 @@ export default class ArtistRepository {
 					return {
 						id: artist.id,
 						name: artist.data().name,
-					}
+					};
 				});
 
 				return Promise.resolve(artists);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static listByName = async (name: string) => {
 		return artistsRef
@@ -31,13 +31,13 @@ export default class ArtistRepository {
 					return {
 						id: artist.id,
 						name: artist.data().name,
-					}
+					};
 				});
 
 				return Promise.resolve(artists);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static load = async (id: string) => {
 		return artistsRef
@@ -52,7 +52,7 @@ export default class ArtistRepository {
 				return Promise.resolve(artist);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static save = (artist: Artist) => {
 		return artistsRef
@@ -60,5 +60,5 @@ export default class ArtistRepository {
 			.set(Object.assign({}, artist))
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
+	};
 }

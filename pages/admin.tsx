@@ -1,6 +1,6 @@
-import Error from 'next/error'
-import Container from "../components/layout/Container"
-import { useAuth } from "../contexts/Auth";
+import Error from 'next/error';
+import Container from 'components/layout/Container';
+import { useAuth } from 'contexts/Auth';
 
 //export async function getStaticProps(context) {
 //	try {
@@ -25,12 +25,8 @@ export default function AdminPage(props) {
 	const auth = useAuth();
 
 	if (!auth.user) {
-		return <Error statusCode={401} />
+		return <Error statusCode={401} />;
 	}
 
-	return (
-		<Container>
-			index
-		</Container>
-	)
+	return <Container>index</Container>;
 }

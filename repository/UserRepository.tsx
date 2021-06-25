@@ -1,7 +1,7 @@
-import { firebase } from "../adapters/firebaseClient";
-import User from "../structures/models/User";
+import { firebase } from 'adapters/firebaseClient';
+import User from 'structures/models/User';
 
-const usersRef = firebase.firestore().collection("users");
+const usersRef = firebase.firestore().collection('users');
 
 export default class UserRepository {
 	static load = (id: string) => {
@@ -19,15 +19,15 @@ export default class UserRepository {
 				return Promise.resolve(user);
 			})
 			.catch((error) => Promise.reject(error));
-	}
+	};
 
 	static save = (user: User) => {
 		user.updatedAt = new Date();
-		
+
 		return usersRef
 			.doc(user.id)
 			.set(Object.assign({}, user))
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
-	}
+	};
 }

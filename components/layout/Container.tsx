@@ -1,5 +1,5 @@
-import Footer from "./Footer";
-import Header from "./Header";
+import Footer from 'components/layout/Footer';
+import Header from 'components/layout/Header';
 
 export default function Container({ children }) {
 	return (
@@ -10,5 +10,5 @@ export default function Container({ children }) {
 
 			<Footer />
 		</>
-	)
+	);
 }

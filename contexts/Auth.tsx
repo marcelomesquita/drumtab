@@ -1,17 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
-import nookies from "nookies";
-import { firebase }  from "../adapters/firebaseClient";
-import User from "../structures/models/User";
-import UserRepository from "../repository/UserRepository";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import nookies from 'nookies';
+import { firebase } from 'adapters/firebaseClient';
+import User from 'structures/models/User';
+import UserRepository from 'repository/UserRepository';
 
 interface auth {
-	user,
-	loading,
-	signIn?,
-	signOut?
-};
+	user;
+	loading;
+	signIn?;
+	signOut?;
+}
 
 const AuthContext = createContext<auth>(null);
 
@@ -43,17 +43,15 @@ export default function AuthProvider(props) {
 			name: user.displayName,
 			email: user.email,
 			avatar: user.photoURL,
-			createdAt: new Date(user.metadata.creationTime)
+			createdAt: new Date(user.metadata.creationTime),
 		});
-	}
+	};
 
 	const registerUser = async (user: User) => {
-		await UserRepository
-			.save(user)
-			.catch((error) => toast.dark(error));
-	}
+		await UserRepository.save(user).catch((error) => toast.dark(error));
+	};
 
-	const signIn = async (redirect: string = "/") => {
+	const signIn = async (redirect: string = '/') => {
 		setLoading(true);
 
 		await firebase
@@ -62,7 +60,7 @@ export default function AuthProvider(props) {
 			.then(async (result) => await registerUser(formatUser(result.user)))
 			.catch((error) => toast.dark(error))
 			.finally(() => setLoading(false));
-	}
+	};
 
 	const signOut = async () => {
 		setLoading(true);
@@ -72,11 +70,7 @@ export default function AuthProvider(props) {
 			.signOut()
 			.catch((error) => toast.dark(error))
 			.finally(() => setLoading(false));
-	}
+	};
 
-	return (
-		<AuthContext.Provider value={{ user, loading, signIn, signOut }}>
-			{props.children}
-		</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={{ user, loading, signIn, signOut }}>{props.children}</AuthContext.Provider>;
 }

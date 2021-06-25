@@ -1,8 +1,10 @@
+import Notes from "./Notes";
+
 export default class Tablature {
 	public times: number = 4;
 	public beats: number = 4;
 	public beatsPerMin: number = 60;
-	public staff: Array<Array<number>> = [];
+	public staff: Array<Notes> = [];
 
 	constructor(init = null) {
 		Object.assign(this, init);
@@ -93,12 +95,12 @@ export default class Tablature {
 	}
 
 	addBar() {
-		this.staff.push(...Array.from({ length: this.getPrecision() - (this.getTotalBeats() % this.getPrecision()) }, () => [0, 0, 0, 0, 0, 0, 0, 0]));
+		this.staff.push(...Array.from({ length: this.getPrecision() - (this.getTotalBeats() % this.getPrecision()) }, () => new Notes()));
 	}
 
-	hitNote(note, pace) {
-		if (!this.staff[pace][note]) {
-			this.staff[pace][note] = 1;
+	hitNote(pace, note, type = 1) {
+		if (this.staff[pace][note] != type) {
+			this.staff[pace][note] = type;
 
 			return true;
 		} else {

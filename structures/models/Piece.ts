@@ -1,28 +1,24 @@
 import { Howl } from "howler";
 
 export default class Piece {
-	public id: number = null;
-	public abbr: string = null;
 	public name: string = null;
 	public brand: string = null;
-	public type: string = null;
+	public model: string = null;
 	public audios: Array<Howl> = [];
 	public variation: number = 0;
 
-	constructor(id, abbr, name, brand, type = 'normal') {
-		this.id = id;
-		this.abbr = abbr;
+	constructor(name, brand, model = 'normal') {
 		this.name = name;
 		this.brand = brand;
-		this.type = type;
+		this.model = model;
 
 		this.audios.push(new Howl({
-			src: [`/assets/audios/drum/${this.name}/${this.brand}/${this.type}-0.mp3`],
+			src: [`/assets/audios/drum/${this.name}/${this.brand}/${this.model}-0.mp3`],
 			preload: true
 		}));
 	}
 
-	hit() {
+	hit(type) {
 		this.audios[this.nextVariation()].play();
 	}
 

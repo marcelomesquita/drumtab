@@ -1,7 +1,7 @@
-import { firebase } from "../adapters/firebaseClient";
-import Music from "../structures/models/Music";
+import { firebase } from 'adapters/firebaseClient';
+import Music from 'structures/models/Music';
 
-const musicsRef = firebase.firestore().collection("musics");
+const musicsRef = firebase.firestore().collection('musics');
 
 export default class MusicRepository {
 	static listByPopularity = async () => {
@@ -97,10 +97,30 @@ export default class MusicRepository {
 			.catch((error) => Promise.reject(error));
 	};
 
-	static save = (music: Music) => {
+	static save = async (music: Music) => {
+		if (!music.isValid()) {
+			return Promise.reject('Invalid parameters');
+		}
+
+		const musicPlain: any = Object.assign({}, music);
+
+		//musicPlain.createdBy = music.updatedBy = `/users/${identity.user_id}`;
+		musicPlain.createdAt = music.updatedAt = new Date();
+		musicPlain.tablature = {
+			times: 4,
+			beats: 4,
+			beatsPerMin: 60,
+			staff: [
+				{ c: 0, h: 1, r: 0, s: 0, t1: 0, t2: 0, t3: 0, b: 1 },
+				{ c: 0, h: 1, r: 0, s: 0, t1: 0, t2: 0, t3: 0, b: 0 },
+				{ c: 0, h: 1, r: 0, s: 1, t1: 0, t2: 0, t3: 0, b: 0 },
+				{ c: 0, h: 1, r: 0, s: 0, t1: 0, t2: 0, t3: 0, b: 0 },
+			],
+		};
+
 		return musicsRef
-			.doc(music.id)
-			.set(Object.assign({}, music))
+			.doc(musicPlain.id)
+			.set(musicPlain)
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
 	};

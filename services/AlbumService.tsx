@@ -1,15 +1,15 @@
-import axiosClient from "../adapters/axiosClient";
+import axiosClient from 'adapters/axiosClient';
 
 export default class AlbumService {
 	static listByName = async (search) => {
-		const response = await axiosClient.post("/api/album/search", { name: search });
+		const response = await axiosClient.post('/api/album/search', { name: search });
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.albums);
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 
 	static load = async (id) => {
 		const response = await axiosClient.get(`/api/album/${id}/load`);
@@ -19,7 +19,7 @@ export default class AlbumService {
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 
 	static save = async (album) => {
 		const response = await axiosClient.post(`/api/album/${album.id}/save`, album);
@@ -29,7 +29,7 @@ export default class AlbumService {
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 
 	static exists = async (id) => {
 		const response = await axiosClient.get(`/api/album/${id}/exists`);
@@ -39,5 +39,5 @@ export default class AlbumService {
 		}
 
 		return Promise.reject({ status: response.status, message: response.data.message });
-	}
+	};
 }

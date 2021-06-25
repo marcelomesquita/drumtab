@@ -1,36 +1,68 @@
-import { Howl } from "howler";
-import { PIECES } from "../enums/Pieces";
 import Piece from "./Piece";
 
-export const PIECE_KEY = {
-	KeyC: PIECES.CRASH,
-	KeyH: PIECES.HAT,
-	//KeyY: PIECES.HAT_CLOSE,
-	//KeyN: PIECES.HAT_PEDAL,
-	KeyR: PIECES.RIDE,
-	KeyS: PIECES.SNARE,
-	Digit1: PIECES.TOM_HIGH,
-	Digit2: PIECES.TOM_MID,
-	Digit3: PIECES.TOM_LOW,
-	KeyB: PIECES.BASS
-};
-
 export default class Drum {
-	public stick = new Howl({src: [`/assets/audios/drum/stick/cycdh/normal-0.mp3`]});
-	public pieces = [
-		new Piece(PIECES.CRASH, 'C', 'crash', 'cycdh'),
-		new Piece(PIECES.HAT, 'H', 'hat', 'cycdh'),
-		new Piece(PIECES.RIDE, 'R', 'ride', 'cycdh'),
-		new Piece(PIECES.SNARE, 'S', 'snare', 'cycdh'),
-		new Piece(PIECES.TOM_HIGH, 'T1', 'tom-high', 'cycdh'),
-		new Piece(PIECES.TOM_MID, 'T2', 'tom-mid', 'cycdh'),
-		new Piece(PIECES.TOM_LOW, 'T3', 'tom-low', 'cycdh'),
-		new Piece(PIECES.BASS, 'B', 'bass', 'cycdh')
-	];
+	public d = new Piece('stick', 'cycdh');
+	public c = new Piece('crash', 'cycdh');
+	public h = new Piece('hat', 'cycdh');
+	public r = new Piece('ride', 'cycdh');
+	public s = new Piece('snare', 'cycdh');
+	public th = new Piece('tom-high', 'cycdh');
+	public tm = new Piece('tom-mid', 'cycdh');
+	public tl = new Piece('tom-low', 'cycdh');
+	public b = new Piece('bass', 'cycdh');
+	
+	public key = {
+		KeyC: 'c',
+		KeyH: 'h',
+		//KeyY: 'h',
+		//KeyN: 'h',
+		KeyR: 'r',
+		KeyS: 's',
+		Digit1: 'th',
+		Digit2: 'tm',
+		Digit3: 'tl',
+		KeyB: 'b'
+	};
 
-	hitNote(note) {
-		if (this.pieces[note]) {
-			this.pieces[note].hit();
+	hitNote(note, type = 1) {
+		if (this[note]) {
+			this[note].hit(type);
 		}
+	}
+
+	hitStick(type) {
+		this.d.hit(type);
+	}
+
+	hitCrash(type) {
+		this.c.hit(type);
+	}
+
+	hitHat(type) {
+		this.h.hit(type);
+	}
+
+	hitRide(type) {
+		this.r.hit(type);
+	}
+
+	hitSnare(type) {
+		this.s.hit(type);
+	}
+
+	hitTomHigh(type) {
+		this.th.hit(type);
+	}
+
+	hitTomMid(type) {
+		this.tm.hit(type);
+	}
+
+	hitTomLow(type) {
+		this.tl.hit(type);
+	}
+
+	hitBass(type) {
+		this.b.hit(type);
 	}
 }
