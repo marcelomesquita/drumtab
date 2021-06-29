@@ -2,7 +2,7 @@ import axiosClient from 'adapters/axiosClient';
 
 export default class MusicService {
 	static search = async (search) => {
-		const response = await axiosClient.post('/api/music/search', search);
+		const response = await axiosClient.post('/api/musics/search', search);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.musics);
@@ -15,7 +15,7 @@ export default class MusicService {
 	};
 
 	static load = async (id) => {
-		const response = await axiosClient.get(`/api/music/${id}/load`);
+		const response = await axiosClient.get(`/api/musics/${id}/load`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.music);
@@ -28,7 +28,7 @@ export default class MusicService {
 	};
 
 	static save = async (music) => {
-		const response = await axiosClient.post(`/api/music/${music.id}/save`, music);
+		const response = await axiosClient.post(`/api/musics/${music.id}/save`, music);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -40,8 +40,8 @@ export default class MusicService {
 		});
 	};
 
-	static exists = async (slug) => {
-		const response = await axiosClient.get(`/api/music/${slug}/exists`);
+	static exists = async (id) => {
+		const response = await axiosClient.get(`/api/musics/${id}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);

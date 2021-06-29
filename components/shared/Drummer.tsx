@@ -302,7 +302,7 @@ export default function Drummer(props) {
 					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'h')}>h</button>
 					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'r')}>r</button>
 					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 's')}>s</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'th')}>h</button>
+					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'th')}>th</button>
 					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'tm')}>tm</button>
 					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'tl')}>tl</button>
 					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'b')}>b</button>

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { FaChevronRight } from 'react-icons/fa';
+import Image from 'next/image';
 import Container from 'components/layout/Container';
 import ArtistRepository from 'repository/ArtistRepository';
 import MusicRepository from 'repository/MusicRepository';
@@ -38,8 +38,8 @@ export default function HomePage(props) {
 								<h3 className='subtitle is-3 has-text-light'>{process.env.NEXT_PUBLIC_DESCRIPTION}</h3>
 							</div>
 							<div className='column'>
-								<figure className='image is-4by3'>
-									<img src='https://bulma.io/images/placeholders/1280x960.png' alt='Placeholder image' />
+								<figure className='image'>
+									<Image src='/assets/images/800x400.png' alt='Placeholder image' width={800} height={400} />
 								</figure>
 							</div>
 						</div>
@@ -68,6 +68,23 @@ export default function HomePage(props) {
 								})}
 						</div>
 						<div className='column'>
+							<h1 className='title is-4 is-info'>SAMPLES</h1>
+							{musics
+								.map((music, m) => {
+									return (
+										<Link key={`music-${m}`} href={`/music/${music.id}`}>
+											<a className='has-text-primary'>
+												<div className='box is-shadowless'>
+													<span className='title is-1 is-pulled-left has-text-grey-light mr-2'>{m + 1}</span>
+													<h3 className='title is-5 mt-2 mb-0'>{music.name}</h3>
+													<h4 className='title is-6 has-text-grey'>{music.artist.name}</h4>
+												</div>
+											</a>
+										</Link>
+									);
+								})}
+						</div>
+						<div className='column'>
 							<h1 className='title is-4 is-info'>ARTISTAS</h1>
 							{artists.map((artist, a) => {
 								return (
@@ -76,26 +93,7 @@ export default function HomePage(props) {
 											<div className='box is-shadowless'>
 												<div className='is-pulled-left mr-3'>
 													<figure className='image is-48x48'>
-														<img className='is-rounded' src='' />
-													</figure>
-												</div>
-												<h3 className='title is-5 mt-3'>{artist.name}</h3>
-											</div>
-										</a>
-									</Link>
-								);
-							})}
-						</div>
-						<div className='column'>
-							<h1 className='title is-4 is-info'>USUÁRIOS</h1>
-							{artists.map((artist, a) => {
-								return (
-									<Link key={`artist-${a}`} href='/music'>
-										<a className='has-text-primary'>
-											<div className='box is-shadowless'>
-												<div className='is-pulled-left mr-3'>
-													<figure className='image is-48x48'>
-														<img className='is-rounded' src='' />
+														<Image src={`/assets/images/artists/${artist.id}.jpg`} alt={artist.name} width={50} height={50} className='is-rounded' />
 													</figure>
 												</div>
 												<h3 className='title is-5 mt-3'>{artist.name}</h3>

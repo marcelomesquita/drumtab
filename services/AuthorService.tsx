@@ -2,7 +2,7 @@ import axiosClient from 'adapters/axiosClient';
 
 export default class AuthorService {
 	static listByName = async (search) => {
-		const response = await axiosClient.post('/api/author/search', { name: search });
+		const response = await axiosClient.post('/api/authors/search', { name: search });
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.authors);
@@ -12,7 +12,7 @@ export default class AuthorService {
 	};
 
 	static load = async (id) => {
-		const response = await axiosClient.get(`/api/author/${id}/load`);
+		const response = await axiosClient.get(`/api/authors/${id}/load`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.author);
@@ -22,7 +22,7 @@ export default class AuthorService {
 	};
 
 	static save = async (author) => {
-		const response = await axiosClient.post(`/api/author/${author.id}/save`, author);
+		const response = await axiosClient.post(`/api/authors/${author.id}/save`, author);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,7 +32,7 @@ export default class AuthorService {
 	};
 
 	static exists = async (id) => {
-		const response = await axiosClient.get(`/api/author/${id}/exists`);
+		const response = await axiosClient.get(`/api/authors/${id}/exists`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);

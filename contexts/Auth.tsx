@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import nookies from 'nookies';
 import { firebase } from 'adapters/firebaseClient';
 import User from 'structures/models/User';
-import UserRepository from 'repository/UserRepository';
+import UserService from 'services/UserService';
 
 interface auth {
 	user;
@@ -48,7 +48,7 @@ export default function AuthProvider(props) {
 	};
 
 	const registerUser = async (user: User) => {
-		await UserRepository.save(user).catch((error) => toast.dark(error));
+		await UserService.save(user).catch((error) => toast.dark(error));
 	};
 
 	const signIn = async (redirect: string = '/') => {
