@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Author from "../../../../structures/models/Author";
+import Author from "../../../../models/Author";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {

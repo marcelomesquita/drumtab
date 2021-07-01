@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaAdjust, FaBan, FaCircle, FaClock, FaDotCircle, FaLock, FaLockOpen, FaLongArrowAltRight, FaMusic, FaPause, FaPlay, FaStepBackward, FaStepForward, FaStop, FaTachometerAlt, FaUndoAlt } from 'react-icons/fa';
-import Drum from 'structures/models/Drum';
-import Tablature from 'structures/models/Tablature';
+import Drum from 'models/Drum';
+import Tablature from 'models/Tablature';
 import styles from 'styles/drummer.module.sass';
 
 export default function Drummer(props) {
@@ -30,37 +30,35 @@ export default function Drummer(props) {
 
 	useEffect(() => {
     if (counterDelay !== null) {
-      const counter = setInterval(() => {
-				if (count < 2) {
-					setCount(count + 1);
-					drum.hitNote('d');
-				} else {
-					setCount(0);
-					setCounterDelay(null);
-					play();
-				}
+			if (count < 2) {
+				drum.hitNote('d');
+			} else {
+				setCount(0);
+				setCounterDelay(null);
+				play();
+			}
+
+      const counter = setTimeout(() => {
+				setCount(count + 1);
 			}, counterDelay);
 
-      return () => clearInterval(counter);
+      return () => clearTimeout(counter);
     }
   }, [count, counterDelay]);
 
-  useEffect(() => {
+	useEffect(() => {
 		if (pacerDelay !== null) {
 			readNotes(tablature.staff[pace]);
-			
-      const pacer = setInterval(() => {
-				const pace = nextPace();
 
-				setPace(pace);
-				readNotes(tablature.staff[pace]);
+			if (scrollLock) {
+				scroller();
+			}
 
-				if (scrollLock) {
-					scroller();
-				}
+			const pacer = setTimeout(() => {
+				setPace(nextPace());
 			}, pacerDelay);
 
-      return () => clearInterval(pacer);
+      return () => clearTimeout(pacer);
     }
   }, [pace, pacerDelay]);
 
@@ -104,7 +102,7 @@ export default function Drummer(props) {
 	};
 
 	const play = () => {
-		setPacerDelay(tablature.getSpeedPerSec() * 1000);
+		setPacerDelay(tablature.getSpeedPerTime() * 1000);
 	};
 
 	const pause = () => {
@@ -229,7 +227,7 @@ export default function Drummer(props) {
 			play();
 		}
 	};
-
+	
 	return (
 		<div id='tablature'>
 			<div className='columns'>

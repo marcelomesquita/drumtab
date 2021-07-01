@@ -4,7 +4,7 @@ import React from 'react';
 import Container from '../../components/layout/Container';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import Pagination from '../../components/shared/Pagination';
-import Music from '../../structures/models/Music';
+import Music from '../../models/Music';
 import MusicRepository from '../../repository/MusicRepository';
 
 export async function getStaticProps(context) {

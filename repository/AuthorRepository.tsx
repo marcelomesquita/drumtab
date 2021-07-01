@@ -1,5 +1,5 @@
 import { firebase } from 'adapters/firebaseClient';
-import Author from 'structures/models/Author';
+import Author from 'models/Author';
 
 const authorsRef = firebase.firestore().collection('authors');
 

@@ -1,13 +1,13 @@
-import validator from "validator";
-import Tablature from "./Tablature";
-import User from "./User";
-import Artist from "./Artist";
-import Author from "./Author";
-import Album from "./Album";
+import validator from 'validator';
+import Tablature from 'models/Tablature';
+import User from 'models/User';
+import Artist from 'models/Artist';
+import Author from 'models/Author';
+import Album from 'models/Album';
 
 export default class Music {
-	public id: string = "";
-	public name: string = "";
+	public id: string = '';
+	public name: string = '';
 	public artist: Artist = new Artist();
 	public album?: Album = new Album();
 	public author?: Author = new Author();
@@ -40,40 +40,40 @@ export default class Music {
 
 		return true;
 	}
-	
+
 	validateId(value = this.id): string {
 		if (validator.isEmpty(value)) {
-			return "required";
+			return 'required';
 		}
 
 		if (!validator.isLowercase(value)) {
-			return "must be lowercase";
+			return 'must be lowercase';
 		}
 
 		if (!validator.isLength(value, { min: 3 })) {
-			return "too short";
+			return 'too short';
 		}
 
 		if (!validator.isSlug(value)) {
-			return "must not contain special characters";
+			return 'must not contain special characters';
 		}
 
-		return "";
+		return '';
 	}
 
 	validateName(value = this.name): string {
 		if (validator.isEmpty(value)) {
-			return "required";
+			return 'required';
 		}
 
-		return "";
+		return '';
 	}
 
 	validateArtist(value = this.artist): string {
 		if (validator.isEmpty(value.name)) {
-			return "required";
+			return 'required';
 		}
 
-		return "";
+		return '';
 	}
 }

@@ -1,12 +1,12 @@
-import React from "react";
 import Head from "next/head";
+import Link from 'next/link';
 import moment from "moment";
 import Container from "components/layout/Container"
 import Breadcrumb from "components/shared/Breadcrumb";
 import Drummer from "components/shared/Drummer";
-import Drum from "structures/models/Drum";
-import Music from "structures/models/Music";
-import Tablature from "structures/models/Tablature";
+import Drum from "models/Drum";
+import Music from "models/Music";
+import Tablature from "models/Tablature";
 import MusicRepository from "repository/MusicRepository";
 
 export async function getStaticPaths() {
@@ -42,6 +42,10 @@ export default function MusicPage(props) {
 				<section className="section is-clearfix">
 					<Breadcrumb />
 
+					<Link href={`/music/editor/?id=${music.id}`}>
+						<a className="button is-outlined is-small is-align-content-end">editar</a>
+					</Link>
+
 					<h1 className="title">{music.name}</h1>
 					<h2 className="subtitle has-text-grey">{music.artist.name} {music.album?.name && (`/ ${music.album.name}`)} {music.author?.name && (`(${music.author.name})`)}</h2>
 
@@ -59,7 +63,7 @@ export default function MusicPage(props) {
 
 			<div className="container is-widescreen">
 				<section className="section">
-					<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy?.name}</a> em {music.createdAt}</p>
+					<p className="content is-small has-text-grey">Enviado por <a className="has-text-dark has-text-weight-bold">{music.createdBy?.name}</a> em {moment(music.createdAt).format('DD/MM/YYYY')}</p>
 				</section>
 			</div>
 		</Container>

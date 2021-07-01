@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import nookies from 'nookies';
 import { firebase } from 'adapters/firebaseClient';
-import User from 'structures/models/User';
+import User from 'models/User';
 import UserService from 'services/UserService';
 
 interface auth {

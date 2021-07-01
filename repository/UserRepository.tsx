@@ -1,5 +1,5 @@
 import { firebase } from 'adapters/firebaseClient';
-import User from 'structures/models/User';
+import User from 'models/User';
 
 const usersRef = firebase.firestore().collection('users');
 

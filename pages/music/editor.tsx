@@ -2,33 +2,30 @@ import React, { useState } from 'react';
 import Error from 'next/error';
 import Head from 'next/head';
 import Slugify from 'slugify';
-import nookies from 'nookies';
+import { toast } from 'react-toastify';
 import AsyncSelect from 'react-select/async';
 import { FaLink } from 'react-icons/fa';
-import { firebaseAdmin } from 'adapters/firebaseAdmin';
-import { useAuth } from 'contexts/Auth';
 import Container from 'components/layout/Container';
 import Drummer from 'components/shared/Drummer';
 import Breadcrumb from 'components/shared/Breadcrumb';
 import Modal from 'components/shared/Modal';
-import Drum from 'structures/models/Drum';
-import Music from 'structures/models/Music';
+import Drum from 'models/Drum';
+import Music from 'models/Music';
 import ArtistService from 'services/ArtistService';
 import AlbumService from 'services/AlbumService';
 import AuthorService from 'services/AuthorService';
 import MusicService from 'services/MusicService';
+import { getSession } from 'services/AuthService';
 import MusicRepository from 'repository/MusicRepository';
 
 export async function getServerSideProps(context) {
 	try {
-		const cookies = nookies.get(context);
 		const id = context.query?.id;
+		const session = await getSession(context);
 
-		if (!cookies.token) {
+		if (!session) {
 			return { props: { error: { code: 403, message: 'You must login to access this page' } } };
 		}
-
-		await firebaseAdmin.auth().verifyIdToken(cookies.token);
 
 		if (id) {
 			return MusicRepository.load(id)
@@ -47,11 +44,8 @@ export default function MusicEditorPage(props) {
 		return <Error statusCode={props.error.code} title={props.error.message} />;
 	}
 
-	const auth = useAuth();
-
 	const drum: Drum = new Drum();
 	const [music, setMusic] = useState(new Music(props.music));
-	const [message, setMessage] = useState(null);
 	const [messageId, setMessageId] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [loadingId, setLoadingId] = useState(false);
@@ -76,7 +70,7 @@ export default function MusicEditorPage(props) {
 
 			MusicRepository.exists(id)
 				.then((result) => (result ? setMessageId('slug already exists!') : setMessageId(null)))
-				.catch((result) => setMessage(result))
+				.catch((result) => toast.dark(result))
 				.finally(() => setLoadingId(false));
 		}
 
@@ -173,8 +167,8 @@ export default function MusicEditorPage(props) {
 		setLoading(true);
 
 		MusicService.save(music)
-			.then((result) => setMessage(result.message))
-			.catch((error) => setMessage(error.message))
+			.then((result) => toast.dark(result.message))
+			.catch((error) => toast.dark(error.message))
 			.finally(() => setLoading(false));
 	};
 

@@ -1,5 +1,5 @@
 import { firebase } from 'adapters/firebaseClient';
-import Album from 'structures/models/Album';
+import Album from 'models/Album';
 
 const albumsRef = firebase.firestore().collection('albums');
 

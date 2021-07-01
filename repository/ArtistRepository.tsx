@@ -1,5 +1,5 @@
 import { firebase } from 'adapters/firebaseClient';
-import Artist from 'structures/models/Artist';
+import Artist from 'models/Artist';
 
 const artistsRef = firebase.firestore().collection('artists');
 

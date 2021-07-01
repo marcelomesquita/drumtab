@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nookies from 'nookies';
 import { firebaseAdmin } from 'adapters/firebaseAdmin';
-import User from 'structures/models/User';
+import User from 'models/User';
 import UserRepository from 'repository/UserRepository';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {

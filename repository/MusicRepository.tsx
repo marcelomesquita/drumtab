@@ -1,7 +1,12 @@
+import nookies from 'nookies';
 import { firebase } from 'adapters/firebaseClient';
-import Music from 'structures/models/Music';
+import Music from 'models/Music';
 
 const musicsRef = firebase.firestore().collection('musics');
+const artistsRef = firebase.firestore().collection('artists');
+const albumsRef = firebase.firestore().collection('albums');
+const authorsRef = firebase.firestore().collection('authors');
+const usersRef = firebase.firestore().collection('users');
 
 export default class MusicRepository {
 	static listByPopularity = async () => {
@@ -57,35 +62,35 @@ export default class MusicRepository {
 			.get()
 			.then(async (result) => {
 				const [album, artist, author, createdBy, updatedBy] = await Promise.all([
-					result.data().album.get(),
-					result.data().artist.get(),
-					result.data().author.get(),
-					result.data().createdBy.get(),
-					result.data().updatedBy.get(),
+					result.data().album?.get(),
+					result.data().artist?.get(),
+					result.data().author?.get(),
+					result.data().createdBy?.get(),
+					result.data().updatedBy?.get(),
 				]);
 
 				const music = {
 					id: result.id,
 					name: result.data().name,
 					tablature: result.data().tablature,
-					album: {
-						id: album.id,
-						name: album.data().name,
-					},
 					artist: {
 						id: artist.id,
 						name: artist.data().name,
 					},
-					author: {
+					album: !album ? {} : {
+						id: album.id,
+						name: album.data().name,
+					},
+					author: !author ? {} : {
 						id: author.id,
 						name: author.data().name,
 					},
-					createdAt: result.data().createdAt.toDate().toString(),
+					createdAt: result.data().createdAt?.toDate().toISOString(),
 					createdBy: {
 						id: createdBy.id,
 						name: createdBy.data().name,
 					},
-					updatedAt: result.data().updatedAt.toDate().toString(),
+					updatedAt: result.data().updatedAt.toDate().toISOString(),
 					updatedBy: {
 						id: updatedBy.id,
 						name: updatedBy.data().name,
@@ -97,29 +102,25 @@ export default class MusicRepository {
 			.catch((error) => Promise.reject(error));
 	};
 
-	static save = async (music: Music) => {
+	static save = async (music: Music, session) => {
 		if (!music.isValid()) {
 			return Promise.reject('Invalid parameters');
 		}
 
-		const musicPlain: any = Object.assign({}, music);
-
-		//musicPlain.createdBy = music.updatedBy = `/users/${identity.user_id}`;
-		musicPlain.createdAt = music.updatedAt = new Date();
-		musicPlain.tablature = {
-			times: 4,
-			beats: 4,
-			beatsPerMin: 60,
-			staff: [
-				{ c: 0, h: 1, r: 0, s: 0, t1: 0, t2: 0, t3: 0, b: 1 },
-				{ c: 0, h: 1, r: 0, s: 0, t1: 0, t2: 0, t3: 0, b: 0 },
-				{ c: 0, h: 1, r: 0, s: 1, t1: 0, t2: 0, t3: 0, b: 0 },
-				{ c: 0, h: 1, r: 0, s: 0, t1: 0, t2: 0, t3: 0, b: 0 },
-			],
-		};
+		const musicPlain = {
+			name: music.name,
+			tablature: Object.assign({}, music.tablature),
+			artist: artistsRef.doc(music.artist.id),
+			album: !music.album.id ? null : albumsRef.doc(music.album.id),
+			author: !music.author.id ? null : authorsRef.doc(music.author.id),
+			createdBy: usersRef.doc(session.uid),
+			createdAt: new Date(),
+			updatedBy: usersRef.doc(session.uid),
+			updatedAt: new Date(),
+		}
 
 		return musicsRef
-			.doc(musicPlain.id)
+			.doc(music.id)
 			.set(musicPlain)
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
