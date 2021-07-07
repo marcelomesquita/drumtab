@@ -1,92 +1,53 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaAdjust, FaBan, FaCircle, FaClock, FaDotCircle, FaLock, FaLockOpen, FaLongArrowAltRight, FaMusic, FaPause, FaPlay, FaStepBackward, FaStepForward, FaStop, FaTachometerAlt, FaUndoAlt } from 'react-icons/fa';
 import Drum from 'models/Drum';
 import Tablature from 'models/Tablature';
 import styles from 'styles/drummer.module.sass';
 
-export default function Drummer(props) {
-	const edit = props.edit;
-	const drum = new Drum();
-	const [tablature, setTablature] = useState(new Tablature(props.tablature));
-	const [count, setCount] = useState(0);
-	const [counterDelay, setCounterDelay] = useState(null);
-	const [pace, setPace] = useState(0);
-	const [pacerDelay, setPacerDelay] = useState(null);
-	const [repeat, setRepeat] = useState(true);
-	const [scrollLock, setScrollLock] = useState(true);
-	const onTablatureChange = props.onTablatureChange ? props.onTablatureChange : null;
+export default class Drummer extends React.Component {
+	constructor(props) {
+		super(props);
 
-	useEffect(() => {
-		if (edit && typeof document !== 'undefined') {
-			document.addEventListener('keydown', handleKeyboardEvent);
+		this.state = {
+			edit: props.edit,
+			drum: new Drum(),
+			tablature: props.tablature,
+			timer: undefined,
+			count: 0,
+			pace: 0,
+			repeat: true,
+			scrollLock: true,
+			onTablatureChange: props.onTablatureChange ? props.onTablatureChange : null
 		}
+	}
 
-		return () => {
-			if (edit && typeof document !== 'undefined') {
-				document.removeEventListener('keydown', handleKeyboardEvent);
-			}
-		};
-	});
-	
-	useEffect(() => {
-		if (pacerDelay) {
-			const newPace = nextPace();
-
-			readNotes(tablature.staff[newPace]);
-
-			if (scrollLock) {
-				scroller();
-			}
-			
-			const pacer = setTimeout(() => {
-				setPace(newPace);
-			}, pacerDelay);
-
-			return () => {
-				clearTimeout(pacer);
-			}
+	componentDidMount = () => {
+		if (this.state.edit && typeof document !== 'undefined') {
+			document.addEventListener('keydown', this.handleKeyboardEvent);
 		}
-  }, [pace, pacerDelay]);
+	}
 
-	useEffect(() => {
-    if (counterDelay) {
-			if (count < 2) {
-				drum.hitNote('d');
-			} else {
-				setCount(0);
-				setCounterDelay(null);
-				play();
-			}
-
-      const counter = setTimeout(() => {
-				setCount(count + 1);
-			}, counterDelay);
-
-      return () => clearTimeout(counter);
-    }
-  }, [count, counterDelay]);
-
-	useEffect(() => {
-		if (onTablatureChange) {
-			onTablatureChange(tablature);
+	componentWillUnmount = () => {
+		if (this.state.edit && typeof document !== 'undefined') {
+			document.removeEventListener('keydown', this.handleKeyboardEvent);
 		}
-	}, [tablature]);
+	}
 
-	const handleKeyboardEvent = (event) => {
-		if (pacerDelay && drum.key[event.code] !== 'undefined') {
-			writeNote(pace, drum.key[event.code]);
+	handleKeyboardEvent = (event) => {
+		if (this.state.timer && this.state.drum.key[event.code] !== 'undefined') {
+			this.writeNote(this.state.pace, this.state.drum.key[event.code]);
 		}
 	};
 
-	const scroller = () => {
+	scroller = () => {
 		const staff = document.getElementById('staff');
 		const beats = document.getElementById('beats');
-		const position = (beats.scrollWidth * pace) / tablature.getTotalBeats() - staff.scrollWidth / 2;
+		const position = (beats.scrollWidth * this.state.pace) / this.state.tablature.getTotalBeats() - staff.scrollWidth / 2;
 
 		beats.scrollTo({ left: position });
 	};
 
-	const beatIcon = (beat) => {
+	beatIcon = (beat) => {
 		switch (beat) {
 			case 1:
 				return <FaCircle />;
@@ -101,79 +62,116 @@ export default function Drummer(props) {
 		}
 	};
 
-	const counter = () => {
-		setCounterDelay(tablature.getSpeedPerSec() * 1000);
+	counter = () => {
+		this.setCount(0);
+		this.setState({timer: setInterval(() => {
+			if (this.state.count < 2) {
+				this.setCount(this.state.count + 1);
+				this.state.drum.hitNote('d');
+			} else {
+				this.clearTimer();
+				this.play();
+			}
+		}, this.state.tablature.getSpeedPerSec() * 1000)});
+	}
+
+	play = () => {
+		this.setState({timer: setInterval(() => {
+			let pace = this.nextPace();
+
+			this.readNotes(this.state.tablature.staff[pace]);
+			this.setPace(pace);
+		}, this.state.tablature.getSpeedPerTime() * 1000)});
+
+		this.readNotes(this.state.tablature.staff[this.state.pace]);
+	}
+
+	pause = () => {
+		this.clearTimer();
+	}
+
+	stop = () => {
+		this.clearTimer();
+		this.setPace(0);
+	}
+
+	skipPrev = () => {
+		this.setPace(this.state.tablature.getFirstBeatInPreviousBar(this.state.pace));
 	};
 
-	const play = () => {
-		setPacerDelay(tablature.getSpeedPerTime() * 1000);
+	skipNext = () => {
+		this.setPace(this.state.tablature.getFirstBeatInNextBar(this.state.pace));
 	};
 
-	const pause = () => {
-		setPacerDelay(null);
-	};
-
-	const stop = () => {
-		setPacerDelay(null);
-		setPace(0);
-	};
-
-	const skipPrev = () => {
-		setPace(tablature.getFirstBeatInPreviousBar(pace));
-	};
-
-	const skipNext = () => {
-		setPace(tablature.getFirstBeatInNextBar(pace));
-	};
-
-	const nextPace = () => {
-		if (repeat && pace == tablature.getLastBeatInBar(pace) - 1) {
-			return tablature.getFirstBeatInBar(pace);
+	nextPace = () => {
+		if (this.state.repeat && this.state.pace == this.state.tablature.getLastBeatInBar(this.state.pace) - 1) {
+			return this.state.tablature.getFirstBeatInBar(this.state.pace);
 		}
 
-		if (pace == tablature.getTotalBeats() - 1) {
-			if (edit) {
-				tablature.addBar();
+		if (this.state.pace == this.state.tablature.getTotalBeats() - 1) {
+			if (this.state.edit) {
+				this.state.tablature.addBar();
 
-				setTablature(new Tablature(tablature));
+				this.setState(this.state);
 			} else {
-				stop();
+				this.stop();
 			}
 		}
 
-		return pace + 1;
-	};
+		return this.state.pace + 1;
+	}
 
-	const writeNote = (pace, note, type = 1) => {
-		if (!edit) {
+	writeNote = (note, pace = this.state.pace) => {
+		if (!this.state.edit) {
 			return;
 		}
 
-		if (tablature.hitNote(pace, note, type)) {
-			drum.hitNote(note, type);
+		if (this.state.tablature.hitNote(pace, note)) {
+			this.state.drum.hitNote(note);
 		}
 
-		setTablature(new Tablature(tablature));
-	};
+		this.setState(this.state);
 
-	const readNotes = (notes) => {
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
+		}
+	}
+
+	readNotes = (notes) => {
 		for (const key in notes) {
 			if (notes[key]) {
-				drum.hitNote(key);
+				this.state.drum.hitNote(key);
 			}
+		};
+	}
+
+	toggleRepeat = () => {
+		this.setState({ repeat: !this.state.repeat });
+	}
+
+	toggleScrollLock = () => {
+		this.setState({ scrollLock: !this.state.scrollLock });
+	}
+
+	clearTimer = () => {
+		clearInterval(this.state.timer);
+		this.setState({timer: undefined});
+	}
+
+	setCount = (count) => {
+		this.setState({count});
+	}
+
+	setPace = (pace) => {
+		this.setState({pace});
+
+		if (this.state.scrollLock) {
+			this.scroller();
 		}
-	};
+	}
 
-	const toggleRepeat = () => {
-		setRepeat(!repeat);
-	};
-
-	const toggleScrollLock = () => {
-		setScrollLock(!scrollLock);
-	};
-
-	const setBeats = (e) => {
-		if (!edit) {
+	setBeats = (e) => {
+		if (!this.state.edit) {
 			return false;
 		}
 
@@ -182,18 +180,22 @@ export default function Drummer(props) {
 		const max = parseInt(e.target.max);
 
 		if (value < min) {
-			tablature.setBeats(min);
+			this.state.tablature.setBeats(min);
 		} else if (value > max) {
-			tablature.setBeats(max);
+			this.state.tablature.setBeats(max);
 		} else {
-			tablature.setBeats(value);
+			this.state.tablature.setBeats(value);
 		}
 
-		setTablature(tablature);
-	};
+		this.setState(this.state);
 
-	const setTimes = (e) => {
-		if (!edit) {
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
+		}
+	}
+
+	setTimes = (e) => {
+		if (!this.state.edit) {
 			return false;
 		}
 
@@ -202,139 +204,150 @@ export default function Drummer(props) {
 		const max = parseInt(e.target.max);
 
 		if (value < min) {
-			tablature.setTimes(min);
+			this.state.tablature.setTimes(min);
 		} else if (value > max) {
-			tablature.setTimes(max);
+			this.state.tablature.setTimes(max);
 		} else {
-			tablature.setTimes(value);
+			this.state.tablature.setTimes(value);
 		}
 
-		setTablature(tablature);
-	};
+		this.setState(this.state);
 
-	const setBeatsPerMin = (e) => {
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
+		}
+	}
+
+	setBeatsPerMin = (e) => {
 		const value = parseInt(e.target.value ? e.target.value : 0);
 		const min = parseInt(e.target.min);
 		const max = parseInt(e.target.max);
 
 		if (value < min) {
-			tablature.setBeatsPerMin(min);
+			this.state.tablature.setBeatsPerMin(min);
 		} else if (value > max) {
-			tablature.setBeatsPerMin(max);
+			this.state.tablature.setBeatsPerMin(max);
 		} else {
-			tablature.setBeatsPerMin(value);
+			this.state.tablature.setBeatsPerMin(value);
 		}
 
-		setTablature(tablature);
+		this.setState(this.state);
 
-		if (pacerDelay) {
-			play();
+		if (this.state.onTablatureChange) {
+			this.state.onTablatureChange(this.state.tablature);
 		}
-	};
 
-	return (
-		<div id='tablature'>
-			<div className='columns'>
-				<div className='column is-narrow'>
-					<button type='button' className='button is-small' title='Stop' onClick={stop}><FaStop /></button>
-					<button type='button' className='button is-small' title='Previous Bar' onClick={skipPrev}><FaStepBackward /></button>
-					{pacerDelay && (<button type='button' className='button is-small' title='Pause' onClick={pause}><FaPause /></button>)}
-					{!pacerDelay && (<button type='button' className='button is-small' title='Play' onClick={counter}><FaPlay /></button>)}
-					<button type='button' className='button is-small' title='Next Bar' onClick={skipNext}><FaStepForward /></button>
-				</div>
+		if (this.state.timer) {
+			this.clearTimer();
+			this.play();
+		}
+	}
 
-				<div className='column is-narrow'>
-					{repeat && (<button type='button' className='button is-small' title='Continuous Bar' onClick={toggleRepeat}><FaUndoAlt /></button>)}
-					{!repeat && (<button type='button' className='button is-small' title='Repeat Bar' onClick={toggleRepeat}><FaLongArrowAltRight /></button>)}
-					{scrollLock && (<button type='button' className='button is-small' title='Scroll Lock' onClick={toggleScrollLock}><FaLock /></button>)}
-					{!scrollLock && (<button type='button' className='button is-small' title='Scroll Lock' onClick={toggleScrollLock}><FaLockOpen /></button>)}
-				</div>
+	render() {
+		return (
+			<div id='tablature'>
+				<div className='columns'>
+					<div className='column is-narrow'>
+						<button type='button' className='button is-small' title='Stop' onClick={this.stop}><FaStop /></button>
+						<button type='button' className='button is-small' title='Previous Bar' onClick={this.skipPrev}><FaStepBackward /></button>
+						{this.state.pacerDelay && (<button type='button' className='button is-small' title='Pause' onClick={this.pause}><FaPause /></button>)}
+						{!this.state.pacerDelay && (<button type='button' className='button is-small' title='Play' onClick={this.counter}><FaPlay /></button>)}
+						<button type='button' className='button is-small' title='Next Bar' onClick={this.skipNext}><FaStepForward /></button>
+					</div>
 
-				<div className='column is-narrow'>
-					<div className='field is-grouped'>
-						<span className='control has-icons-left'>
-							<input
-								className='input is-small'
-								type='number'
-								placeholder='Times'
-								min='1'
-								max='16'
-								style={{ width: '80px' }}
-								value={tablature.times}
-								onChange={(e) => setTimes(e)}
-								disabled={!edit}
-							/>
-							<span className='icon is-left'><FaClock /></span>
-						</span>
-						<span className='control has-icons-left'>
-							<input
-								className='input is-small'
-								type='number'
-								placeholder='Beats'
-								min='1'
-								max='16'
-								style={{ width: '80px' }}
-								value={tablature.beats}
-								onChange={(e) => setBeats(e)}
-								disabled={!edit}
-							/>
-							<span className='icon is-left'><FaMusic /></span>
-						</span>
-						<span className='control has-icons-left'>
-							<input
-								className='input is-small'
-								type='number'
-								placeholder='BpM'
-								min='1'
-								max='300'
-								style={{ width: '80px' }}
-								value={tablature.getBeatsPerMin()}
-								onChange={(e) => setBeatsPerMin(e)}
-							/>
-							<span className='icon is-left'><FaTachometerAlt /></span>
-						</span>
+					<div className='column is-narrow'>
+						{this.state.repeat && (<button type='button' className='button is-small' title='Continuous Bar' onClick={this.toggleRepeat}><FaUndoAlt /></button>)}
+						{!this.state.repeat && (<button type='button' className='button is-small' title='Repeat Bar' onClick={this.toggleRepeat}><FaLongArrowAltRight /></button>)}
+						{this.state.scrollLock && (<button type='button' className='button is-small' title='Scroll Lock' onClick={this.toggleScrollLock}><FaLock /></button>)}
+						{!this.state.scrollLock && (<button type='button' className='button is-small' title='Scroll Lock' onClick={this.toggleScrollLock}><FaLockOpen /></button>)}
+					</div>
+
+					<div className='column is-narrow'>
+						<div className='field is-grouped'>
+							<span className='control has-icons-left'>
+								<input
+									className='input is-small'
+									type='number'
+									placeholder='Times'
+									min='1'
+									max='16'
+									style={{ width: '80px' }}
+									value={this.state.tablature.times}
+									onChange={(e) => this.setTimes(e)}
+									disabled={!this.state.edit}
+								/>
+								<span className='icon is-left'><FaClock /></span>
+							</span>
+							<span className='control has-icons-left'>
+								<input
+									className='input is-small'
+									type='number'
+									placeholder='Beats'
+									min='1'
+									max='16'
+									style={{ width: '80px' }}
+									value={this.state.tablature.beats}
+									onChange={(e) => this.setBeats(e)}
+									disabled={!this.state.edit}
+								/>
+								<span className='icon is-left'><FaMusic /></span>
+							</span>
+							<span className='control has-icons-left'>
+								<input
+									className='input is-small'
+									type='number'
+									placeholder='BpM'
+									min='1'
+									max='300'
+									style={{ width: '80px' }}
+									value={this.state.tablature.getBeatsPerMin()}
+									onChange={(e) => this.setBeatsPerMin(e)}
+								/>
+								<span className='icon is-left'><FaTachometerAlt /></span>
+							</span>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div id='staff' className='pb-2'>
-				<div id="pieces" className={styles.pieces}>
-					<button type='button' className={styles.mark}></button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'c')}>c</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'h')}>h</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'r')}>r</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 's')}>s</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'th')}>th</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'tm')}>tm</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'tl')}>tl</button>
-					<button type='button' className={styles.mark} onMouseDown={() => writeNote(pace, 'b')}>b</button>
-					<button type='button' className={styles.mark}></button>
+				<div id='staff' className='pb-2'>
+					<div id="pieces" className={styles.pieces}>
+						<button type='button' className={styles.mark}></button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('c', this.state.pace)}>c</button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('h', this.state.pace)}>h</button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('r', this.state.pace)}>r</button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('s', this.state.pace)}>s</button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('th', this.state.pace)}>th</button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('tm', this.state.pace)}>tm</button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('tl', this.state.pace)}>tl</button>
+						<button type='button' className={styles.mark} onMouseDown={() => this.writeNote('b', this.state.pace)}>b</button>
+						<button type='button' className={styles.mark}></button>
+					</div>
+					<div id='beats' className={styles.beats}>
+						{this.state.tablature.staff.map((notes, b) => {
+							return (
+								<div key={`beat-${b}`} className={`${styles.beat} ${b == this.state.pace && styles.active} ${b % this.state.tablature.beats == 0 && styles.time} ${b % this.state.tablature.getPrecision() == 0 && styles.bar}`}>
+									<button type='button' className={styles.mark} onMouseDown={() => this.setPace(b)}>{this.state.tablature.getCurrentTime(b) + 1}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('c', b)}>{this.beatIcon(notes.c)}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('h', b)}>{this.beatIcon(notes.h)}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('r', b)}>{this.beatIcon(notes.r)}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('s', b)}>{this.beatIcon(notes.s)}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('th', b)}>{this.beatIcon(notes.th)}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('tm', b)}>{this.beatIcon(notes.tm)}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('tl', b)}>{this.beatIcon(notes.tl)}</button>
+									<button type='button' className={styles.note} onMouseDown={() => this.writeNote('b', b)}>{this.beatIcon(notes.b)}</button>
+									<button type='button' className={styles.mark} onMouseDown={() => this.setPace(b)}>{this.state.tablature.getCurrentTime(b) + 1}</button>
+								</div>
+							);
+						})}
+					</div>
 				</div>
-				<div id='beats' className={styles.beats}>
-					{tablature.staff.map((notes, b) => {
-						return (
-							<div key={`beat-${b}`} className={`${styles.beat} ${b == pace && styles.active} ${b % tablature.beats == 0 && styles.time} ${b % tablature.getPrecision() == 0 && styles.bar}`}>
-								<button type='button' className={styles.mark} onMouseDown={() => setPace(b)}>{tablature.getCurrentTime(b) + 1}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 'c')}>{beatIcon(notes.c)}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 'h')}>{beatIcon(notes.h)}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 'r')}>{beatIcon(notes.r)}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 's')}>{beatIcon(notes.s)}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 'th')}>{beatIcon(notes.th)}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 'tm')}>{beatIcon(notes.tm)}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 'tl')}>{beatIcon(notes.tl)}</button>
-								<button type='button' className={styles.note} onMouseDown={() => writeNote(b, 'b')}>{beatIcon(notes.b)}</button>
-								<button type='button' className={styles.mark} onMouseDown={() => setPace(b)}>{tablature.getCurrentTime(b) + 1}</button>
-							</div>
-						);
-					})}
-				</div>
-			</div>
 
-			<div className='content is-small pb-2'>
-				<p>
-					{pace}/{tablature.getTotalBeats()}
-				</p>
+				<div className='content is-small pb-2'>
+					<p>
+						{this.state.pace}/{this.state.tablature.getTotalBeats()}
+					</p>
+				</div>
 			</div>
-		</div>
-	);
+		);
+	}
 }
