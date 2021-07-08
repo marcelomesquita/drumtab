@@ -1,4 +1,4 @@
-import { firebase } from 'adapters/firebaseClient';
+import { firebase } from '../adapters/firebaseClient';
 
 const authorsRef = firebase.firestore().collection('authors');
 

@@ -1,4 +1,4 @@
-import MusicRepository from 'repository/MusicRepository';
+import MusicRepository from '../../../../repository/MusicRepository';
 
 export default async function (req, res) {
 	try {

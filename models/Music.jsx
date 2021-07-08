@@ -1,8 +1,8 @@
 import validator from 'validator';
-import Tablature from 'models/Tablature';
-import Artist from 'models/Artist';
-import Author from 'models/Author';
-import Album from 'models/Album';
+import Tablature from '../models/Tablature';
+import Artist from '../models/Artist';
+import Author from '../models/Author';
+import Album from '../models/Album';
 
 export default class Music {
 	id = '';

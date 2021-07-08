@@ -1,13 +1,13 @@
 import Head from "next/head";
 import Link from 'next/link';
 import moment from "moment";
-import Container from "components/layout/Container"
-import Breadcrumb from "components/shared/Breadcrumb";
-import Drummer from "components/shared/Drummer";
-import Drum from "models/Drum";
-import Music from "models/Music";
-import Tablature from "models/Tablature";
-import MusicRepository from "repository/MusicRepository";
+import Container from "../../components/layout/Container"
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import Drummer from "../../components/shared/Drummer";
+import Drum from "../../models/Drum";
+import Music from "../../models/Music";
+import Tablature from "../../models/Tablature";
+import MusicRepository from "../../repository/MusicRepository";
 
 export async function getStaticPaths() {
 	return {

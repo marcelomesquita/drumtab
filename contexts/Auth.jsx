@@ -2,9 +2,9 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import nookies from 'nookies';
-import { firebase } from 'adapters/firebaseClient';
-import User from 'models/User';
-import UserService from 'services/UserService';
+import { firebase } from '../adapters/firebaseClient';
+import User from '../models/User';
+import UserService from '../services/UserService';
 
 const AuthContext = createContext(null);
 

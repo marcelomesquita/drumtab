@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-import Container from 'components/layout/Container';
-import ArtistRepository from 'repository/ArtistRepository';
-import MusicRepository from 'repository/MusicRepository';
+import Container from '../components/layout/Container';
+import ArtistRepository from '../repository/ArtistRepository';
+import MusicRepository from '../repository/MusicRepository';
 
 export async function getStaticProps(context) {
 	const [musics, artists] = await Promise.all([MusicRepository.listByPopularity(), ArtistRepository.listByPopularity()]);

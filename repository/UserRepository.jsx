@@ -1,4 +1,4 @@
-import { firebase } from 'adapters/firebaseClient';
+import { firebase } from '../adapters/firebaseClient';
 
 const usersRef = firebase.firestore().collection('users');
 

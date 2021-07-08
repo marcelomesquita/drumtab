@@ -1,6 +1,6 @@
-import MusicRepository from 'repository/MusicRepository';
-import { getSession } from 'services/AuthService';
-import Music from 'models/Music';
+import MusicRepository from '../../../../repository/MusicRepository';
+import { getSession } from '../../../../services/AuthService';
+import Music from '../../../../models/Music';
 
 export default async function (req, res) {
 	try {

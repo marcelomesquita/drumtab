@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FaSearch, FaSignInAlt } from 'react-icons/fa';
-import { useAuth } from 'contexts/Auth';
+import { useAuth } from '../../contexts/Auth';
 
 export default function Header() {
 	const auth = useAuth();

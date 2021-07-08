@@ -1,4 +1,4 @@
-import axiosClient from 'adapters/axiosClient';
+import axiosClient from '../adapters/axiosClient';
 
 export default class ArtistService {
 	static listByName = async (search) => {

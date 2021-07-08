@@ -1,5 +1,5 @@
 import nookies from 'nookies';
-import { firebaseAdmin } from 'adapters/firebaseAdmin';
+import { firebaseAdmin } from '../adapters/firebaseAdmin';
 
 export async function getSession(context) {
 	const cookies = nookies.get(context);

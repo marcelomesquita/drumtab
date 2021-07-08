@@ -5,18 +5,18 @@ import Slugify from 'slugify';
 import { toast } from 'react-toastify';
 import AsyncSelect from 'react-select/async';
 import { FaLink } from 'react-icons/fa';
-import Container from 'components/layout/Container';
-import Drummer from 'components/shared/Drummer';
-import Breadcrumb from 'components/shared/Breadcrumb';
-import Modal from 'components/shared/Modal';
-import Drum from 'models/Drum';
-import Music from 'models/Music';
-import ArtistService from 'services/ArtistService';
-import AlbumService from 'services/AlbumService';
-import AuthorService from 'services/AuthorService';
-import MusicService from 'services/MusicService';
-import { getSession } from 'services/AuthService';
-import MusicRepository from 'repository/MusicRepository';
+import Container from '../../components/layout/Container';
+import Drummer from '../../components/shared/Drummer';
+import Breadcrumb from '../../components/shared/Breadcrumb';
+import Modal from '../../components/shared/Modal';
+import Drum from '../../models/Drum';
+import Music from '../../models/Music';
+import ArtistService from '../../services/ArtistService';
+import AlbumService from '../../services/AlbumService';
+import AuthorService from '../../services/AuthorService';
+import MusicService from '../../services/MusicService';
+import { getSession } from '../../services/AuthService';
+import MusicRepository from '../../repository/MusicRepository';
 
 export async function getServerSideProps(context) {
 	try {

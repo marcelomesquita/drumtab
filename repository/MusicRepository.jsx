@@ -1,4 +1,4 @@
-import { firebase } from 'adapters/firebaseClient';
+import { firebase } from '../adapters/firebaseClient';
 
 const musicsRef = firebase.firestore().collection('musics');
 const artistsRef = firebase.firestore().collection('artists');

@@ -1,6 +1,6 @@
 import Error from 'next/error';
-import Container from 'components/layout/Container';
-import { useAuth } from 'contexts/Auth';
+import Container from '../components/layout/Container';
+import { useAuth } from '../contexts/Auth';
 
 //export async function getStaticProps(context) {
 //	try {

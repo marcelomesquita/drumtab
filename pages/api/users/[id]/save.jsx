@@ -1,7 +1,7 @@
 import nookies from 'nookies';
-import { firebaseAdmin } from 'adapters/firebaseAdmin';
-import User from 'models/User';
-import UserRepository from 'repository/UserRepository';
+import { firebaseAdmin } from '../../../../adapters/firebaseAdmin';
+import User from '../../../../models/User';
+import UserRepository from '../../../../repository/UserRepository';
 
 export default async function (req, res) {
 	try {
