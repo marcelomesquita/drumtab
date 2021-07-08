@@ -35,8 +35,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "next build"
   },
   "devDependencies": {
     "file-loader": "^6.2.0",
