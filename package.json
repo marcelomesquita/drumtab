@@ -1,6 +1,7 @@
 {
   "name": "drumtab",
   "version": "1.0.0",
+  "private": true,
   "license": "ISC",
   "description": "The easiest way to read and write drum tabs!",
   "author": {
@@ -15,7 +16,6 @@
     "url": "git+https://github.com/marcelomesquita/drumtab.git"
   },
   "dependencies": {
-    "autoprefixer": "^10.2.5",
     "axios": "^0.21.1",
     "bulma": "^0.9.3",
     "firebase": "^8.6.8",
@@ -35,10 +35,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build"
-  },
-  "devDependencies": {
-    "file-loader": "^6.2.0",
-    "url-loader": "^4.1.1"
+    "build": "next build",
+    "start": "next start"
   }
 }
