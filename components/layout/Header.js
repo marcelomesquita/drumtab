@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaSearch, FaSignInAlt } from 'react-icons/fa';
 import { useAuth } from '../../contexts/Auth';
 
@@ -54,7 +55,7 @@ export default function Header() {
 							) : (
 								<div className='navbar-item has-dropdown is-hoverable'>
 									<a className='navbar-link is-arrowless'>
-										<img src={auth.user.avatar} />
+										<Image src={auth.user.avatar} alt={auth.user.name} width={400} height={400} />
 									</a>
 									<div className='navbar-dropdown is-right'>
 										<div className='navbar-item'>

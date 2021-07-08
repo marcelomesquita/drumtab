@@ -80,7 +80,7 @@ export default function Footer() {
 							<div className='content is-small has-text-grey'>
 								<p>
 									&copy; {process.env.NEXT_PUBLIC_TITLE} by
-									<a href={packageJson.author.url} target='_blank' className='has-text-primary'>
+									<a href={packageJson.author.url} target='_blank' rel='noreferrer' className='has-text-primary'>
 										{packageJson.author.name}
 									</a>
 								</p>
