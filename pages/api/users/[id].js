@@ -1,5 +1,5 @@
 import User from '../../../models/User';
-import UserRepository from '../../repository/UserRepository';
+import UserRepository from '../../../repository/UserRepository';
 
 export default async function userApi(req, res) {
 	try {
