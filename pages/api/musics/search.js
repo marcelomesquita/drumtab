@@ -1,6 +1,6 @@
 import MusicRepository from '../../../repository/MusicRepository';
 
-export default async function (req, res) {
+export default async function MusicSearchApi(req, res) {
 	try {
 		if (req.method !== 'POST') {
 			return res.status(400).json({ error: { code: 400, message: 'Method not allowed!' } });

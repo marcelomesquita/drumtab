@@ -1,6 +1,6 @@
 import AlbumRepository from "../../../repository/AlbumRepository";
 
-export default async function (req, res) {
+export default async function AlbunsSearchApi(req, res) {
 	try {
 		if (req.method !== "POST") {
 			return res.status(400).json({ error: { code: 400, message: "Method not allowed!" }});

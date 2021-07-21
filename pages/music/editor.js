@@ -54,13 +54,13 @@ export default function MusicEditorPage(props) {
 	const [modalAlbum, setModalAlbum] = useState(false);
 	const [modalAuthor, setModalAuthor] = useState(false);
 
+	useEffect(() => setShowModalArtist(modalArtist), [modalArtist]);
+
 	if (props.error) {
 		return <Error statusCode={props.error.code} title={props.error.message} />;
 	}
 
 	const pageTitle = music.name ? `Atualizar Música "${music.name}"` : 'Cadastrar Música';
-
-	useEffect(() => setShowModalArtist(modalArtist), [modalArtist]);
 
 	const setId = async (id) => {
 		music.id = id;
