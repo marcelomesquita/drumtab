@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Error from 'next/error';
 import Head from 'next/head';
 import Slugify from 'slugify';
@@ -50,6 +50,7 @@ export default function MusicEditorPage(props) {
 	const [createAlbum, setCreateAlbum] = useState(false);
 	const [createAuthor, setCreateAuthor] = useState(false);
 	const [modalArtist, setModalArtist] = useState(false);
+	const [showModalArtist, setShowModalArtist] = useState(false);
 	const [modalAlbum, setModalAlbum] = useState(false);
 	const [modalAuthor, setModalAuthor] = useState(false);
 
@@ -58,6 +59,8 @@ export default function MusicEditorPage(props) {
 	}
 
 	const pageTitle = music.name ? `Atualizar Música "${music.name}"` : 'Cadastrar Música';
+
+	useEffect(() => setShowModalArtist(modalArtist), [modalArtist]);
 
 	const setId = async (id) => {
 		music.id = id;
@@ -179,7 +182,7 @@ export default function MusicEditorPage(props) {
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
 			</Head>
 
-			{modalArtist && (<Modal title='Artist' onClose={() => setModalArtist(false)}><ArtistForm onSave={() => setModalArtist(false)} /></Modal>)}
+			{showModalArtist && (<Modal title='Artist' onClose={() => setModalArtist(false)}><ArtistForm onSave={() => setModalArtist(false)} /></Modal>)}
 			{modalAlbum && (<Modal title='Album' onClose={() => setModalAlbum(false)}>Lorem ipsum dolor</Modal>)}
 			{modalAuthor && (<Modal title='Author' onClose={() => setModalAuthor(false)}>Lorem ipsum dolor</Modal>)}
 
