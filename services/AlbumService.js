@@ -12,7 +12,7 @@ export default class AlbumService {
 	};
 
 	static load = async (id) => {
-		const response = await axiosClient.get(`/api/albums/${id}/load`);
+		const response = await axiosClient.get(`/api/albums/${id}`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.album);
@@ -22,7 +22,7 @@ export default class AlbumService {
 	};
 
 	static save = async (album) => {
-		const response = await axiosClient.post(`/api/albums/${album.id}/save`, album);
+		const response = await axiosClient.put(`/api/albums/${album.id}`, album);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,7 +32,7 @@ export default class AlbumService {
 	};
 
 	static exists = async (id) => {
-		const response = await axiosClient.get(`/api/albums/${id}/exists`);
+		const response = await axiosClient.get(`/api/albums/${id}`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);

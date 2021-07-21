@@ -12,7 +12,7 @@ export default class AuthorService {
 	};
 
 	static load = async (id) => {
-		const response = await axiosClient.get(`/api/authors/${id}/load`);
+		const response = await axiosClient.get(`/api/authors/${id}`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.author);
@@ -22,7 +22,7 @@ export default class AuthorService {
 	};
 
 	static save = async (author) => {
-		const response = await axiosClient.post(`/api/authors/${author.id}/save`, author);
+		const response = await axiosClient.put(`/api/authors/${author.id}`, author);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -32,12 +32,15 @@ export default class AuthorService {
 	};
 
 	static exists = async (id) => {
-		const response = await axiosClient.get(`/api/authors/${id}/exists`);
+		const response = await axiosClient.head(`/api/authors/${id}`);
 
 		if (response.status == 200) {
-			return Promise.resolve(response.data.exists);
+			return Promise.resolve();
 		}
 
-		return Promise.reject({ status: response.status, message: response.data.message });
+		return Promise.reject({
+			code: response.data.error.code,
+			message: response.data.error.message,
+		});
 	};
 }

@@ -3,6 +3,14 @@ import { firebase } from '../adapters/firebaseClient';
 const usersRef = firebase.firestore().collection('users');
 
 export default class UserRepository {
+	static exists = (id) => {
+		return usersRef
+			.doc(id)
+			.get()
+			.then((result) => Promise.resolve(result.exists))
+			.catch((error) => Promise.reject(error));
+	};
+
 	static load = (id) => {
 		return usersRef
 			.doc(id)

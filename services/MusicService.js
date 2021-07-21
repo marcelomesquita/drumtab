@@ -15,7 +15,7 @@ export default class MusicService {
 	};
 
 	static load = async (id) => {
-		const response = await axiosClient.get(`/api/musics/${id}/load`);
+		const response = await axiosClient.get(`/api/musics/${id}`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.music);
@@ -28,7 +28,7 @@ export default class MusicService {
 	};
 
 	static save = async (music) => {
-		const response = await axiosClient.put(`/api/musics/${music.id}/save`, music);
+		const response = await axiosClient.put(`/api/musics/${music.id}`, music);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
@@ -41,10 +41,10 @@ export default class MusicService {
 	};
 
 	static exists = async (id) => {
-		const response = await axiosClient.get(`/api/musics/${id}/exists`);
+		const response = await axiosClient.head(`/api/musics/${id}`);
 
 		if (response.status == 200) {
-			return Promise.resolve(response.data.exists);
+			return Promise.resolve();
 		}
 
 		return Promise.reject({

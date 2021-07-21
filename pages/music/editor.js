@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import Error from 'next/error';
 import Head from 'next/head';
 import Slugify from 'slugify';
-import { toast } from 'react-toastify';
 import AsyncSelect from 'react-select/async';
+import { toast } from 'react-toastify';
 import { FaLink } from 'react-icons/fa';
 import Container from '../../components/layout/Container';
 import Drummer from '../../components/shared/Drummer';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import Modal from '../../components/shared/Modal';
+import ArtistForm from '../../components/shared/ArtistForm';
 import Drum from '../../models/Drum';
 import Music from '../../models/Music';
 import ArtistService from '../../services/ArtistService';
@@ -42,10 +43,10 @@ export async function getServerSideProps(context) {
 export default function MusicEditorPage(props) {
 	const drum = new Drum();
 	const [music, setMusic] = useState(new Music(props.music));
-	const [messageId, setMessageId] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [messageId, setMessageId] = useState(null);
 	const [loadingId, setLoadingId] = useState(false);
-	const [createArtist, setCreateArtist] = useState(false);
+	const [createArtist, setCreateArtist] = useState(true);
 	const [createAlbum, setCreateAlbum] = useState(false);
 	const [createAuthor, setCreateAuthor] = useState(false);
 	const [modalArtist, setModalArtist] = useState(false);
@@ -68,9 +69,9 @@ export default function MusicEditorPage(props) {
 		} else {
 			setLoadingId(true);
 
-			MusicRepository.exists(id)
-				.then((result) => (result ? setMessageId('slug already exists!') : setMessageId(null)))
-				.catch((result) => toast.dark(result))
+			MusicService.exists(id)
+				.then(() => setMessageId('slug already exists!'))
+				.catch(() => setMessageId(null))
 				.finally(() => setLoadingId(false));
 		}
 
@@ -178,7 +179,7 @@ export default function MusicEditorPage(props) {
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
 			</Head>
 
-			{modalArtist && (<Modal title='Artist' onClose={() => setModalArtist(false)}>Lorem ipsum dolor</Modal>)}
+			{modalArtist && (<Modal title='Artist' onClose={() => setModalArtist(false)}><ArtistForm onSave={() => setModalArtist(false)} /></Modal>)}
 			{modalAlbum && (<Modal title='Album' onClose={() => setModalAlbum(false)}>Lorem ipsum dolor</Modal>)}
 			{modalAuthor && (<Modal title='Author' onClose={() => setModalAuthor(false)}>Lorem ipsum dolor</Modal>)}
 
@@ -215,7 +216,7 @@ export default function MusicEditorPage(props) {
 											instanceId='artist'
 											defaultValue={{ value: music.artist, label: music.artist?.name }}
 											loadOptions={searchArtists}
-											onChange={(e) => setArtist(e.value)}
+											onChange={(e) => setArtist(e?.value)}
 											isClearable={true}
 										/>
 									</div>
@@ -230,7 +231,7 @@ export default function MusicEditorPage(props) {
 											instanceId='album'
 											defaultValue={{ value: music.album, label: music.album?.name }}
 											loadOptions={searchAlbum}
-											onChange={(e) => setAlbum(e.value)}
+											onChange={(e) => setAlbum(e?.value)}
 											isClearable={true}
 										/>
 									</div>
@@ -245,7 +246,7 @@ export default function MusicEditorPage(props) {
 											instanceId='author'
 											defaultValue={{ value: music.author, label: music.author?.name }}
 											loadOptions={searchAuthor}
-											onChange={(e) => setAuthor(e.value)}
+											onChange={(e) => setAuthor(e?.value)}
 											isClearable={true}
 										/>
 									</div>

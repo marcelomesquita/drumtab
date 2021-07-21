@@ -56,6 +56,14 @@ export default class MusicRepository {
 			.catch((error) => Promise.reject(error));
 	};
 
+	static exists = async (id) => {
+		return musicsRef
+			.doc(id)
+			.get()
+			.then((result) => Promise.resolve(result.exists))
+			.catch((error) => Promise.reject(error));
+	};
+
 	static load = (id) => {
 		return musicsRef
 			.doc(id)
@@ -123,14 +131,6 @@ export default class MusicRepository {
 			.doc(music.id)
 			.set(musicPlain)
 			.then((result) => Promise.resolve(result))
-			.catch((error) => Promise.reject(error));
-	};
-
-	static exists = (id) => {
-		return musicsRef
-			.doc(id)
-			.get()
-			.then(async (result) => Promise.resolve(result.exists))
 			.catch((error) => Promise.reject(error));
 	};
 }

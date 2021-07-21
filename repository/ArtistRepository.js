@@ -38,6 +38,14 @@ export default class ArtistRepository {
 			.catch((error) => Promise.reject(error));
 	};
 
+	static exists = async (id) => {
+		return artistsRef
+			.doc(id)
+			.get()
+			.then((result) => Promise.resolve(result.exists))
+			.catch((error) => Promise.reject(error));
+	};
+
 	static load = async (id) => {
 		return artistsRef
 			.doc(id)

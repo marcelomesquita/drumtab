@@ -15,7 +15,7 @@ export default class UserService {
 	};
 
 	static load = async (slug) => {
-		const response = await axiosClient.get(`/api/users/${slug}/select`);
+		const response = await axiosClient.get(`/api/users/${slug}`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.user);
@@ -28,10 +28,23 @@ export default class UserService {
 	};
 
 	static save = async (user) => {
-		const response = await axiosClient.post(`/api/users/${user.id}/save`, user);
+		const response = await axiosClient.put(`/api/users/${user.id}`, user);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data);
+		}
+
+		return Promise.reject({
+			code: response.data.error.code,
+			message: response.data.error.message,
+		});
+	};
+
+	static exists = async (id) => {
+		const response = await axiosClient.head(`/api/users/${id}`);
+
+		if (response.status == 200) {
+			return Promise.resolve();
 		}
 
 		return Promise.reject({
