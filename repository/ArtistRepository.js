@@ -1,6 +1,7 @@
 import { firebase } from '../adapters/firebaseClient';
 
 const artistsRef = firebase.firestore().collection('artists');
+const usersRef = firebase.firestore().collection('users');
 
 export default class ArtistRepository {
 	static listByPopularity = async () => {
@@ -61,10 +62,22 @@ export default class ArtistRepository {
 			.catch((error) => Promise.reject(error));
 	};
 
-	static save = (artist) => {
+	static save = (artist, session) => {
+		if (!artist.isValid()) {
+			return Promise.reject('Invalid parameters');
+		}
+
+		const artistPlain = {
+			name: artist.name,
+			createdBy: usersRef.doc(session.uid),
+			createdAt: new Date(),
+			updatedBy: usersRef.doc(session.uid),
+			updatedAt: new Date(),
+		}
+
 		return artistsRef
 			.doc(artist.id)
-			.set(Object.assign({}, artist))
+			.set(artistPlain)
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
 	};

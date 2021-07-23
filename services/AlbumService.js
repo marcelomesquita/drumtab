@@ -32,12 +32,15 @@ export default class AlbumService {
 	};
 
 	static exists = async (id) => {
-		const response = await axiosClient.get(`/api/albums/${id}`);
+		const response = await axiosClient.head(`/api/albums/${id}`);
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.exists);
 		}
 
-		return Promise.reject({ status: response.status, message: response.data.message });
+		return Promise.reject({ 
+			code: response.data.error.code, 
+			message: response.data.error.message
+		});
 	};
 }

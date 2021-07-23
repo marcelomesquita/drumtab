@@ -25,7 +25,7 @@ export default async function albumApi(req, res) {
 async function albumExists(req, res) {
 	return AlbumRepository.exists(req.query.id)
 		.then((result) => ( result ? res.status(200).json() : res.status(204).json() ))
-		.catch(() => res.status(500).json({ error: { code: 500, message: 'Não encontrado' } }));
+		.catch((error) => res.status(500).json({ error: { code: 500, message: error } }));
 }
 
 async function albumLoad(req, res) {

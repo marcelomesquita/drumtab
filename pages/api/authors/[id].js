@@ -25,7 +25,7 @@ export default async function authorApi(req, res) {
 async function authorExists(req, res) {
 	return AuthorRepository.exists(req.query.id)
 		.then((result) => ( result ? res.status(200).json() : res.status(204).json() ))
-		.catch(() => res.status(500).json({ error: { code: 500, message: 'Não encontrado' } }));
+		.catch((error) => res.status(500).json({ error: { code: 500, message: error } }));
 }
 
 async function authorLoad(req, res) {

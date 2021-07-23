@@ -1,6 +1,7 @@
 import { firebase } from '../adapters/firebaseClient';
 
 const albumsRef = firebase.firestore().collection('albums');
+const usersRef = firebase.firestore().collection('users');
 
 export default class AlbumRepository {
 	static listByPopularity = async () => {
@@ -38,6 +39,14 @@ export default class AlbumRepository {
 			.catch((error) => Promise.reject(error));
 	};
 
+	static exists = async (id) => {
+		return albumsRef
+			.doc(id)
+			.get()
+			.then((result) => Promise.resolve(result.exists))
+			.catch((error) => Promise.reject(error));
+	};
+
 	static load = async (id) => {
 		return albumsRef
 			.doc(id)
@@ -53,10 +62,22 @@ export default class AlbumRepository {
 			.catch((error) => Promise.reject(error));
 	};
 
-	static save = (album) => {
+	static save = (album, session) => {
+		if (!album.isValid()) {
+			return Promise.reject('Invalid parameters');
+		}
+
+		const albumPlain = {
+			name: album.name,
+			createdBy: usersRef.doc(session.uid),
+			createdAt: new Date(),
+			updatedBy: usersRef.doc(session.uid),
+			updatedAt: new Date(),
+		}
+
 		return albumsRef
 			.doc(album.id)
-			.set(Object.assign({}, album))
+			.set(albumPlain)
 			.then((result) => Promise.resolve(result))
 			.catch((error) => Promise.reject(error));
 	};

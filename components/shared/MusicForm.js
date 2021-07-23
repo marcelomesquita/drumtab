@@ -150,91 +150,93 @@ export default function MusicForm(props) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<>
 			{showModalArtist && (<Modal title='Artist' onClose={() => setModalArtist(false)}><ArtistForm onSave={() => setModalArtist(false)} /></Modal>)}
 			{showModalAlbum && (<Modal title='Album' onClose={() => setModalAlbum(false)}><AlbumForm onSave={() => setModalAlbum(false)} /></Modal>)}
 			{showModalAuthor && (<Modal title='Author' onClose={() => setModalAuthor(false)}><AuthorForm onSave={() => setModalAuthor(false)} /></Modal>)}
 
-			<div className='container is-widescreen'>
-				<section className='section is-clearfix mt-0 pt-0'>
-					<div className='field'>
-						<label className='label'>Música *</label>
-						<div className='control'>
-							<input className='input is-large' type='text' name='name' value={music.name} onChange={(e) => setName(e.target.value)} autoFocus />
-						</div>
-					</div>
-
-					<div className='field'>
-						<div className={`control has-icons-left has-icons-right is-small ${loadingId ? 'is-loading' : ''}`}>
-							<input className='input is-small' type='text' value={music.id} onFocus={setDefaultId} onChange={(e) => setId(e.target.value)} />
-							<span className='icon is-small is-left'>
-								<FaLink />
-							</span>
-						</div>
-						{messageId && <p className='help'>{messageId}</p>}
-					</div>
-
-					<div className='columns'>
-						<div className='column is-4'>
-							<div className='field'>
-								<label className='label'>Artista *</label>
-								<div className='control'>
-									<AsyncSelect
-										instanceId='artist'
-										defaultValue={{ value: music.artist, label: music.artist?.name }}
-										loadOptions={searchArtists}
-										onChange={(e) => setArtist(e?.value)}
-										isClearable={true}
-									/>
-								</div>
-								{createArtist && (<p className='help'>artista não encontrado... gostaria de <a onClick={() => setModalArtist(true)}>cadastra-lo</a>?</p>)}
+			<form onSubmit={handleSubmit}>
+				<div className='container is-widescreen'>
+					<section className='section is-clearfix mt-0 pt-0'>
+						<div className='field'>
+							<label className='label'>Música *</label>
+							<div className='control'>
+								<input className='input is-large' type='text' name='name' value={music.name} onChange={(e) => setName(e.target.value)} autoFocus />
 							</div>
 						</div>
-						<div className='column is-4'>
-							<div className='field'>
-								<label className='label'>Álbum</label>
-								<div className='control'>
-									<AsyncSelect
-										instanceId='album'
-										defaultValue={{ value: music.album, label: music.album?.name }}
-										loadOptions={searchAlbum}
-										onChange={(e) => setAlbum(e?.value)}
-										isClearable={true}
-									/>
+
+						<div className='field'>
+							<div className={`control has-icons-left has-icons-right is-small ${loadingId ? 'is-loading' : ''}`}>
+								<input className='input is-small' type='text' value={music.id} onFocus={setDefaultId} onChange={(e) => setId(e.target.value)} />
+								<span className='icon is-small is-left'>
+									<FaLink />
+								</span>
+							</div>
+							{messageId && <p className='help'>{messageId}</p>}
+						</div>
+
+						<div className='columns'>
+							<div className='column is-4'>
+								<div className='field'>
+									<label className='label'>Artista *</label>
+									<div className='control'>
+										<AsyncSelect
+											instanceId='artist'
+											defaultValue={{ value: music.artist, label: music.artist?.name }}
+											loadOptions={searchArtists}
+											onChange={(e) => setArtist(e?.value)}
+											isClearable={true}
+										/>
+									</div>
+									{createArtist && (<p className='help'>artista não encontrado... gostaria de <a onClick={() => setModalArtist(true)}>cadastra-lo</a>?</p>)}
 								</div>
-								{createAlbum && (<p className='help'>album não encontrado... gostaria de <a onClick={() => setModalAlbum(true)}>cadastra-lo</a>?</p>)}
+							</div>
+							<div className='column is-4'>
+								<div className='field'>
+									<label className='label'>Álbum</label>
+									<div className='control'>
+										<AsyncSelect
+											instanceId='album'
+											defaultValue={{ value: music.album, label: music.album?.name }}
+											loadOptions={searchAlbum}
+											onChange={(e) => setAlbum(e?.value)}
+											isClearable={true}
+										/>
+									</div>
+									{createAlbum && (<p className='help'>album não encontrado... gostaria de <a onClick={() => setModalAlbum(true)}>cadastra-lo</a>?</p>)}
+								</div>
+							</div>
+							<div className='column is-4'>
+								<div className='field'>
+									<label className='label'>Batera</label>
+									<div className='control'>
+										<AsyncSelect
+											instanceId='author'
+											defaultValue={{ value: music.author, label: music.author?.name }}
+											loadOptions={searchAuthor}
+											onChange={(e) => setAuthor(e?.value)}
+											isClearable={true}
+										/>
+									</div>
+									{createAuthor && (<p className='help'>batera não encontrado... gostaria de <a onClick={() => setModalAuthor(true)}>cadastra-lo</a>?</p>)}
+								</div>
 							</div>
 						</div>
-						<div className='column is-4'>
-							<div className='field'>
-								<label className='label'>Batera</label>
-								<div className='control'>
-									<AsyncSelect
-										instanceId='author'
-										defaultValue={{ value: music.author, label: music.author?.name }}
-										loadOptions={searchAuthor}
-										onChange={(e) => setAuthor(e?.value)}
-										isClearable={true}
-									/>
-								</div>
-								{createAuthor && (<p className='help'>batera não encontrado... gostaria de <a onClick={() => setModalAuthor(true)}>cadastra-lo</a>?</p>)}
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
+					</section>
+				</div>
 
-			<div className='container is-fluid has-background-grey-lighter'>
-				<Drummer drum={drum} tablature={music.tablature} edit={true} onTablatureChange={() => setTablature.bind(this)} />
-			</div>
+				<div className='container is-fluid has-background-grey-lighter'>
+					<Drummer drum={drum} tablature={music.tablature} edit={true} onTablatureChange={() => setTablature.bind(this)} />
+				</div>
 
-			<div className='container is-widescreen'>
-				<section className='section'>
-					<button type='submit' className='button is-primary' disabled={!music.isValid()}>
-						Salvar
-					</button>
-				</section>
-			</div>
-		</form>
+				<div className='container is-widescreen'>
+					<section className='section'>
+						<button type='submit' className='button is-primary' disabled={!music.isValid()}>
+							Salvar
+						</button>
+					</section>
+				</div>
+			</form>
+		</>
 	);
 }
