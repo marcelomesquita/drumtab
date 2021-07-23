@@ -99,6 +99,14 @@ export default class Tablature {
 	}
 
 	hitNote(pace, note, type = 1) {
+		console.log("this.staff");
+		console.log(this.staff);
+		console.log("pace");
+		console.log(pace);
+		console.log("note");
+		console.log(note);
+		console.log("this.staff[pace]");
+		console.log(this.staff[pace]);
 		if (this.staff[pace][note] != type) {
 			this.staff[pace][note] = type;
 

@@ -55,7 +55,7 @@ async function authorSave(req, res) {
 
 	await AuthorRepository.save(author, session);
 
-	return res.status(200).json({ message: 'Música salva!' });
+	return res.status(200).json({ message: 'Autor salvo!' });
 }
 
 async function authorDelete(req, res) {
@@ -65,5 +65,5 @@ async function authorDelete(req, res) {
 		return { props: { error: { code: 403, message: 'Forbidden' } } };
 	}
 
-	return res.status(200).json({ message: "Música deletada!" });
+	return res.status(200).json({ message: "Autor deletado!" });
 }

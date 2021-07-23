@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from 'next/link';
 import moment from "moment";
 import Container from "../../components/layout/Container"
-import Breadcrumb from "../../components/shared/Breadcrumb";
+import Breadcrumb from "../../components/helpers/Breadcrumb";
 import Drummer from "../../components/shared/Drummer";
 import Drum from "../../models/Drum";
 import Music from "../../models/Music";
@@ -43,7 +43,7 @@ export default function MusicPage(props) {
 					<Breadcrumb />
 
 					<Link href={`/music/editor/?id=${music.id}`}>
-						<a className="button is-outlined is-small is-align-content-end">editar</a>
+						<a className="button is-outlined is-small is-right">editar</a>
 					</Link>
 
 					<h1 className="title">{music.name}</h1>

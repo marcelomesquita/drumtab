@@ -55,7 +55,7 @@ async function albumSave(req, res) {
 
 	await AlbumRepository.save(album, session);
 
-	return res.status(200).json({ message: 'Música salva!' });
+	return res.status(200).json({ message: 'Albúm salvo!' });
 }
 
 async function albumDelete(req, res) {
@@ -65,5 +65,5 @@ async function albumDelete(req, res) {
 		return { props: { error: { code: 403, message: 'Forbidden' } } };
 	}
 
-	return res.status(200).json({ message: "Música deletada!" });
+	return res.status(200).json({ message: "Albúm deletado!" });
 }

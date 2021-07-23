@@ -34,7 +34,7 @@ export default class Drummer extends React.Component {
 
 	handleKeyboardEvent = (event) => {
 		if (this.state.timer && this.state.drum.key[event.code] !== 'undefined') {
-			this.writeNote(this.state.pace, this.state.drum.key[event.code]);
+			this.writeNote(this.state.drum.key[event.code], this.state.pace);
 		}
 	};
 

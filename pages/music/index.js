@@ -3,8 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../../components/layout/Container';
-import Breadcrumb from '../../components/shared/Breadcrumb';
-import Pagination from '../../components/shared/Pagination';
+import Breadcrumb from '../../components/helpers/Breadcrumb';
+import Pagination from '../../components/helpers/Pagination';
 import MusicRepository from '../../repository/MusicRepository';
 
 export async function getStaticProps(context) {

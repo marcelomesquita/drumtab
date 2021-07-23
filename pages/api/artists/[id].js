@@ -55,7 +55,7 @@ async function artistSave(req, res) {
 
 	await ArtistRepository.save(artist, session);
 
-	return res.status(200).json({ message: 'Música salva!' });
+	return res.status(200).json({ message: 'Artista salvo!' });
 }
 
 async function artistDelete(req, res) {
@@ -65,5 +65,5 @@ async function artistDelete(req, res) {
 		return { props: { error: { code: 403, message: 'Forbidden' } } };
 	}
 
-	return res.status(200).json({ message: "Música deletada!" });
+	return res.status(200).json({ message: "Artista deletado!" });
 }
