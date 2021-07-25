@@ -7,7 +7,7 @@ import Drummer from "../../components/shared/Drummer";
 import Drum from "../../models/Drum";
 import Sample from "../../models/Sample";
 import Tablature from "../../models/Tablature";
-import SampleRepository from "../../repository/SampleRepository";
+import SamplesRepository from "../../repository/SamplesRepository";
 
 export async function getStaticPaths() {
 	return {
@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-	const sample = await SampleRepository.load(context.params.id);
+	const sample = await SamplesRepository.load(context.params.id);
 
 	return {
 		props: {
