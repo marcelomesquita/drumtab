@@ -42,7 +42,7 @@ export default function MusicPage(props) {
 				<section className="section is-clearfix">
 					<Breadcrumb />
 
-					<Link href={`/music/editor/?id=${music.id}`}>
+					<Link href={`/musics/editor/?id=${music.id}`}>
 						<a className="button is-outlined is-small is-right">editar</a>
 					</Link>
 

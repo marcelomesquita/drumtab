@@ -32,13 +32,13 @@ export default function MusicsPage(props) {
 					<Breadcrumb />
 
 					<h1 className='title'>{pageTitle}</h1>
-					<h2 className='subtitle'>Não encontrou a música que queria? Que tal <Link href='/music/editor'><a>cadastrá-la!</a></Link></h2>
+					<h2 className='subtitle'>Não encontrou a música que queria? Que tal <Link href='/musics/editor'><a>cadastrá-la!</a></Link></h2>
 
 					<div className='columns is-multiline'>
 						{musics.map((music) => {
 							return (
 								<div key={music.id} className='column is-4'>
-									<Link href={`/music/${music.id}`}>
+									<Link href={`/musics/${music.id}`}>
 										<a>
 											<div className='card'>
 												<div className='card-image'>

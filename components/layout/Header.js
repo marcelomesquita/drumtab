@@ -31,7 +31,7 @@ export default function Header() {
 
 					<div className='navbar-menu' id='mainbar'>
 						<div className='navbar-start'>
-							<Link href='/music'>
+							<Link href='/musics'>
 								<a className='navbar-item'>Músicas</a>
 							</Link>
 						</div>

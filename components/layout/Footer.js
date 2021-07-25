@@ -40,32 +40,30 @@ export default function Footer() {
 							<h6 className='title is-7 has-text-primary-dark'>PARTICIPE</h6>
 							<ul className='content'>
 								<li>
-									<Link href='/'>
+									<Link href='/musics/editor'>
 										<a className='has-text-primary'>cadastre músicas</a>
 									</Link>
 								</li>
 								<li>
-									<Link href='/'>
-										<a className='has-text-primary'>monte sua bateria</a>
-									</Link>
+									<span className='has-text-lighter'>monte sua bateria</span>
 								</li>
 							</ul>
 						</div>
 						<div className='column'>
-							<h6 className='title is-7 has-text-primary-dark'>SOBRE</h6>
+							<h6 className='title is-7 has-text-primary-dark'>DRUMTAB</h6>
 							<ul className='content'>
 								<li>
-									<Link href='/'>
+									<Link href='/about'>
+										<a className='has-text-primary'>sobre</a>
+									</Link>
+								</li>
+								<li>
+									<Link href='/help'>
 										<a className='has-text-primary'>ajuda</a>
 									</Link>
 								</li>
 								<li>
-									<Link href='/'>
-										<a className='has-text-primary'>quem somos</a>
-									</Link>
-								</li>
-								<li>
-									<Link href='/'>
+									<Link href='/terms'>
 										<a className='has-text-primary'>termos de uso</a>
 									</Link>
 								</li>
@@ -79,10 +77,7 @@ export default function Footer() {
 						<div className='column'>
 							<div className='content is-small has-text-grey'>
 								<p>
-									&copy; {process.env.NEXT_PUBLIC_TITLE} by
-									<a href={packageJson.author.url} target='_blank' rel='noreferrer' className='has-text-primary'>
-										{packageJson.author.name}
-									</a>
+									&copy; {process.env.NEXT_PUBLIC_TITLE} by <a href={packageJson.author.url} target='_blank' rel='noreferrer' className='has-text-primary'>{packageJson.author.name}</a>
 								</p>
 							</div>
 						</div>

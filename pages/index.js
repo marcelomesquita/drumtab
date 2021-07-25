@@ -53,7 +53,7 @@ export default function HomePage(props) {
 							{musics
 								.map((music, m) => {
 									return (
-										<Link key={`music-${m}`} href={`/music/${music.id}`}>
+										<Link key={`music-${m}`} href={`/musics/${music.id}`}>
 											<a className='has-text-primary'>
 												<div className='box is-shadowless'>
 													<span className='title is-1 is-pulled-left has-text-grey-light mr-2'>{m + 1}</span>
@@ -70,7 +70,7 @@ export default function HomePage(props) {
 							{musics
 								.map((music, m) => {
 									return (
-										<Link key={`music-${m}`} href={`/music/${music.id}`}>
+										<Link key={`music-${m}`} href={`/musics/${music.id}`}>
 											<a className='has-text-primary'>
 												<div className='box is-shadowless'>
 													<span className='title is-1 is-pulled-left has-text-grey-light mr-2'>{m + 1}</span>
@@ -86,7 +86,7 @@ export default function HomePage(props) {
 							<h1 className='title is-4 is-info'>ARTISTAS</h1>
 							{artists.map((artist, a) => {
 								return (
-									<Link key={`artist-${a}`} href='/music'>
+									<Link key={`artist-${a}`} href='/musics'>
 										<a className='has-text-primary'>
 											<div className='box is-shadowless'>
 												<div className='is-pulled-left mr-3'>
