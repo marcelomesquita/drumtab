@@ -75,7 +75,7 @@ export default function HomePage(props) {
 						<div className='column'>
 							<h1 className='title is-4 is-info'>SAMPLES</h1>
 							{samples
-								.map((sample, m) => {
+								.map((sample, s) => {
 									return (
 										<Link key={`sample-${s}`} href={`/samples/${sample.id}`}>
 											<a className='has-text-primary'>
