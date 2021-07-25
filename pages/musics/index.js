@@ -8,7 +8,7 @@ import Pagination from '../../components/helpers/Pagination';
 import MusicRepository from '../../repository/MusicRepository';
 
 export async function getStaticProps(context) {
-	const musics = await MusicRepository.listByPopularity();
+	const musics = await MusicRepository.list();
 
 	return {
 		props: {

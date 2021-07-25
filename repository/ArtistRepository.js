@@ -5,7 +5,13 @@ const usersRef = firebase.firestore().collection('users');
 
 export default class ArtistRepository {
 	static listByPopularity = async () => {
+		return await this.list('pageCount')
+	}
+
+	static list = async (order = 'name', limit = 10) => {
 		return artistsRef
+			//.orderBy(order)
+			.limit(limit)
 			.get()
 			.then((result) => {
 				const artists = result.docs.map((artist) => {

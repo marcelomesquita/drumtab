@@ -45,6 +45,11 @@ export default function Footer() {
 									</Link>
 								</li>
 								<li>
+									<Link href='/samples/editor'>
+										<a className='has-text-primary'>cadastre samples</a>
+									</Link>
+								</li>
+								<li>
 									<span className='has-text-lighter'>monte sua bateria</span>
 								</li>
 							</ul>

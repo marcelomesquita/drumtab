@@ -4,13 +4,19 @@ import Image from 'next/image';
 import Container from '../components/layout/Container';
 import ArtistRepository from '../repository/ArtistRepository';
 import MusicRepository from '../repository/MusicRepository';
+import SamplesRepository from '../repository/SamplesRepository';
 
 export async function getStaticProps(context) {
-	const [musics, artists] = await Promise.all([MusicRepository.listByPopularity(), ArtistRepository.listByPopularity()]);
+	const [musics, samples, artists] = await Promise.all([
+		MusicRepository.listByPopularity(), 
+		SamplesRepository.listByPopularity(), 
+		ArtistRepository.listByPopularity()
+	]);
 
 	return {
 		props: {
 			artists,
+			samples,
 			musics,
 		},
 	};
@@ -20,6 +26,7 @@ export default function HomePage(props) {
 	const pageTitle = 'Home';
 	const artists = props.artists;
 	const musics = props.musics;
+	const samples = props.samples;
 
 	return (
 		<Container>
@@ -67,15 +74,15 @@ export default function HomePage(props) {
 						</div>
 						<div className='column'>
 							<h1 className='title is-4 is-info'>SAMPLES</h1>
-							{musics
-								.map((music, m) => {
+							{samples
+								.map((sample, m) => {
 									return (
-										<Link key={`music-${m}`} href={`/musics/${music.id}`}>
+										<Link key={`sample-${s}`} href={`/samples/${sample.id}`}>
 											<a className='has-text-primary'>
 												<div className='box is-shadowless'>
-													<span className='title is-1 is-pulled-left has-text-grey-light mr-2'>{m + 1}</span>
-													<h3 className='title is-5 mt-2 mb-0'>{music.name}</h3>
-													<h4 className='title is-6 has-text-grey'>{music.artist.name}</h4>
+													<span className='title is-1 is-pulled-left has-text-grey-light mr-2'>{s + 1}</span>
+													<h3 className='title is-5 mt-2 mb-0'>{sample.name}</h3>
+													<h4 className='title is-6 has-text-grey'>{sample.createdBy.name}</h4>
 												</div>
 											</a>
 										</Link>

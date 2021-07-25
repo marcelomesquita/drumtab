@@ -34,6 +34,9 @@ export default function Header() {
 							<Link href='/musics'>
 								<a className='navbar-item'>Músicas</a>
 							</Link>
+							<Link href='/samples'>
+								<a className='navbar-item'>Samples</a>
+							</Link>
 						</div>
 
 						<div className='navbar-end'>

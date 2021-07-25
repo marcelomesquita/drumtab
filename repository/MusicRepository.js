@@ -8,7 +8,13 @@ const usersRef = firebase.firestore().collection('users');
 
 export default class MusicRepository {
 	static listByPopularity = async () => {
+		return await this.list('pageCount');
+	}
+
+	static list = async (order = 'name', limit = 10) => {
 		return musicsRef
+			//.orderBy(order)
+			.limit(limit)
 			.get()
 			.then(async (result) => {
 				const musics = await Promise.all(
