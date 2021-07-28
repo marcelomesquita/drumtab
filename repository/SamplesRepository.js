@@ -4,7 +4,7 @@ const samplesRef = firebase.firestore().collection('samples');
 const usersRef = firebase.firestore().collection('users');
 
 export default class SamplesRepository {
-	static search = async (search, order, last, limit) => {
+	static search = async (search, last = '', order = 'name', limit = 10) => {
 		return samplesRef
 			.orderBy(order)
 			.startAfter(last)

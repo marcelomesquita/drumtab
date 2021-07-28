@@ -5,8 +5,8 @@ export default class SamplesService {
 		const response = await axiosClient.get('/api/samples/search', {
 			params: {
 				search,
-				order,
 				last,
+				order,
 				limit
 			}
 		});

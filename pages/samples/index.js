@@ -17,12 +17,12 @@ export default function SamplesPage(props) {
 	const [loading, setLoading] = useState(false);
 	const [finish, setFinish] = useState(false);
 
-	useEffect(() => searchSamples(), []);
+	useEffect(() => searchSamples());
 
 	const searchSamples = () => {
 		setLoading(true);
 
-		SamplesService.search(search, order, last, limit)
+		SamplesService.search(search, last, order, limit)
 			.then((snapshot) => {
 				setSamples(samples.concat(snapshot));
 				setLast(snapshot[snapshot.length - 1][order]);
