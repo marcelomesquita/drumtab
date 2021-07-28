@@ -1,4 +1,12 @@
 export default function Pagination(props) {
+	const path = props.path;
+	const currentPage = props.currentPage ? props.currentPage : 1;
+	const itemsPerPage = props.itemsPerPage ? props.currentPage : 10;
+	const tolerancePage = props.tolerancePage ? props.tolerancePage : 3;
+	const total = props.total;
+	const showPages = props.showPages ? props.showPages : true;
+	const showPrevNext = props.showPrevNext ? props.showPrevNext : true;
+
 	return (
 		<nav className='pagination' role='navigation' aria-label='pagination'>
 			<a className='pagination-previous'>Previous</a>

@@ -1,25 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../../components/layout/Container';
 import Breadcrumb from '../../components/helpers/Breadcrumb';
-import Pagination from '../../components/helpers/Pagination';
-import SamplesRepository from '../../repository/SamplesRepository';
-
-export async function getStaticProps(context) {
-	const samples = await SamplesRepository.list();
-
-	return {
-		props: {
-			samples,
-		},
-	};
-}
+import SamplesService from '../../services/SamplesService';
 
 export default function SamplesPage(props) {
 	const pageTitle = 'Samples';
-	const samples = props.samples;
+
+	const [samples, setSamples] = useState([]);
+	const [search, setSearch] = useState();
+	const [order, setOrder] = useState('name');
+	const [last, setLast] = useState();
+	const [limit, setLimit] = useState(10);
+	const [loading, setLoading] = useState(false);
+	const [finish, setFinish] = useState(false);
+
+	useEffect(() => searchSamples(), []);
+
+	const searchSamples = () => {
+		setLoading(true);
+
+		SamplesService.search(search, order, last, limit)
+			.then((snapshot) => {
+				setSamples(samples.concat(snapshot));
+				setLast(snapshot[snapshot.length - 1][order]);
+
+				if (snapshot.length < limit) {
+					setFinish(true);
+				}
+			})
+			.catch((error) => ({ props: { error: { code: error.code, message: error.message } } }))
+			.finally(() => setLoading(false));
+	}
 
 	return (
 		<Container>
@@ -36,7 +50,7 @@ export default function SamplesPage(props) {
 
 					<div className='columns'>
 						<div className='column'>
-							{samples.map((sample) => {
+							{samples && samples.map((sample) => {
 								return (
 									<Link key={`sample-${sample.id}`} href={`/sample/${sample.id}`}>
 										<a className='has-text-primary'>
@@ -56,7 +70,7 @@ export default function SamplesPage(props) {
 						</div>
 					</div>
 
-					<Pagination />
+					<button className={`button is-fullwidth ${loading && 'is-loading'}`} disabled={finish} onClick={searchSamples}>carregar mais</button>
 				</section>
 			</div>
 		</Container>

@@ -1,17 +1,13 @@
-import async from 'react-select/async';
 import { firebase } from '../adapters/firebaseClient';
 
 const samplesRef = firebase.firestore().collection('samples');
 const usersRef = firebase.firestore().collection('users');
 
 export default class SamplesRepository {
-	static listByPopularity = async () => {
-		return await this.list('pageCount');
-	}
-
-	static list = async (order = 'name', limit = 10) => {
+	static search = async (search, order, last, limit) => {
 		return samplesRef
-			//.orderBy(order)
+			.orderBy(order)
+			.startAfter(last)
 			.limit(limit)
 			.get()
 			.then(async (result) => {

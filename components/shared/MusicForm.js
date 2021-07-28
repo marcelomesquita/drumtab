@@ -161,13 +161,24 @@ export default function MusicForm(props) {
 						<div className='field'>
 							<label className='label'>Música *</label>
 							<div className='control'>
-								<input className='input is-large' type='text' name='name' value={music.name} onChange={(e) => setName(e.target.value)} autoFocus />
+								<input 
+									className='input is-large' 
+									type='text' 
+									name='name' 
+									value={music.name} 
+									onChange={(e) => setName(e.target.value)} 
+									onBlur={setDefaultId} 
+									autoFocus />
 							</div>
 						</div>
 
 						<div className='field'>
 							<div className={`control has-icons-left has-icons-right is-small ${loadingId ? 'is-loading' : ''}`}>
-								<input className='input is-small' type='text' value={music.id} onFocus={setDefaultId} onChange={(e) => setId(e.target.value)} />
+								<input 
+									className='input is-small' 
+									type='text' 
+									value={music.id} 
+									onChange={(e) => setId(e.target.value)} />
 								<span className='icon is-small is-left'>
 									<FaLink />
 								</span>
