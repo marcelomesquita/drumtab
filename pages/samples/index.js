@@ -12,12 +12,12 @@ export default function SamplesPage(props) {
 	const [samples, setSamples] = useState([]);
 	const [search, setSearch] = useState();
 	const [order, setOrder] = useState('name');
-	const [last, setLast] = useState();
+	const [last, setLast] = useState('');
 	const [limit, setLimit] = useState(10);
 	const [loading, setLoading] = useState(false);
 	const [finish, setFinish] = useState(false);
 
-	useEffect(() => searchSamples());
+	useEffect(() => searchSamples(), []);
 
 	const searchSamples = () => {
 		setLoading(true);

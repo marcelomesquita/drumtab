@@ -1,8 +1,15 @@
 import axiosClient from '../adapters/axiosClient';
 
 export default class MusicService {
-	static search = async (search) => {
-		const response = await axiosClient.get('/api/musics/search');
+	static search = async (search, last, order, limit) => {
+		const response = await axiosClient.get('/api/musics/search', {
+			params: {
+				search,
+				last,
+				order,
+				limit
+			}
+		});
 
 		if (response.status == 200) {
 			return Promise.resolve(response.data.musics);

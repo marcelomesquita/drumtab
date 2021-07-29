@@ -8,7 +8,7 @@ import SamplesRepository from '../repository/SamplesRepository';
 
 export async function getStaticProps(context) {
 	const [musics, samples, artists] = await Promise.all([
-		MusicRepository.listByPopularity(), 
+		MusicRepository.search(), 
 		SamplesRepository.search(), 
 		ArtistRepository.listByPopularity()
 	]);

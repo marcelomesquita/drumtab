@@ -1,7 +1,7 @@
 import axiosClient from '../adapters/axiosClient';
 
 export default class SamplesService {
-	static search = async (search, order, last, limit) => {
+	static search = async (search, last, order, limit) => {
 		const response = await axiosClient.get('/api/samples/search', {
 			params: {
 				search,

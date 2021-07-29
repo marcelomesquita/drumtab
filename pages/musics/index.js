@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../../components/layout/Container';
 import Breadcrumb from '../../components/helpers/Breadcrumb';
-import Pagination from '../../components/helpers/Pagination';
-import MusicRepository from '../../repository/MusicRepository';
-
-export async function getStaticProps(context) {
-	const musics = await MusicRepository.list();
-
-	return {
-		props: {
-			musics,
-		},
-	};
-}
+import MusicService from '../../services/MusicService';
 
 export default function MusicsPage(props) {
 	const pageTitle = 'Músicas';
-	const musics = props.musics;
+
+	const [musics, setMusics] = useState([]);
+	const [search, setSearch] = useState();
+	const [order, setOrder] = useState('name');
+	const [last, setLast] = useState('');
+	const [limit, setLimit] = useState(10);
+	const [loading, setLoading] = useState(false);
+	const [finish, setFinish] = useState(false);
+
+	useEffect(() => searchMusics(), []);
+
+	const searchMusics = () => {
+		setLoading(true);
+
+		MusicService.search(search, last, order, limit)
+			.then((snapshot) => {
+				setMusics(musics.concat(snapshot));
+				setLast(snapshot[snapshot.length - 1][order]);
+
+				if (snapshot.length < limit) {
+					setFinish(true);
+				}
+			})
+			.catch((error) => ({ props: { error: { code: error.code, message: error.message } } }))
+			.finally(() => setLoading(false));
+	}
+
 
 	return (
 		<Container>
@@ -60,7 +75,7 @@ export default function MusicsPage(props) {
 						})}
 					</div>
 
-					<Pagination />
+					<button className={`button is-fullwidth ${loading && 'is-loading'}`} disabled={finish} onClick={searchMusics}>carregar mais</button>
 				</section>
 			</div>
 		</Container>

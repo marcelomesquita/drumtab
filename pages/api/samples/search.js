@@ -7,7 +7,7 @@ export default async function SampleSearchApi(req, res) {
 		}
 
 		const search = req.query.search ? req.query.search : null;
-		const last = req.query.last ? req.query.last : null;
+		const last = req.query.last ? req.query.last : '';
 		const order = req.query.order ? req.query.order : 'name';
 		const limit = req.query.limit ? req.query.limit : 10;
 
