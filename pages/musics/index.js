@@ -40,13 +40,14 @@ export default function MusicsPage(props) {
 		<Container>
 			<Head>
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
+				<meta property='description' content='Aprenda a tocar aquela música que você adora' key='description' />
 			</Head>
 
 			<div className='container is-widescreen'>
 				<section className='section'>
 					<Breadcrumb />
 
-					<h1 className='title'>{pageTitle}</h1>
+					<h1 className='title is-1'>{pageTitle}</h1>
 					<h2 className='subtitle'>Não encontrou a música que queria? Que tal <Link href='/musics/editor'><a>cadastrá-la!</a></Link></h2>
 
 					<div className='columns is-multiline'>
@@ -57,7 +58,7 @@ export default function MusicsPage(props) {
 										<a>
 											<div className='card'>
 												<div className='card-image'>
-													<figure className='image is-4by3'>
+													<figure className='image'>
 														<Image src={`/assets/images/artists/${music.artist.id}.jpg`} alt={music.artist.name} width={400} height={400} />
 													</figure>
 												</div>

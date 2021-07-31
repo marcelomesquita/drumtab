@@ -39,6 +39,7 @@ export default function SamplesEditorPage(props) {
 		<Container>
 			<Head>
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
+				<meta property='description' content='Crie a tablatura de bateria daquele sample que você sonhou' />
 			</Head>
 
 			<div className='container is-widescreen'>

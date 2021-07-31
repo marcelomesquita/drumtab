@@ -39,6 +39,7 @@ export default function MusicEditorPage(props) {
 		<Container>
 			<Head>
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
+				<meta property='description' content='Crie a tablatura de bateria daquela música que você adora' />
 			</Head>
 
 			<div className='container is-widescreen'>

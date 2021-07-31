@@ -32,6 +32,7 @@ export default function HomePage(props) {
 		<Container>
 			<Head>
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
+				<meta property='description' content={process.env.NEXT_PUBLIC_DESCRIPTION} key='description' />
 			</Head>
 
 			<section className='hero is-link is-medium'>

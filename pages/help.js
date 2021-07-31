@@ -8,12 +8,13 @@ export default function HelpPage(props) {
 		<Container>
 			<Head>
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
+				<meta property="description" content="Precisa de ajuda para usar o drumtab?" key="description" />
 			</Head>
 
 			<div className='container is-widescreen'>
 				<section className='section'>
 					<div className='content'>
-						<h1>Ajuda</h1>
+					<h1 className='title is-1'>{pageTitle}</h1>
 						<h3>1. É grátis?</h3>
 						<p>Sim</p>
 						<h3>2. Como faço para cadastrar tablaturas de bateria?</h3>

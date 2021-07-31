@@ -39,20 +39,21 @@ export default function SamplesPage(props) {
 		<Container>
 			<Head>
 				<title>{pageTitle} | {process.env.NEXT_PUBLIC_TITLE}</title>
+				<meta property='description' content='Encontre inspiração para suas próximas músicas' key='description' />
 			</Head>
 
 			<div className='container is-widescreen'>
 				<section className='section'>
 					<Breadcrumb />
 
-					<h1 className='title'>{pageTitle}</h1>
+					<h1 className='title is-1'>{pageTitle}</h1>
 					<h2 className='subtitle'>Tem uma batida que vai fazer outros pirarem? Que tal <Link href='/samples/editor'><a>cadastrá-la!</a></Link></h2>
 
 					<div className='columns'>
 						<div className='column'>
 							{samples && samples.map((sample) => {
 								return (
-									<Link key={`sample-${sample.id}`} href={`/sample/${sample.id}`}>
+									<Link key={`sample-${sample.id}`} href={`/samples/${sample.id}`}>
 										<a className='has-text-primary'>
 											<div className='box is-shadowless'>
 												<div className='is-pulled-left mr-3'>
