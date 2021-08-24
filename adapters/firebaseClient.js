@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
 
 if (!firebase.apps.length) {
 	firebase.initializeApp({
@@ -16,5 +17,6 @@ if (!firebase.apps.length) {
 }
 
 const analytics = firebase.analytics;
+const storage = firebase.storage();
 
-export { firebase, analytics };
+export { firebase, analytics, storage };

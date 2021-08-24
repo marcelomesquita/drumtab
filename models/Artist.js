@@ -2,6 +2,7 @@ import validator from 'validator';
 export default class Artist {
 	id = '';
 	name = '';
+	image = '';
 	createdBy = null;
 	createdAt = null;
 	updatedBy = null;
@@ -17,6 +18,10 @@ export default class Artist {
 		}
 
 		if (this.validateName()) {
+			return false;
+		}
+
+		if (this.validateImage()) {
 			return false;
 		}
 
@@ -44,6 +49,14 @@ export default class Artist {
 	}
 
 	validateName(value = this.name) {
+		if (validator.isEmpty(value)) {
+			return 'required';
+		}
+
+		return '';
+	}
+
+	validateImage(value = this.image) {
 		if (validator.isEmpty(value)) {
 			return 'required';
 		}

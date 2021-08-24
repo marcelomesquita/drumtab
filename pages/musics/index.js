@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Container from '../../components/layout/Container';
 import Breadcrumb from '../../components/helpers/Breadcrumb';
 import MusicService from '../../services/MusicService';
+import artistImage from '../../assets/images/artist.jpg';
 
 export default function MusicsPage(props) {
 	const pageTitle = 'Músicas';
@@ -35,7 +36,6 @@ export default function MusicsPage(props) {
 			.finally(() => setLoading(false));
 	}
 
-
 	return (
 		<Container>
 			<Head>
@@ -59,7 +59,7 @@ export default function MusicsPage(props) {
 											<div className='card'>
 												<div className='card-image'>
 													<figure className='image'>
-														<Image src={`/assets/images/artists/${music.artist.id}.jpg`} alt={music.artist.name} width={400} height={400} />
+													<Image src={music.artist?.image ? music.artist.image : artistImage} alt={music.artist.name} width={400} height={400} />
 													</figure>
 												</div>
 												<div className='card-content'>

@@ -5,6 +5,7 @@ import Container from '../components/layout/Container';
 import ArtistRepository from '../repository/ArtistRepository';
 import MusicRepository from '../repository/MusicRepository';
 import SamplesRepository from '../repository/SamplesRepository';
+import artistImage from '../assets/images/artist.jpg';
 
 export async function getStaticProps(context) {
 	const [musics, samples, artists] = await Promise.all([
@@ -45,7 +46,7 @@ export default function HomePage(props) {
 							</div>
 							<div className='column'>
 								<figure className='image'>
-									<Image src='/assets/images/800x400.png' alt='Placeholder image' width={800} height={400} />
+									<Image src={artistImage} alt='Placeholder image' width={800} height={400} />
 								</figure>
 							</div>
 						</div>
@@ -99,7 +100,7 @@ export default function HomePage(props) {
 											<div className='box is-shadowless'>
 												<div className='is-pulled-left mr-3'>
 													<figure className='image is-48x48'>
-														<Image src={`/assets/images/artists/${artist.id}.jpg`} alt={artist.name} width={50} height={50} className='is-rounded' />
+														<Image src={artist?.image ? artist.image : artistImage} alt={artist.name} width={50} height={50} className='is-rounded' />
 													</figure>
 												</div>
 												<h3 className='title is-5 mt-3'>{artist.name}</h3>

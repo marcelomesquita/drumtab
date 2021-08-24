@@ -18,6 +18,7 @@ export default class ArtistRepository {
 					return {
 						id: artist.id,
 						name: artist.data().name,
+						image: artist.data().image ? artist.data().image : '',
 					};
 				});
 
@@ -37,6 +38,7 @@ export default class ArtistRepository {
 					return {
 						id: artist.id,
 						name: artist.data().name,
+						image: artist.data().image ? artist.data().image : '',
 					};
 				});
 
@@ -61,6 +63,7 @@ export default class ArtistRepository {
 				const artist = {
 					id: result.id,
 					name: result.data().name,
+					image: result.data().image,
 				};
 
 				return Promise.resolve(artist);
@@ -75,6 +78,7 @@ export default class ArtistRepository {
 
 		const artistPlain = {
 			name: artist.name,
+			image: artist.image,
 			createdBy: usersRef.doc(session.uid),
 			createdAt: new Date(),
 			updatedBy: usersRef.doc(session.uid),

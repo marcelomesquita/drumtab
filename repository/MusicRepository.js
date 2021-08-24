@@ -31,6 +31,7 @@ export default class MusicRepository {
 							artist: {
 								id: artist.id,
 								name: artist.data().name,
+								image: artist.data().image ? artist.data().image : '',
 							},
 							album: !album ? {} : {
 								id: album.id,
@@ -87,6 +88,7 @@ export default class MusicRepository {
 					artist: {
 						id: artist.id,
 						name: artist.data().name,
+						image: artist.data().image ? artist.data().image : '',
 					},
 					album: !album ? {} : {
 						id: album.id,

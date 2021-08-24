@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaAdjust, FaBan, FaCircle, FaClock, FaDotCircle, FaLock, FaLockOpen, FaLongArrowAltRight, FaMusic, FaPause, FaPlay, FaStepBackward, FaStepForward, FaStop, FaTachometerAlt, FaUndoAlt } from 'react-icons/fa';
 import Drum from '../../models/Drum';
-import styles from '../../styles/drummer.module.sass';
+import styles from '../../assets/styles/drummer.module.sass';
 
 export default class Drummer extends React.Component {
 	constructor(props) {

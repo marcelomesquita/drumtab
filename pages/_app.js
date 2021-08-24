@@ -6,7 +6,7 @@ import { analytics } from '../adapters/firebaseClient';
 import AuthProvider from '../contexts/Auth';
 
 import 'react-toastify/dist/ReactToastify.css';
-import '../styles/global.sass';
+import '../assets/styles/global.sass';
 
 export default function DrumTab({ Component, pageProps }) {
 	const cookies = parseCookies();

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FaLink } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import slugify from 'slugify';
+import { storage } from '../../adapters/firebaseClient';
 import Artist from '../../models/Artist';
 import ArtistService from '../../services/ArtistService';
 
@@ -10,6 +11,8 @@ export default function ArtistForm(props) {
 	const [loading, setLoading] = useState(false);
 	const [messageId, setMessageId] = useState(null);
 	const [loadingId, setLoadingId] = useState(false);
+	const [messageImage, setMessageImage] = useState(null);
+	const [loadingImage, setLoadingImage] = useState(false);
 
 	const setId = async (id) => {
 		artist.id = id;
@@ -59,6 +62,32 @@ export default function ArtistForm(props) {
 			.finally(() => setLoading(false));
 	};
 
+	const handleUpload = async (e) => {
+		const image = e.target.files[0];
+
+		if (image.size > 100000) {
+			setMessageImage('A imagem deve ter menos de 100KB');
+
+			return false;
+		}
+
+		setLoadingImage(true);
+
+		const name = [...Array(16)].map(i => (~~(Math.random() * 36)).toString(36)).join('');
+		const ref = storage.ref(`/images/artists/${name}`);
+    const uploadTask = ref.put(image);
+
+    uploadTask.on('state_changed', console.log, console.error, () => {
+			uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          artist.image = url;
+
+					setArtist(new Artist(artist));
+        });
+
+			setLoadingImage(false);
+    });
+	}
+
 	return (
 		<form onSubmit={handleSubmit}>
 			<div className='field'>
@@ -76,6 +105,14 @@ export default function ArtistForm(props) {
 					</span>
 				</div>
 				{messageId && <p className='help'>{messageId}</p>}
+			</div>
+
+			<div className='field'>
+				<label className='label'>Imagem *</label>
+				<div className={`control has-icons-right ${loadingImage ? 'is-loading' : ''}`}>
+					<input className='input' type='file' name='image' accept='.jpg, .jpeg' onChange={handleUpload} />
+				</div>
+				{messageImage && <p className='help'>{messageImage}</p>}
 			</div>
 
 			<button type='submit' className='button is-primary' disabled={!artist.isValid()}>
