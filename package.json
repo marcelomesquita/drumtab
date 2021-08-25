@@ -38,9 +38,12 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"cypress": "cypress run",
+		"cypress:open": "cypress open"
 	},
 	"devDependencies": {
+		"cypress": "^8.3.0",
 		"eslint": "^7.30.0",
 		"eslint-config-next": "^11.0.1"
 	}

@@ -41,8 +41,8 @@ export default function HomePage(props) {
 					<div className='container is-widescreen'>
 						<div className='columns'>
 							<div className='column'>
-								<h2 className='title is-2'>{process.env.NEXT_PUBLIC_TITLE}</h2>
-								<h3 className='subtitle is-3 has-text-light'>{process.env.NEXT_PUBLIC_DESCRIPTION}</h3>
+								<h1 className='title is-2'>{process.env.NEXT_PUBLIC_TITLE}</h1>
+								<h2 className='subtitle is-3 has-text-light'>{process.env.NEXT_PUBLIC_DESCRIPTION}</h2>
 							</div>
 							<div className='column'>
 								<figure className='image'>
@@ -58,7 +58,7 @@ export default function HomePage(props) {
 				<section className='section'>
 					<div className='columns'>
 						<div className='column'>
-							<h1 className='title is-4 is-info'>MÚSICAS</h1>
+							<h3 className='title is-4 is-info'>MÚSICAS</h3>
 							{musics
 								.map((music, m) => {
 									return (
@@ -75,7 +75,7 @@ export default function HomePage(props) {
 								})}
 						</div>
 						<div className='column'>
-							<h1 className='title is-4 is-info'>SAMPLES</h1>
+							<h3 className='title is-4 is-info'>SAMPLES</h3>
 							{samples
 								.map((sample, s) => {
 									return (
@@ -92,7 +92,7 @@ export default function HomePage(props) {
 								})}
 						</div>
 						<div className='column'>
-							<h1 className='title is-4 is-info'>ARTISTAS</h1>
+							<h3 className='title is-4 is-info'>ARTISTAS</h3>
 							{artists.map((artist, a) => {
 								return (
 									<Link key={`artist-${a}`} href='/musics'>
