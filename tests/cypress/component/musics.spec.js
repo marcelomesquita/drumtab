@@ -1,0 +1,62 @@
+/// <reference types='cypress' />
+import { mount } from '@cypress/react'
+import Musics from '../../../components/shared/Musics'
+
+const musics = [
+  {
+    id:'be-yourself',
+    name:'Be Yourself',
+    tablature:{
+      beatsPerMin:60,
+      staff:[{'h':1,'t2':0,'c':0,'t3':0,'s':0,'b':1,'t1':0,'r':0},{'s':0,'c':0,'t3':0,'r':0,'t1':0,'b':0,'t2':0,'h':1},{'r':0,'t2':0,'h':1,'b':0,'s':1,'t1':0,'c':0,'t3':0},{'t1':0,'b':0,'t2':0,'t3':0,'h':1,'s':0,'c':0,'r':0},{'s':0,'h':1,'tl':0,'c':0,'tm':0,'l':'','r':0,'th':0,'b':1},{'tm':0,'h':1,'s':0,'l':'','th':0,'c':0,'b':0,'r':0,'tl':0},{'h':1,'r':0,'tl':0,'b':0,'th':0,'tm':0,'c':0,'s':1,'l':''},{'b':0,'c':0,'h':1,'th':0,'s':0,'l':'','tm':0,'r':0,'tl':0},{'s':0,'tl':0,'l':'','th':0,'h':1,'r':0,'tm':0,'b':1,'c':0},{'tm':0,'b':0,'c':0,'h':1,'r':0,'tl':0,'s':0,'l':'','th':0},{'r':0,'c':0,'h':1,'s':1,'tl':0,'tm':0,'b':0,'l':'','th':0},{'l':'','r':0,'h':1,'th':0,'tm':0,'s':0,'c':0,'tl':0,'b':0},{'r':0,'h':0,'c':0,'th':1,'b':0,'s':0,'tm':0,'tl':0,'l':''},{'th':0,'h':0,'c':0,'r':0,'s':0,'tm':1,'l':'','b':0,'tl':0},{'l':'','th':0,'tl':1,'h':0,'c':0,'r':0,'tm':0,'s':0,'b':0},{'th':0,'h':0,'l':'','tl':0,'c':1,'r':0,'b':1,'tm':0,'s':0}],
+      beats:4,
+      times:4
+    },
+    artist:{
+      id:'audioslave',
+      name:'Audioslave',
+      image:'https://firebasestorage.googleapis.com/v0/b/drumtab-club.appspot.com/o/images%2Fartists%2Faudioslave.jpg?alt=media&token=31b5c312-2910-40bc-8302-0d41b302fefe'
+    },
+    album:{
+      id:'out-of-exile',
+      name:'Out Of Exile'
+    },
+    author:{
+      id:'brad-wilk',
+      name:'Brad Wilk'
+    },
+    createdAt:'2021-07-16T01:01:07.130Z',
+    createdBy:{
+      id:'7lJ4NauH1zbNkKdNO78tL3mN4lC3',
+      name:'Marcelo Mesquita'
+    },
+    updatedAt:'2021-07-16T01:01:07.130Z',
+    updatedBy:{
+      id:'7lJ4NauH1zbNkKdNO78tL3mN4lC3',
+      name:'Marcelo Mesquita'
+    }
+  }
+]
+
+it('Renders page component', () => {
+  mount(<Musics />)
+  cy.contains('Welcome to Next.js')
+})
+
+//describe('<Musics />', () => {
+//  beforeEach(() => {
+//    mount(<Musics musics={musics} />)
+//  })
+//
+//  it('renders music title', () => {
+//    cy.findAllByTestId('music-title').should('have.length', musics.length)
+//    cy.findAllByTestId('music-title').first().should('have.text', musics[0].name)
+//    cy.findAllByTestId('music-title').eq(1).should('have.text', musics[1].name)
+//  })
+//
+//  it('renders music artist', () => {
+//    cy.findAllByTestId('music-artist').should('have.length', musics.length)
+//    cy.findAllByTestId('music-artist').first().should('have.text', musics[0].artist.name)
+//    cy.findAllByTestId('music-artist').eq(1).should('have.text', musics[1].artist.name)
+//  })
+//})

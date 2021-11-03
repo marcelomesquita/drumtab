@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { parseCookies, setCookie } from 'nookies'
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,11 +10,23 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../assets/styles/global.sass';
 
 export default function DrumTab({ Component, pageProps }) {
+	const routers = useRouter();
 	const cookies = parseCookies();
 
 	useEffect(() => {
-		if (process.env.ENV === 'production') {
-			analytics();
+		if (process.env.NEXT_PUBLIC_PRODUCTION) {
+      const logEvent = (url) => {
+        analytics().setCurrentScreen(url);
+        analytics().logEvent('screen_view');
+      };
+
+      routers.events.on('routeChangeComplete', logEvent);
+
+      logEvent(window.location.pathname);
+
+      return () => {
+        routers.events.off('routeChangeComplete', logEvent);
+      };
 		}
 
 		if (!cookies?.onceCookies) {
